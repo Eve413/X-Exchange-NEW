@@ -1,0 +1,56 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ * 更多样式变量定义在 styles/variables/ 目录下
+ */
+
+/* 颜色变量 - 与现代设计系统保持一致 */
+$uni-color-primary: #6f4bfd;  // ✅ 品牌紫色 (与 $primary-500 一致)
+$uni-color-success: #19af00;  // ✅ 交易所专用绿 (与 $success-500 一致)
+$uni-color-warning: #ff9800;  // ✅ 保持警告橙色
+$uni-color-error: #d92a2a;    // ✅ 卖出红色 (与 $error-500 一致)
+
+/* 文字基本颜色 */
+$uni-text-color: #333;
+$uni-text-color-secondary: #666;
+$uni-text-color-placeholder: #999;
+$uni-text-color-disable: #c0c0c0;
+
+/* 背景颜色 */
+$uni-bg-color: #ffffff;
+$uni-bg-color-grey: #f8f8f8;
+$uni-bg-color-hover: #f1f1f1;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+/* 边框颜色 */
+$uni-border-color: #e5e5e5;
+
+/* 尺寸变量 */
+$uni-spacing-sm: 8upx;
+$uni-spacing-base: 16upx;
+$uni-spacing-lg: 24upx;
+$uni-spacing-xl: 32upx;
+
+/* 字体大小 */
+$uni-font-size-sm: 24upx;
+$uni-font-size-base: 28upx;
+$uni-font-size-lg: 32upx;
+
+/* 圆角 */
+$uni-border-radius-sm: 6upx;
+$uni-border-radius-base: 8upx;
+$uni-border-radius-lg: 12upx;
+$uni-border-radius-circle: 50%;
+
+/* 阴影 */
+$uni-shadow-base: 0 2upx 12upx 0 rgba(0, 0, 0, 0.1);
+
+/* 交易所主题色 */
+$exchange-color-buy: #19af00;
+$exchange-color-sell: #d92a2a;
+$exchange-color-chart-bg: #1e1e1e;
+$exchange-color-chart-grid: #333;
+
+/* 导入基础样式文件（避免循环导入）*/
+@import '@/styles/variables/_index.scss';
+@import '@/styles/mixins/_index.scss';
+/* 注意：不要在此导入 styles/index.scss，会造成循环导入 */ 

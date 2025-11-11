@@ -1,0 +1,130 @@
+/**
+ * 响应式设计混入
+ */
+
+// 断点定义
+$breakpoint-xs: 480px;   // 超小屏
+$breakpoint-sm: 768px;   // 小屏
+$breakpoint-md: 1024px;  // 中屏
+$breakpoint-lg: 1200px;  // 大屏
+$breakpoint-xl: 1600px;  // 超大屏
+
+// 媒体查询混入
+@mixin xs {
+  @media (max-width: #{$breakpoint-xs - 1}) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (min-width: #{$breakpoint-xs}) and (max-width: #{$breakpoint-sm - 1}) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1}) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1}) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+// 最小宽度
+@mixin min-sm {
+  @media (min-width: #{$breakpoint-xs}) {
+    @content;
+  }
+}
+
+@mixin min-md {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin min-lg {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin min-xl {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+// 最大宽度
+@mixin max-xs {
+  @media (max-width: #{$breakpoint-xs - 1}) {
+    @content;
+  }
+}
+
+@mixin max-sm {
+  @media (max-width: #{$breakpoint-sm - 1}) {
+    @content;
+  }
+}
+
+@mixin max-md {
+  @media (max-width: #{$breakpoint-md - 1}) {
+    @content;
+  }
+}
+
+@mixin max-lg {
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    @content;
+  }
+}
+
+// 高度媒体查询
+@mixin landscape {
+  @media (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin portrait {
+  @media (orientation: portrait) {
+    @content;
+  }
+}
+
+// Retina屏幕
+@mixin retina {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    @content;
+  }
+}
+
+// 平台特定样式 (仅H5生效)
+@mixin h5-only {
+  /* #ifdef H5 */
+  @content;
+  /* #endif */
+}
+
+@mixin mp-only {
+  /* #ifdef MP */
+  @content;
+  /* #endif */
+}
+
+@mixin app-only {
+  /* #ifdef APP-PLUS */
+  @content;
+  /* #endif */
+} 

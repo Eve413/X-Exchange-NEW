@@ -1,0 +1,125 @@
+/**
+ * 按钮相关混入
+ */
+
+// 基础按钮样式
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-base $spacing-lg;
+  border: none;
+  border-radius: $uni-border-radius-base;
+  font-size: $uni-font-size-base;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// 主要按钮
+@mixin button-primary {
+  @include button-base;
+  background-color: $primary-500;
+  color: #ffffff;
+  
+  &:hover {
+    background-color: $primary-600;
+  }
+  
+  &:active {
+    background-color: $primary-700;
+  }
+}
+
+// 次要按钮
+@mixin button-secondary {
+  @include button-base;
+  background-color: transparent;
+  color: $primary-500;
+  border: 1upx solid $primary-500;
+  
+  &:hover {
+    background-color: $primary-50;
+  }
+  
+  &:active {
+    background-color: $primary-100;
+  }
+}
+
+// 买入按钮
+@mixin button-buy {
+  @include button-base;
+  background-color: $trade-buy;
+  color: #ffffff;
+  
+  &:hover {
+    background-color: $success-600;
+  }
+  
+  &:active {
+    background-color: $success-700;
+  }
+}
+
+// 卖出按钮
+@mixin button-sell {
+  @include button-base;
+  background-color: $trade-sell;
+  color: #ffffff;
+  
+  &:hover {
+    background-color: $error-600;
+  }
+  
+  &:active {
+    background-color: $error-700;
+  }
+}
+
+// 危险按钮
+@mixin button-danger {
+  @include button-base;
+  background-color: $error-500;
+  color: #ffffff;
+  
+  &:hover {
+    background-color: $error-600;
+  }
+  
+  &:active {
+    background-color: $error-700;
+  }
+}
+
+// 按钮尺寸
+@mixin button-large {
+  padding: $spacing-lg $spacing-xl;
+  font-size: $font-size-lg;
+  height: 96upx;
+}
+
+@mixin button-small {
+  padding: $spacing-sm $spacing-base;
+  font-size: $font-size-sm;
+  height: 60upx;
+}
+
+// 圆形按钮
+@mixin button-circle {
+  border-radius: 50%;
+  width: 80upx;
+  height: 80upx;
+  padding: 0;
+} 

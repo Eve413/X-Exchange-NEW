@@ -1,0 +1,23 @@
+/**
+ * 样式系统入口文件
+ * 按照设计系统的层级结构导入所有样式
+ */
+
+// 0. 字体导入 (Plus Jakarta Sans from Google Fonts)
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+// 1. 变量和配置（最先导入，供其他文件使用）
+@import './variables.scss';
+
+// 2. 混入（工具函数）
+@import './mixins/_index.scss';
+
+// 3. 基础样式（重置、通用类等）
+@import './scss/normalize.scss';
+@import './scss/common.scss';
+@import './scss/utilities.scss';
+@import './scss/animations.scss';
+
+// 4. 主题样式
+@import './themes/light.scss';
+@import './themes/dark.scss';

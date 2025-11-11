@@ -1,0 +1,135 @@
+/**
+ * 实用工具类
+ */
+
+// 定位相关
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  position: sticky;
+}
+
+// 层级
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-30 { z-index: 30; }
+.z-40 { z-index: 40; }
+.z-50 { z-index: 50; }
+
+// 宽高
+.w-full { width: 100%; }
+.w-screen { width: 100vw; }
+.h-full { height: 100%; }
+.h-screen { height: 100vh; }
+
+.w-auto { width: auto; }
+.h-auto { height: auto; }
+
+// 最大宽高
+.max-w-full { max-width: 100%; }
+.max-h-full { max-height: 100%; }
+
+// 最小宽高
+.min-w-0 { min-width: 0; }
+.min-h-0 { min-height: 0; }
+
+// 溢出处理
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-scroll { overflow: scroll; }
+.overflow-visible { overflow: visible; }
+
+.overflow-x-hidden { overflow-x: hidden; }
+.overflow-y-hidden { overflow-y: hidden; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+// 光标样式
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-default { cursor: default; }
+
+// 用户选择
+.select-none { user-select: none; }
+.select-text { user-select: text; }
+.select-all { user-select: all; }
+
+// 透明度
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+// 变换
+.scale-50 { transform: scale(0.5); }
+.scale-75 { transform: scale(0.75); }
+.scale-90 { transform: scale(0.9); }
+.scale-95 { transform: scale(0.95); }
+.scale-100 { transform: scale(1); }
+.scale-105 { transform: scale(1.05); }
+.scale-110 { transform: scale(1.1); }
+.scale-125 { transform: scale(1.25); }
+
+// 旋转
+.rotate-0 { transform: rotate(0deg); }
+.rotate-45 { transform: rotate(45deg); }
+.rotate-90 { transform: rotate(90deg); }
+.rotate-180 { transform: rotate(180deg); }
+
+// 交易所专用类
+.price-up {
+  color: $trade-up !important;
+}
+
+.price-down {
+  color: $trade-down !important;
+}
+
+.price-neutral {
+  color: $text-color-primary !important;
+}
+
+.bg-up {
+  background-color: $trade-up !important;
+}
+
+.bg-down {
+  background-color: $trade-down !important;
+}
+
+// 状态类
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.loading {
+  position: relative;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32upx;
+    height: 32upx;
+    margin: -16upx 0 0 -16upx;
+    border: 4upx solid $primary-200;
+    border-top-color: $primary-500;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+  }
+} 

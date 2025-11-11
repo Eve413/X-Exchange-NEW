@@ -1,0 +1,305 @@
+/**
+ * 深色主题样式
+ * 覆盖默认变量以提供深色主题支持
+ */
+
+// 深色主题变量 mixin
+@mixin theme-dark-variables() {
+  // 背景色
+  --theme-bg-primary: #121212;
+  --theme-bg-secondary: #1e1e1e;
+  --theme-bg-tertiary: #242424;
+  
+  // 文字色
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #b3b3b3;
+  --theme-text-tertiary: #888888;
+  
+  // 品牌色
+  --theme-brand-primary: #8b5cf6;
+  --theme-brand-secondary: #a855f7;
+  
+  // 功能色
+  --theme-success: #22c55e;
+  --theme-warning: #f59e0b;
+  --theme-error: #ef4444;
+  --theme-info: #06b6d4;
+  
+  // 边框色
+  --theme-border: #333333;
+  --theme-border-secondary: #2a2a2a;
+  
+  // 特殊效果
+  --theme-shadow: rgba(0, 0, 0, 0.3);
+  --theme-overlay: rgba(0, 0, 0, 0.7);
+  
+  // 交易专用色
+  --theme-buy-color: #22c55e;
+  --theme-sell-color: #ef4444;
+
+  // 覆盖默认的uni-app变量
+  --uni-bg-color: var(--theme-bg-primary);
+  --uni-bg-color-grey: var(--theme-bg-secondary);
+  --uni-bg-color-hover: var(--theme-bg-tertiary);
+  --uni-text-color: var(--theme-text-primary);
+  --uni-text-color-secondary: var(--theme-text-secondary);
+  --uni-border-color: var(--theme-border);
+}
+
+.theme-dark {
+  @include theme-dark-variables();
+}
+
+// 深色主题样式 mixin
+@mixin theme-dark-styles() {
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  
+  // 页面背景
+  page {
+    background-color: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+  }
+  
+  // 导航栏
+  .uni-navbar {
+    background-color: var(--theme-bg-primary);
+    border-bottom-color: var(--theme-border);
+    
+    .uni-navbar__title {
+      color: var(--theme-text-primary);
+    }
+  }
+  
+  // 状态栏
+  .uni-statusbar {
+    background-color: var(--theme-bg-primary);
+  }
+  
+  // 输入框
+  input, textarea {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border);
+    
+    &::placeholder {
+      color: var(--theme-text-tertiary);
+    }
+  }
+  
+  // 按钮
+  button {
+    &.button-light {
+      background-color: var(--theme-bg-secondary);
+      color: var(--theme-text-primary);
+      border-color: var(--theme-border);
+    }
+  }
+  
+  // 卡片组件
+  .card, .uni-card {
+    background-color: var(--theme-bg-secondary);
+    border-color: var(--theme-border);
+    box-shadow: 0 2upx 12upx var(--theme-shadow);
+  }
+  
+  // 列表项
+  .uni-list-item {
+    background-color: var(--theme-bg-secondary);
+    border-bottom-color: var(--theme-border);
+    
+    &:hover {
+      background-color: var(--theme-bg-tertiary);
+    }
+  }
+  
+  // 分割线
+  .divider, .uni-divider {
+    background-color: var(--theme-border);
+  }
+  
+  // 遮罩层
+  .uni-mask, .modal-mask {
+    background-color: var(--theme-overlay);
+  }
+  
+  // 弹出层
+  .uni-popup, .modal-content {
+    background-color: var(--theme-bg-primary);
+    border-color: var(--theme-border);
+    box-shadow: 0 8upx 24upx var(--theme-shadow);
+  }
+  
+  // TabBar
+  .uni-tabbar {
+    background-color: var(--theme-bg-primary);
+    border-top-color: var(--theme-border);
+    
+    .uni-tabbar-item {
+      .uni-tabbar-item__label {
+        color: var(--theme-text-secondary);
+      }
+      
+      &.uni-tabbar-item--active {
+        .uni-tabbar-item__label {
+          color: var(--theme-brand-primary);
+        }
+      }
+    }
+  }
+  
+  // 滚动条
+  ::-webkit-scrollbar {
+    background: var(--theme-bg-secondary);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--theme-border);
+    
+    &:hover {
+      background: var(--theme-text-tertiary);
+    }
+  }
+  
+  // 选择器
+  picker-view {
+    background-color: var(--theme-bg-primary);
+  }
+  
+  // 加载组件
+  .uni-loading {
+    color: var(--theme-brand-primary);
+  }
+  
+  // Toast
+  .uni-toast {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border);
+  }
+  
+  // 开关
+  switch {
+    &[checked] {
+      background-color: var(--theme-brand-primary);
+    }
+  }
+  
+  // 复选框和单选框
+  checkbox[checked]::before,
+  radio[checked]::before {
+    background-color: var(--theme-brand-primary);
+    border-color: var(--theme-brand-primary);
+  }
+  
+  // 图表组件专用
+  .chart-container {
+    background-color: var(--theme-bg-secondary);
+    border-color: var(--theme-border);
+    
+    canvas {
+      background-color: transparent;
+    }
+  }
+  
+  // 交易相关颜色
+  .price-up, .buy-color {
+    color: var(--theme-buy-color) !important;
+  }
+  
+  .price-down, .sell-color {
+    color: var(--theme-sell-color) !important;
+  }
+  
+  // K线图相关
+  .kline-up {
+    stroke: var(--theme-buy-color);
+    fill: var(--theme-buy-color);
+  }
+  
+  .kline-down {
+    stroke: var(--theme-sell-color);
+    fill: var(--theme-sell-color);
+  }
+  
+  // 深度图相关
+  .depth-buy {
+    fill: rgba(34, 197, 94, 0.2);
+    stroke: var(--theme-buy-color);
+  }
+  
+  .depth-sell {
+    fill: rgba(239, 68, 68, 0.2);
+    stroke: var(--theme-sell-color);
+  }
+  
+  // 表格组件
+  .table {
+    background-color: var(--theme-bg-primary);
+    border-color: var(--theme-border);
+    
+    .table-header {
+      background-color: var(--theme-bg-secondary);
+      border-bottom-color: var(--theme-border);
+    }
+    
+    .table-row {
+      border-bottom-color: var(--theme-border);
+      
+      &:hover {
+        background-color: var(--theme-bg-tertiary);
+      }
+      
+      &:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+    }
+  }
+  
+  // 代码高亮
+  .hljs {
+    background: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+  }
+  
+  // 表单验证
+  .form-error {
+    color: var(--theme-error);
+  }
+  
+  .form-success {
+    color: var(--theme-success);
+  }
+  
+  // 徽章
+  .badge {
+    &.badge-primary {
+      background-color: var(--theme-brand-primary);
+    }
+    
+    &.badge-success {
+      background-color: var(--theme-success);
+    }
+    
+    &.badge-warning {
+      background-color: var(--theme-warning);
+    }
+    
+    &.badge-error {
+      background-color: var(--theme-error);
+    }
+  }
+}
+
+// 深色主题下的页面样式
+.theme-dark {
+  @include theme-dark-styles();
+}
+
+// 自动主题模式下的媒体查询
+@media (prefers-color-scheme: dark) {
+  .theme-auto {
+    @include theme-dark-variables();
+    @include theme-dark-styles();
+  }
+}

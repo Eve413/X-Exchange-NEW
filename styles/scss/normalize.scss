@@ -1,0 +1,76 @@
+/**
+ * Uniapp 样式重置
+ * 基于 normalize.css 适配 Uniapp
+ */
+
+/* 通用重置 */
+page {
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 移除默认边距 */
+view, text, image, button, input, textarea, picker, scroll-view {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 按钮重置 */
+button {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  color: inherit;
+  
+  &::after {
+    border: none;
+  }
+}
+
+/* 输入框重置 */
+input, textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  color: inherit;
+  
+  &::placeholder {
+    color: $text-color-placeholder;
+  }
+}
+
+/* 图片默认样式 */
+image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 滚动视图重置 */
+scroll-view {
+  box-sizing: border-box;
+}
+
+/* 列表重置 */
+.uni-list-item {
+  border: none;
+  
+  &::after {
+    height: 0;
+  }
+}
+
+/* 导航栏重置 */
+.uni-navbar {
+  box-shadow: none;
+}
+
+/* 标签栏重置 */
+.uni-tabbar {
+  border-top: 1upx solid $border-color-light;
+} 

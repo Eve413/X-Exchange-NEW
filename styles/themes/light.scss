@@ -1,0 +1,124 @@
+/**
+ * 浅色主题样式
+ * 定义默认的浅色主题变量和样式
+ */
+
+// 浅色主题变量 mixin
+@mixin theme-light-variables() {
+  // 背景色
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8f9fa;
+  --theme-bg-tertiary: #f1f3f4;
+  
+  // 文字色
+  --theme-text-primary: #212121;
+  --theme-text-secondary: #666666;
+  --theme-text-tertiary: #999999;
+  
+  // 品牌色
+  --theme-brand-primary: #6f4bfd;
+  --theme-brand-secondary: #9333ea;
+  
+  // 功能色
+  --theme-success: #19af00;
+  --theme-warning: #ff9800;
+  --theme-error: #d92a2a;
+  --theme-info: #03a9f4;
+  
+  // 边框色
+  --theme-border: #e5e5e5;
+  --theme-border-secondary: #f0f0f0;
+  
+  // 特殊效果
+  --theme-shadow: rgba(0, 0, 0, 0.1);
+  --theme-overlay: rgba(0, 0, 0, 0.5);
+  
+  // 交易专用色
+  --theme-buy-color: #19af00;
+  --theme-sell-color: #d92a2a;
+}
+
+// 浅色主题样式 mixin
+@mixin theme-light-styles() {
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  
+  // 页面背景
+  page {
+    background-color: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+  }
+  
+  // 输入框
+  input, textarea {
+    background-color: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border);
+    
+    &:focus {
+      border-color: var(--theme-brand-primary);
+    }
+    
+    &::placeholder {
+      color: var(--theme-text-tertiary);
+    }
+  }
+  
+  // 按钮
+  button {
+    &.button-light {
+      background-color: var(--theme-bg-primary);
+      color: var(--theme-text-primary);
+      border-color: var(--theme-border);
+      
+      &:hover {
+        background-color: var(--theme-bg-secondary);
+      }
+    }
+  }
+  
+  // 卡片组件
+  .card, .uni-card {
+    background-color: var(--theme-bg-primary);
+    border-color: var(--theme-border);
+    box-shadow: 0 2upx 12upx var(--theme-shadow);
+  }
+  
+  // 交易相关颜色
+  .price-up, .buy-color {
+    color: var(--theme-buy-color) !important;
+  }
+  
+  .price-down, .sell-color {
+    color: var(--theme-sell-color) !important;
+  }
+  
+  // K线图相关
+  .kline-up {
+    stroke: var(--theme-buy-color);
+    fill: var(--theme-buy-color);
+  }
+  
+  .kline-down {
+    stroke: var(--theme-sell-color);
+    fill: var(--theme-sell-color);
+  }
+}
+
+:root,
+.theme-light {
+  @include theme-light-variables();
+}
+
+// 浅色主题下的页面样式
+.theme-light {
+  @include theme-light-styles();
+}
+
+// 自动主题模式下的媒体查询
+@media (prefers-color-scheme: light) {
+  .theme-auto {
+    @include theme-light-variables();
+    @include theme-light-styles();
+  }
+}

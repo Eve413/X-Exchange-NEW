@@ -1,0 +1,22 @@
+/**
+ * 响应式断点变量
+ */
+
+// 屏幕尺寸断点
+$breakpoint-xs: 480px;   // 超小屏 (手机竖屏)
+$breakpoint-sm: 768px;   // 小屏 (平板竖屏)
+$breakpoint-md: 1024px;  // 中屏 (平板横屏)
+$breakpoint-lg: 1200px;  // 大屏 (桌面)
+$breakpoint-xl: 1600px;  // 超大屏 (大桌面)
+
+// 容器最大宽度
+$container-max-width-sm: 540px;
+$container-max-width-md: 720px;
+$container-max-width-lg: 960px;
+$container-max-width-xl: 1140px;
+
+// 设备类型检测 (仅H5有效)
+$mobile-max-width: $breakpoint-sm - 1;
+$tablet-min-width: $breakpoint-sm;
+$tablet-max-width: $breakpoint-md - 1;
+$desktop-min-width: $breakpoint-md; 

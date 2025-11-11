@@ -1,0 +1,83 @@
+/**
+ * 动画混入
+ */
+
+// 淡入动画
+@mixin fade-in($duration: 0.3s, $timing: ease) {
+  animation: fadeIn $duration $timing;
+}
+
+// 滑入动画
+@mixin slide-in-up($duration: 0.3s, $timing: ease) {
+  animation: slideInUp $duration $timing;
+}
+
+@mixin slide-in-down($duration: 0.3s, $timing: ease) {
+  animation: slideInDown $duration $timing;
+}
+
+// 加载动画
+@mixin loading-spinner($size: 32upx, $color: $primary-500) {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $size;
+    height: $size;
+    margin: -#{$size/2} 0 0 -#{$size/2};
+    border: 4upx solid rgba($color, 0.3);
+    border-top-color: $color;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+  }
+}
+
+// 脉冲动画
+@mixin pulse($color: $primary-500, $duration: 2s) {
+  animation: pulse $duration infinite;
+  
+  @keyframes pulse {
+    0%, 100% { 
+      box-shadow: 0 0 0 0 rgba($color, 0.7);
+    }
+    70% { 
+      box-shadow: 0 0 0 10upx rgba($color, 0);
+    }
+  }
+}
+
+// 价格闪烁动画
+@mixin price-flash($type: 'up') {
+  @if $type == 'up' {
+    animation: priceFlashUp 0.6s ease;
+    
+    @keyframes priceFlashUp {
+      0% { background-color: transparent; }
+      50% { background-color: rgba($trade-buy, 0.3); }
+      100% { background-color: transparent; }
+    }
+  } @else {
+    animation: priceFlashDown 0.6s ease;
+    
+    @keyframes priceFlashDown {
+      0% { background-color: transparent; }
+      50% { background-color: rgba($trade-sell, 0.3); }
+      100% { background-color: transparent; }
+    }
+  }
+}
+
+// 骨架屏动画
+@mixin skeleton($base-color: #f2f2f2, $highlight-color: #e6e6e6) {
+  background: linear-gradient(90deg, $base-color 25%, $highlight-color 50%, $base-color 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+  
+  @keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+} 

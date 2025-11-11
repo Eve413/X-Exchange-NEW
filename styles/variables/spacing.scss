@@ -1,0 +1,54 @@
+/**
+ * 间距系统变量
+ */
+
+// 基础间距单位
+$spacing-unit: 4upx;
+
+// 间距值
+$spacing-0: 0;
+$spacing-1: $spacing-unit;      // 4upx
+$spacing-2: $spacing-unit * 2;  // 8upx
+$spacing-3: $spacing-unit * 3;  // 12upx
+$spacing-4: $spacing-unit * 4;  // 16upx
+$spacing-5: $spacing-unit * 5;  // 20upx
+$spacing-6: $spacing-unit * 6;  // 24upx
+$spacing-8: $spacing-unit * 8;  // 32upx
+$spacing-10: $spacing-unit * 10; // 40upx
+$spacing-12: $spacing-unit * 12; // 48upx
+$spacing-16: $spacing-unit * 16; // 64upx
+$spacing-20: $spacing-unit * 20; // 80upx
+$spacing-24: $spacing-unit * 24; // 96upx
+$spacing-32: $spacing-unit * 32; // 128upx
+
+// 语义化间距
+$spacing-xs: $spacing-2;    // 8upx
+$spacing-sm: $spacing-3;    // 12upx
+$spacing-base: $spacing-4;  // 16upx
+$spacing-md: $spacing-6;    // 24upx
+$spacing-lg: $spacing-8;    // 32upx
+$spacing-xl: $spacing-12;   // 48upx
+$spacing-2xl: $spacing-16;  // 64upx
+
+// 组件特定间距
+$header-height: 88upx;
+$tabbar-height: 100upx;
+$button-height: 80upx;
+$input-height: 80upx;
+$list-item-height: 100upx;
+
+// 安全区域
+$safe-area-top: constant(safe-area-inset-top);
+$safe-area-bottom: constant(safe-area-inset-bottom);
+$safe-area-left: constant(safe-area-inset-left);
+$safe-area-right: constant(safe-area-inset-right);
+
+// 圆角半径
+$border-radius-none: 0;
+$border-radius-sm: 4upx;
+$border-radius-base: 8upx;
+$border-radius-md: 12upx;
+$border-radius-lg: 16upx;
+$border-radius-xl: 24upx;
+$border-radius-2xl: 32upx;
+$border-radius-full: 9999upx; 

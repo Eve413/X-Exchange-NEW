@@ -1,0 +1,30 @@
+/**
+ * 过渡动画变量
+ */
+
+// 过渡时间
+$transition-duration-fast: 0.15s;
+$transition-duration-base: 0.3s;
+$transition-duration-slow: 0.5s;
+
+// 过渡函数
+$transition-timing-linear: linear;
+$transition-timing-ease: ease;
+$transition-timing-ease-in: ease-in;
+$transition-timing-ease-out: ease-out;
+$transition-timing-ease-in-out: ease-in-out;
+
+// 自定义贝塞尔曲线
+$transition-timing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$transition-timing-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+// 常用过渡组合
+$transition-all: all $transition-duration-base $transition-timing-ease;
+$transition-opacity: opacity $transition-duration-base $transition-timing-ease;
+$transition-transform: transform $transition-duration-base $transition-timing-ease;
+$transition-colors: background-color $transition-duration-base $transition-timing-ease, 
+                   color $transition-duration-base $transition-timing-ease;
+
+// 交易所专用过渡
+$transition-price: color $transition-duration-fast $transition-timing-ease;
+$transition-chart: all $transition-duration-slow $transition-timing-smooth; 

@@ -1,0 +1,49 @@
+/**
+ * 字体系统变量
+ */
+
+// 字体家族 (基于设计稿)
+$font-family-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-base: $font-family-primary;
+$font-family-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+
+// 字体大小
+$font-size-xs: 20upx;
+$font-size-sm: 24upx;
+$font-size-base: 28upx;
+$font-size-lg: 32upx;
+$font-size-xl: 36upx;
+$font-size-2xl: 40upx;
+$font-size-3xl: 48upx;
+$font-size-4xl: 56upx;
+
+// 字体粗细
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// 行高
+$line-height-none: 1;
+$line-height-tight: 1.25;
+$line-height-snug: 1.375;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+$line-height-loose: 2;
+
+// 字母间距
+$letter-spacing-tighter: -0.05em;
+$letter-spacing-tight: -0.025em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.025em;
+$letter-spacing-wider: 0.05em;
+$letter-spacing-widest: 0.1em;
+
+// 字体组合预设 (基于设计稿)
+$font-heading-bold: #{$font-weight-bold} #{$font-size-2xl}/#{$line-height-tight} #{$font-family-primary};
+$font-heading-medium: #{$font-weight-medium} #{$font-size-xl}/#{$line-height-normal} #{$font-family-primary};
+$font-body-bold: #{$font-weight-bold} #{$font-size-base}/#{$line-height-normal} #{$font-family-primary};
+$font-body-medium: #{$font-weight-medium} #{$font-size-base}/#{$line-height-normal} #{$font-family-primary};
+$font-caption-medium: #{$font-weight-medium} #{$font-size-sm}/#{$line-height-normal} #{$font-family-primary}; 

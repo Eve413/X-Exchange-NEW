@@ -1,0 +1,30 @@
+/**
+ * 阴影系统变量
+ */
+
+// 基础阴影
+$shadow-xs: 0 1upx 2upx 0 rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 1upx 3upx 0 rgba(0, 0, 0, 0.1), 0 1upx 2upx 0 rgba(0, 0, 0, 0.06);
+$shadow-base: 0 4upx 6upx -1upx rgba(0, 0, 0, 0.1), 0 2upx 4upx -1upx rgba(0, 0, 0, 0.06);
+$shadow-md: 0 10upx 15upx -3upx rgba(0, 0, 0, 0.1), 0 4upx 6upx -2upx rgba(0, 0, 0, 0.05);
+$shadow-lg: 0 20upx 25upx -5upx rgba(0, 0, 0, 0.1), 0 10upx 10upx -5upx rgba(0, 0, 0, 0.04);
+$shadow-xl: 0 25upx 50upx -12upx rgba(0, 0, 0, 0.25);
+$shadow-2xl: 0 50upx 100upx -20upx rgba(0, 0, 0, 0.25);
+
+// 内阴影
+$shadow-inner: inset 0 2upx 4upx 0 rgba(0, 0, 0, 0.06);
+
+// 无阴影
+$shadow-none: none;
+
+// 交易所专用阴影
+$shadow-card: 0 2upx 12upx 0 rgba(0, 0, 0, 0.1);
+$shadow-modal: 0 10upx 40upx 0 rgba(0, 0, 0, 0.2);
+$shadow-floating: 0 8upx 24upx 0 rgba(0, 0, 0, 0.15);
+$shadow-glass: 0 8upx 32upx 0 rgba(0, 0, 0, 0.12), 0 0upx 1upx 0 rgba(255, 255, 255, 0.05) inset;
+
+// 彩色阴影
+$shadow-primary: 0 4upx 12upx 0 rgba(25, 118, 210, 0.3);
+$shadow-success: 0 4upx 12upx 0 rgba(76, 175, 80, 0.3);
+$shadow-error: 0 4upx 12upx 0 rgba(244, 67, 54, 0.3);
+$shadow-warning: 0 4upx 12upx 0 rgba(255, 152, 0, 0.3); 

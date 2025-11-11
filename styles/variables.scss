@@ -1,0 +1,22 @@
+/**
+ * 样式变量统一管理
+ * 导入所有变量文件
+ */
+
+// 颜色系统
+@import './variables/colors.scss';
+
+// 字体系统
+@import './variables/typography.scss';
+
+// 间距系统
+@import './variables/spacing.scss';
+
+// 阴影系统
+@import './variables/shadows.scss';
+
+// 过渡动画
+@import './variables/transitions.scss';
+
+// 响应式断点
+@import './variables/breakpoints.scss';
