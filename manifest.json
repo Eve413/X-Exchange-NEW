@@ -1,6 +1,6 @@
 {
     "name" : "1313",
-    "appid" : "__UNI__BE5311F",
+    "appid" : "__UNI__G11F096E",
     "description" : "141413",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -117,5 +117,10 @@
             "base" : "./"
         }
     },
-    "vueVersion" : "3"
+    "vueVersion" : "3",
+    "app-harmony" : {
+        "distribute" : {
+            "bundleName" : "xtrader"
+        }
+    }
 }

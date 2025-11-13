@@ -49,7 +49,7 @@ function deletePhone() {
 
 <style scoped>
 .page {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   height: 100vh;
   display: flex;
@@ -62,7 +62,8 @@ function deletePhone() {
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
+  padding-top: 50rpx;
 }
 .back-btn {
   width: 40px;
@@ -85,11 +86,12 @@ function deletePhone() {
 
 /* 手机卡片 */
 .phone-card {
-  background-color: #1c1c1e;
+  background-color: #2a2a2a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   padding: 14px 16px;
+  margin-top: 50rpx;
 }
 .flag {
   width: 36px;

@@ -101,7 +101,7 @@ const goToMydevice= () => {
 
 <style scoped>
 .bind-page-dialog {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   min-height: 100vh;
   display: flex;
@@ -115,8 +115,9 @@ const goToMydevice= () => {
   justify-content: center;
   position: relative;
   height: 100rpx;
-  background-color: #1e1e1e;
-  border-bottom: 1rpx solid #2a2a2a;
+  background-color: #202020;
+  padding-top: 40rpx;
+  /* border-bottom: 1rpx solid #2a2a2a; */
 }
 .back-icon-dialog {
   position: absolute;
@@ -137,7 +138,7 @@ const goToMydevice= () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #1e1e1e;
+  background-color: #2A2A2A;
   padding: 24rpx;
   border-radius: 16rpx;
   margin-bottom: 20rpx;
@@ -179,7 +180,7 @@ const goToMydevice= () => {
 
 /* Activity Box */
 .activity-box-dialog {
-  background-color: #1e1e1e;
+  background-color: #2A2A2A;
   border-radius: 16rpx;
   margin: 40rpx 24rpx;
   padding: 24rpx;

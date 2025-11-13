@@ -16,11 +16,12 @@
       <view class="project-info">
         <view class="project-header">
           <view class="project-left">
-            <image src="/static/icons/star.png" mode="aspectFit" class="project-icon" />
+            <image :src="data?.icon" mode="aspectFit" class="project-icon" />
 
             <view class="project-bottom">
-              <text class="project-name">NOVA Token</text>
-              <text class="project-description">{{ t('newlisting.detail.project_description') }}</text>
+              <text class="project-name">{{ data?.baseAsset }}</text>
+               <view class="project-description" v-html="data?.description"></view>
+              <!-- <text class="project-description">{{ t('newlisting.detail.project_description') }}</text> -->
             </view>
 
           </view>
@@ -28,7 +29,7 @@
           <view class="project-title-container">
 
             <view class="project-status status-ongoing">
-              <text class="status-text">{{ t('newlisting.status_ongoing') }}</text>
+              <text class="status-text">{{data?.airdrop_status}}</text>
             </view>
           </view>
         </view>
@@ -39,17 +40,17 @@
       <view class="progress-section">
         <view class="progress-header">
           <text class="progress-label">{{ t('newlisting.detail.funding_progress') }}</text>
-          <text class="progress-amount">650,000 USD / 1,000,000 USD</text>
+          <text class="progress-amount">{{data?.progress?.raised}} / {{data?.progress?.target}}</text>
         </view>
         <view class="progress-bar">
           <view class="progress-fill" :style="{ width: '65%' }"></view>
         </view>
         <view class="progress-stats">
-          <text class="progress-percentage">65% {{ t('newlisting.detail.completed') }}</text>
-          <text class="participants-count">3.24万 {{ t('newlisting.detail.participants') }}</text>
+          <text class="progress-percentage">{{data?.progress?.percent}} {{ t('newlisting.detail.completed') }}</text>
+          <text class="participants-count">{{data?.progress?.participants}} {{ t('newlisting.detail.participants') }}</text>
         </view>
         <view class="countdown">
-          <text class="countdown-text">{{ t('newlisting.detail.time_remaining') }} 3天15:23:45</text>
+          <text class="countdown-text">{{ t('newlisting.detail.time_remaining') }} {{data?.time_remaining}}</text>
         </view>
       </view>
     </view>
@@ -58,7 +59,7 @@
     <view class="purchase-section">
       <view class="section-title">
         <text class="title-text">{{ t('newlisting.detail.purchase_amount') }}</text>
-        <text class="price-text">0.05 USDT</text>
+        <text class="price-text">{{data?.subscription?.price}}</text>
       </view>
 
       <view class="amount-input">
@@ -71,7 +72,7 @@
 
       <view class="estimated-return">
         <text class="estimated-label">{{ t('newlisting.detail.estimated_return') }}</text>
-        <text class="estimated-value1">0.01 BTC</text>
+        <text class="estimated-value1">{{data?.subscription?.price_receive}}</text>
       </view>
 
       <view class="limit-info">
@@ -86,66 +87,39 @@
       <view class="section-top">
         <view class="detail-item">
           <view class="detail-label">{{ t('newlisting.detail.start_time') }}</view>
-          <view class="detail-value">2024-03-20 10:00:00</view>
+          <view class="detail-value">{{ data?.details?.start_date }}</view>
         </view>
 
         <view class="detail-item">
           <view class="detail-label">{{ t('newlisting.detail.end_time') }}</view>
-          <view class="detail-value">2024-03-25 10:00:00</view>
+          <view class="detail-value">{{data?.details?.end_date}}</view>
         </view>
       </view>
 
       <view class="highlights-section">
         <text class="section-title-text">{{ t('newlisting.detail.project_highlights') }}</text>
 
-        <view class="highlight-item">
-          <text class="check-icon">✓</text>
-          <text class="highlight-text">{{ t('newlisting.detail.highlight1') }}</text>
-        </view>
-
-        <view class="highlight-item">
-          <text class="check-icon">✓</text>
-          <text class="highlight-text">{{ t('newlisting.detail.highlight2') }}</text>
-        </view>
-
-        <view class="highlight-item">
-          <text class="check-icon">✓</text>
-          <text class="highlight-text">{{ t('newlisting.detail.highlight3') }}</text>
-        </view>
-
-        <view class="highlight-item">
-          <text class="check-icon">✓</text>
-          <text class="highlight-text">{{ t('newlisting.detail.highlight4') }}</text>
+         <view v-for="(point, i) in data?.details?.highlights" :key="i" class="highlight-item">
+            <view class="highlight-item">
+              <image src="/static/icons/checkImg.png" mode="aspectFit" class="check-icon" />
+              <text class="highlight-text">{{ point.title }}</text>
+            </view>
         </view>
       </view>
       <!-- 解锁时间表 -->
       <view class="unlock-section">
         <text class="section-title-text2">{{ t('newlisting.detail.unlock_schedule') }}</text>
 
+        <view
+          v-for="(item, i) in data?.details?.unlock_schedule"
+          :key="i"
+        >
         <view class="unlock-item">
-          <text class="unlock-time">TGE</text>
-          <text class="unlock-percentage">20%</text>
+          <text class="unlock-time">{{item.title}}</text>
+          <text class="unlock-percentage">{{ item.percentage }}</text>
+        </view>
         </view>
 
-        <view class="unlock-item">
-          <text class="unlock-time">{{ t('newlisting.detail.one_month_later') }}</text>
-          <text class="unlock-percentage">20%</text>
-        </view>
-
-        <view class="unlock-item">
-          <text class="unlock-time">{{ t('newlisting.detail.two_months_later') }}</text>
-          <text class="unlock-percentage">20%</text>
-        </view>
-
-        <view class="unlock-item">
-          <text class="unlock-time">{{ t('newlisting.detail.three_months_later') }}</text>
-          <text class="unlock-percentage">20%</text>
-        </view>
-
-        <view class="unlock-item">
-          <text class="unlock-time">{{ t('newlisting.detail.four_months_later') }}</text>
-          <text class="unlock-percentage">20%</text>
-        </view>
       </view>
     </view>
 
@@ -162,10 +136,12 @@
       </view>
 
       <view class="risk-content">
-        <text class="risk-text">• {{ t('newlisting.detail.risk_volatility') }}</text>
+
+         <view class="risk-text" v-html="data?.risk_warning"></view>
+        <!-- <text class="risk-text">• {{ t('newlisting.detail.risk_volatility') }}</text>
         <text class="risk-text">• {{ t('newlisting.detail.risk_market') }}</text>
         <text class="risk-text">• {{ t('newlisting.detail.risk_technical') }}</text>
-        <text class="risk-text">• {{ t('newlisting.detail.risk_assessment') }}</text>
+        <text class="risk-text">• {{ t('newlisting.detail.risk_assessment') }}</text> -->
       </view>
     </view>
 
@@ -178,10 +154,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-
+import { useUserStore,AirdropsSubscriptionDetilParams } from '@/store/modules/user'
+const userStore = useUserStore()
+const userInfo = uni.getStorageSync('userData')
 const { t } = useI18n();
+
+const pages = getCurrentPages();
+const currentPage = pages[pages.length - 1];
+const productId = currentPage.options.id || '1';
+const data = ref({})
 
 // 认购金额
 const purchaseAmount = ref('10000');
@@ -190,6 +173,61 @@ const purchaseAmount = ref('10000');
 const goBack = () => {
   uni.navigateBack();
 };
+
+onMounted(async () => {
+
+
+   try {
+
+    const params: AirdropsSubscriptionDetilParams = {
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      token: userInfo.data.token,
+      lang: 'en',
+      id:  productId,
+    }
+
+    const result = await userStore.postAirdropsSubscriptionDetil(params)
+    if (result.data.status === -1) {
+      handleLogout()
+    } else{
+      data.value = result.data.data
+      purchaseAmount.value = data.value.subscription.balance
+    }
+  } catch (e) {
+    console.error('❌ Failed to load details:', e)
+  }
+})
+
+const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -454,10 +492,12 @@ const goBack = () => {
   font-size: 28rpx;
   color: #6F4BFD;
 }
+
 .estimated-value1 {
   font-size: 28rpx;
   color: #19AF00;
 }
+
 .limit-info {
   display: flex;
   justify-content: space-between;
@@ -525,14 +565,17 @@ const goBack = () => {
   padding: 20rpx 0;
   // border-bottom: 1rpx solid #333333;
 }
-.unlock-section{
+
+.unlock-section {
   margin-top: 30rpx;
 }
+
 .check-icon {
   font-size: 24rpx;
-  color: #6F4BFD;
+  // color: #6F4BFD;
   margin-right: 20rpx;
-  width: 30rpx;
+  width: 32rpx;
+  height: 32rpx;
   text-align: center;
 }
 

@@ -230,7 +230,7 @@ function getHotTradingData() {
       name: "Ethereum",
       code: "ETH",
       pair: "ETH/USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 2509.75,
       percentChange24h: -21.0,
       sparkline: "/static/icons/line_chart.png",
@@ -280,7 +280,7 @@ async function loadData(type: string) {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type: type || "",
-      limit: 20, // 使用与trade页面相同的limit值
+      limit: 100, // 使用与trade页面相同的limit值
     };
     const resultAuth = await userStore.getTickers(tickersParams);
     tradeList.value = resultAuth.data;
@@ -317,7 +317,7 @@ function getMockData() {
       name: "Ethereum",
       code: "ETH",
       pair: "ETH/USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 2509.75,
       percentChange24h: -21.0,
       sparkline: "/static/icons/line_chart.png",
@@ -568,7 +568,7 @@ function handleItemClick(item: any) {
 .results-list {
   display: flex;
   flex-direction: column;
-  gap: 30rpx;
+  /* gap: 30rpx; */
 }
 
 .result-item {
@@ -581,6 +581,7 @@ function handleItemClick(item: any) {
   background-color: #2a2a2a;
   /* border-bottom: 1rpx solid #333; */
   position: relative;
+  margin-top: 30rpx;
 }
 
 .item-left {

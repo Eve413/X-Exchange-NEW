@@ -32,7 +32,7 @@
         <view class="section-label">{{ t('recharge.select_currency') }}</view>
         <view class="currency-item">
           <view class="currency-info">
-            <image class="currency-logo" src="/static/tubiao/bizhong/usdt.png" mode="aspectFit"></image>
+<image class="currency-logo" src="/static/tubiao/bizhong/USDT.png" mode="aspectFit"></image>
             <view class="currency-bottom">
               <text class="currency-name">USDT</text>
             <text class="currency-desc">Tether</text>

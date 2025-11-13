@@ -91,7 +91,7 @@ function transferToHuman() {
 
 <style scoped>
 .chat-page {
-  background-color: #1a1a1a;
+  background-color: #202020;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -105,7 +105,7 @@ function transferToHuman() {
   height: 50px;
   display: flex;
   align-items: center;
-  background-color: #1a1a1a;
+  background-color: #202020;
   padding: 0 20px;
   box-sizing: border-box;
   position: sticky;
@@ -144,7 +144,7 @@ function transferToHuman() {
 /* 聊天区 */
 .chat-scroll {
   flex: 1;
-  padding: 14rpx;
+  padding: 14rpx 30rpx;
   box-sizing: border-box;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -255,7 +255,7 @@ function transferToHuman() {
   display: flex;
   align-items: center;
   padding: 8px 10px;
-  background-color: #1a1a1a;
+  background-color: #202020;
   padding-bottom: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   position: sticky;

@@ -122,7 +122,7 @@
           class="banner-item"
         >
           <view class="banner-gradient">
-            <!-- <image :src="banner.banner_url" class="banner-image" mode="aspectFill" /> -->
+            <image :src="banner.banner_url" class="banner-image" mode="aspectFill" />
             <text class="banner-text">{{ banner.title }}</text>
           </view>
         </view>
@@ -172,7 +172,7 @@
         </view>
 
         <!-- Card 2 -->
-        <view class="promo-card">
+        <view class="promo-card" @click="goToTeamDashboard">
           <view class="team-logo">{{ dataProfile?.Hot?.name ?? "-" }}</view>
           <view class="team-title">{{ $t('profile.my_team_title') }}</view>
           <view class="team-desc">{{
@@ -655,7 +655,7 @@ onLoad(async (options) => {
             console.log("✅ Successfully loaded banner data");
           } else {
             // 如果没有横幅数据，使用模拟横幅数据
-            banners.value = mockBannerData;
+            banners.value = resultBanner.data.data;
             console.log("⚠️  No banner data from API, using mock banners");
           }
         } catch (bannerError) {
@@ -686,6 +686,16 @@ const onMenuClick = (item) => {
     // 点击跟单交易，跳转到market页面
     uni.navigateTo({
       url: '/pages/market/index'
+    });
+  } else if (item.id === 2) {
+    // 点击理财，跳转到理财页面
+    uni.navigateTo({
+      url: '/pages/wealth/index'
+    });
+  } else if (item.id === 3) {
+    // 点击空投活动，跳转到空投页面
+    uni.navigateTo({
+      url: '/pages/airdrop/index'
     });
   } else if (item.id === 5) {
     // 点击闪兑，跳转到market页面
@@ -790,6 +800,16 @@ const goToNotification = () => {
       url: "/pages/notification/index",
       success: () => console.log("✅ Navigated"),
       fail: (err) => console.error("❌ Navigation failed:", err),
+    });
+  }, 500);
+};
+
+const goToTeamDashboard = () => {
+  setTimeout(() => {
+    uni.navigateTo({
+      url: "/pages/team/index",
+      success: () => console.log("✅ 成功跳转到团队看板"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
     });
   }, 500);
 };

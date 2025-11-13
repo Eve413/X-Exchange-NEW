@@ -21,7 +21,7 @@
         />
         <image
           class="eye-icon"
-          :src="showNewPassword ? '/static/icons/ic_eye_open.png' : '/static/icons/ic_eye_close.png'"
+          :src="showNewPassword ? '/static/icons/ic_eye.png' : '/static/icons/ic_eye_close.png'"
           @click="showNewPassword = !showNewPassword"
           mode="aspectFit"
         />
@@ -45,7 +45,7 @@
         />
         <image
           class="eye-icon"
-          :src="showConfirmPassword ? '/static/icons/ic_eye_open.png' : '/static/icons/ic_eye_close.png'"
+          :src="showConfirmPassword ? '/static/icons/ic_eye.png' : '/static/icons/ic_eye_close.png'"
           @click="showConfirmPassword = !showConfirmPassword"
           mode="aspectFit"
         />
@@ -87,7 +87,7 @@ function confirmChange() {
 
 <style scoped>
 .page {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   height: 100vh;
   display: flex;
@@ -100,7 +100,9 @@ function confirmChange() {
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 50rpx;
+  box-sizing: content-box;
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
 }
 .back-btn {
   width: 40px;
@@ -129,7 +131,7 @@ function confirmChange() {
 .input-row {
   display: flex;
   align-items: center;
-  background-color: #1c1c1e;
+  background-color: #2a2a2a;
   border-radius: 10px;
   padding: 0 10px;
   height: 44px;
@@ -162,13 +164,15 @@ function confirmChange() {
 
 /* 确认按钮 */
 .btn-confirm {
-  width: 100%;
+  width: 680rpx;
   height: 44px;
   border-radius: 22px;
   text-align: center;
   line-height: 44px;
   font-size: 15px;
   color: #fff;
-  background: linear-gradient(90deg, #9b5cff, #ff5fa2);
+  background: linear-gradient(175deg, #5565B9, #CD5890);
+  position: absolute;
+  bottom: 100rpx;
 }
 </style>

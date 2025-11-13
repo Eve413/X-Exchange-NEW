@@ -337,6 +337,20 @@
         "navigationBarTitleText": "空投活动",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/airdrop/result",
+      "style": {
+        "navigationBarTitleText": "空投活动",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/activity/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
     }
   ],
 

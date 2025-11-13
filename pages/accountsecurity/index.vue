@@ -11,13 +11,13 @@
     <!-- 内容区 -->
     <view class="content">
       <text class="title">双重验证 (2FA)</text>
-      <text class="subtitle">
+      <view class="subtitle">
         为保障账户安全，请至少启用两种双重身份的验证形式。
-      </text>
+      </view>
 
       <!-- 验证选项 -->
-      <view class="option" v-for="(item, i) in options" :key="i">
-        <view class="option-left" @click="goToNextPage(item)">
+      <view class="option" v-for="(item, i) in options" :key="i" @click="goToNextPage(item)">
+        <view class="option-left">
           <image class="icon" :src="item.icon" mode="aspectFit" />
           <text class="label">{{ item.label }}</text>
         </view>
@@ -37,24 +37,24 @@ const options = ref([
   {
     label: '邮箱',
     icon: '/static/icons/user.png',
-    page:'/pages/changeemail/index',
+    page: '/pages/changeemail/index',
     active: true
   },
   {
     label: '登陆密码',
-    page:'/pages/changepassword/index',
-    icon: '/static/icons/user.png',
+    page: '/pages/changepassword/index',
+    icon: '/static/icons/lock.png',
     active: false
   },
   {
     label: '支付PIN码',
-    page:'/pages/setpincode/index',
-    icon: '/static/icons/user.png',
+    page: '/pages/setpincode/index',
+    icon: '/static/icons/lock.png',
     active: false
   },
   {
     label: '手机号',
-    page:'/pages/phoneverify/index',
+    page: '/pages/phoneverify/index',
     icon: '/static/icons/user.png',
     active: false
   }
@@ -65,20 +65,18 @@ function goBack() {
 }
 
 function goToNextPage(item) {
-
-     setTimeout(() => {
-      uni.navigateTo({
-        url: item.page,
-        success: () => console.log('✅ Navigated'),
-        fail: (err) => console.error('❌ Navigation failed:', err)
-      })
-    }, 500)
+  console.log(item, '>>>>>>>>>>>')
+  uni.navigateTo({
+    url: item.page,
+    success: () => console.log('✅ Navigated'),
+    fail: (err) => console.error('❌ Navigation failed:', err)
+  })
 }
 </script>
 
 <style scoped>
 .page {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   height: 100vh;
   display: flex;
@@ -91,8 +89,11 @@ function goToNextPage(item) {
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 40rpx;
+  box-sizing: content-box;
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
 }
+
 .back-btn {
   width: 40px;
   height: 50px;
@@ -100,16 +101,19 @@ function goToNextPage(item) {
   align-items: center;
   justify-content: center;
 }
+
 .back-icon {
   width: 22px;
   height: 22px;
 }
+
 .header-title {
   flex: 1;
   text-align: center;
   font-weight: 600;
   font-size: 16px;
-  margin-right: 40px; /* agar tetap center */
+  margin-right: 40px;
+  /* agar tetap center */
 }
 
 /* 内容区 */
@@ -117,11 +121,13 @@ function goToNextPage(item) {
   padding: 20px 16px;
   flex: 1;
 }
+
 .title {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 4px;
 }
+
 .subtitle {
   font-size: 13px;
   color: #999;
@@ -131,7 +137,7 @@ function goToNextPage(item) {
 
 /* 选项卡 */
 .option {
-  background-color: #1c1c1e;
+  background-color: #2A2A2A;
   border-radius: 10px;
   padding: 14px 12px;
   display: flex;
@@ -139,15 +145,18 @@ function goToNextPage(item) {
   align-items: center;
   margin-bottom: 12px;
 }
+
 .option-left {
   display: flex;
   align-items: center;
 }
+
 .icon {
   width: 20px;
   height: 20px;
   margin-right: 10px;
 }
+
 .label {
   font-size: 14px;
 }
@@ -162,6 +171,7 @@ function goToNextPage(item) {
   align-items: center;
   justify-content: center;
 }
+
 .dot {
   width: 10px;
   height: 10px;
@@ -169,4 +179,3 @@ function goToNextPage(item) {
   border-radius: 50%;
 }
 </style>
-

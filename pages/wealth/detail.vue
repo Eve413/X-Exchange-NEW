@@ -21,24 +21,24 @@
       <!-- 产品基本信息 -->
       <view class="product-header-section">
         <view class="product-basic-info">
-          <image class="product-icon" :src="productInfo.icon" mode="aspectFit" />
+          <image class="product-icon" :src="productInfo?.Staking?.icon" mode="aspectFit" />
           <view class="product-name-container">
-            <text class="product-name">{{ productInfo.name }}</text>
-            <text class="product-full-name">{{ productInfo.fullName }}</text>
+            <text class="product-name">{{ productInfo?.Staking?.baseAsset }}</text>
+            <text class="product-full-name">{{ productInfo?.Staking?.name }}</text>
           </view>
           <view class="product-tag">
-            <text class="tag-text">{{ productInfo.tag }}</text>
+            <text class="tag-text">{{ productInfo?.Staking?.category }}</text>
           </view>
         </view>
 
         <view class="product-return-info">
           <view class="return-item">
             <text class="return-label">{{ t('wealth.annual_return_rate') }}</text>
-            <text class="return-value green-text">{{ productInfo.annualRate }}%</text>
+            <text class="return-value green-text">{{ productInfo?.Staking?.apr_percent }}%</text>
           </view>
           <view class="return-item">
             <text class="return-label">{{ t('wealth.wealth_period') }}</text>
-            <text class="return-value">{{ productInfo.period }}</text>
+            <text class="return-value">{{ productInfo?.Staking?.type }}</text>
           </view>
         </view>
       </view>
@@ -77,19 +77,19 @@
         <view class="info-grid">
           <view class="info-item">
             <text class="info-label">{{ t('wealth.min_purchase') }}</text>
-            <text class="info-value">{{ productInfo.minPurchase }}</text>
+            <text class="info-value">{{ productInfo?.Staking?.min_deposit }}</text>
           </view>
           <view class="info-item">
             <text class="info-label">{{ t('wealth.total_quota') }}</text>
-            <text class="info-value">{{ productInfo.totalQuota }}</text>
+            <text class="info-value">{{ productInfo?.Staking?.total_quota }}</text>
           </view>
           <view class="info-item">
             <text class="info-label">{{ t('wealth.remaining_quota') }}</text>
-            <text class="info-value remaining">>{{ productInfo.remainingQuota }}</text>
+            <text class="info-value remaining">>{{ productInfo?.Staking?.remaining_quota }}</text>
           </view>
           <view class="info-item">
             <text class="info-label">{{ t('wealth.interest_calculation') }}</text>
-            <text class="info-value">{{ productInfo.interestCalculation }}</text>
+            <text class="info-value">{{ productInfo?.Staking?.interest_method }}</text>
           </view>
         </view>
       </view>
@@ -99,22 +99,23 @@
         <text class="section-title">{{ t('wealth.purchase_amount') }}</text>
         <view class="available-balance">
           <text class="balance-label">{{ t('wealth.available_balance') }}</text>
-          <text class="balance-value">{{ productInfo.availableBalance }}</text>
+          <text class="balance-value">{{ productInfo?.Balance?.total }}</text>
+          
         </view>
 
         <view class="amount-input-container">
           <input class="amount-input" type="digit" placeholder="" v-model="purchaseAmount"
             :placeholder-class="'placeholder-class'" />
           <view class="currency-selector">
-            <text class="currency-text">{{ productInfo.currency }}</text>
+            <text class="currency-text">{{ productInfo?.Balance?.baseAsset }}</text>
             <image class="dropdown-icon" src="/static/tubiao/xiala.png" mode="aspectFit" />
           </view>
         </view>
-        <text class="input-hint">{{ t('wealth.min_purchase') }}: {{ productInfo.minPurchase }}</text>
+        <text class="input-hint">{{ t('wealth.min_purchase') }}: {{  productInfo?.Balance?.total }}</text>
 
         <view class="estimated-return">
           <text class="return-label">{{ t('wealth.estimated_daily_return') }}</text>
-          <text class="return-value green-text">{{ productInfo.estimatedDailyReturn }}</text>
+          <text class="return-value green-text">{{productInfo?.Balance?.total  }}</text>
         </view>
       </view>
 
@@ -143,6 +144,9 @@
 import { ref, onMounted } from "vue";
 import { tl } from "@/utils/i18n";
 import { useSafeArea } from "@/utils/composables/useSafeArea";
+import {useUserStore, StakingsDetilsParams, StakingsSubscriptionParams} from '@/store/modules/user'
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
 
 const { getTopStyle } = useSafeArea();
 const t = tl;
@@ -157,26 +161,80 @@ const purchaseAmount = ref('');
 
 // 产品详情模拟数据
 const productInfo = ref({
-  id: productId,
-  name: 'BTC',
-  fullName: 'Bitcoin',
-  icon: '/static/logo/logos_bitcoin.png',
-  tag: t('wealth.hot'),
-  annualRate: '10.00',
-  period: t('wealth.flexible'),
-  minPurchase: '0.001 BTC',
-  totalQuota: '100 BTC',
-  remainingQuota: '45.8 BTC',
-  interestCalculation: t('wealth.daily_interest'),
-  availableBalance: '10,000 USDT',
-  currency: 'BTC',
-  estimatedDailyReturn: '0.01 BTC'
+  // id: productId,
+  // name: 'BTC',
+  // fullName: 'Bitcoin',
+  // icon: '/static/logo/logos_bitcoin.png',
+  // tag: t('wealth.hot'),
+  // annualRate: '10.00',
+  // period: t('wealth.flexible'),
+  // minPurchase: '0.001 BTC',
+  // totalQuota: '100 BTC',
+  // remainingQuota: '45.8 BTC',
+  // interestCalculation: t('wealth.daily_interest'),
+  // availableBalance: '10,000 USDT',
+  // currency: 'BTC',
+  // estimatedDailyReturn: '0.01 BTC'
 });
 
-onMounted(() => {
+onMounted(async () => {
   // 这里可以根据productId获取不同的产品数据
   console.log('产品详情页面加载，产品ID:', productId);
+
+   try {
+          const stakingsDetilsParams: StakingsDetilsParams = {
+            passkey: userStore.pasKeyAuth,
+            device:userStore.deviceAuth,
+            appversion:userStore.appversionAuth,
+            token: userInfo.data.token,
+            lang: "en",
+            staking_id: productId
+          }
+
+          
+
+          const resultStakings = await userStore.getStakingsDetil(stakingsDetilsParams)
+
+      
+              if (resultStakings.data.status === -1){
+                            handleLogout()
+                        }
+          productInfo.value = resultStakings.data.data
+        //   balance.value = resultStakings.data.data.Balance
+        //   features.value = resultStakings.data.data.Staking.Feature
+         
+    
+        } catch (e) {
+          console.error('❌ Failed to load tickers:', e)
+        }
 });
+
+const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
 
 // 返回上一页
 const goBack = () => {
@@ -190,10 +248,50 @@ const shareProduct = () => {
 };
 
 // 确认申购
-const confirmPurchase = () => {
-  if (!purchaseAmount.value) {
+const confirmPurchase = async () => {
+  
+
+  try {
+    
+
+   if (!purchaseAmount.value) {
     console.log('请输入申购金额');
     return;
+  }
+
+    // const [amount, symbol] = purchaseAmount.value.total.split(" ")
+
+    const stakingsSubscriptionParams: StakingsSubscriptionParams = {
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      token: userInfo.data.token,
+      lang: "en",
+      staking_id: productId,
+      amount: purchaseAmount.value
+    }
+
+    console.log('🧾 Sending subscription params:', stakingsSubscriptionParams)
+
+    const resultStakings = await userStore.postStakingsSubscriptionParams(stakingsSubscriptionParams)
+
+    console.log
+    if (resultStakings?.data?.status === -1) {
+      handleLogout()
+      return
+    } else {
+      uni.showToast({
+        title: resultStakings.data.msg,
+        icon: resultStakings.data.msg
+      })
+    }
+
+  } catch (e) {
+    console.error('❌ Failed to subscribe staking:', e)
+    uni.showToast({
+      title: 'Network error',
+      icon: 'none'
+    })
   }
 
   console.log('确认申购，金额:', purchaseAmount.value, productInfo.value.currency);

@@ -270,7 +270,7 @@ function getMockData() {
       code: "ETH",
       pair: "ETH/USDT",
       quoteAsset: "USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 2509.75,
       percentChange24h: -21.0,
       sparkline: "/static/icons/line_chart.png",
@@ -358,7 +358,7 @@ function getMockData() {
       code: "UNI",
       pair: "UNI/USDT",
       quoteAsset: "USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 6.78,
       percentChange24h: 1.92,
       sparkline: "/static/icons/line_chart.png",
@@ -380,7 +380,7 @@ async function loadData(type: string) {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type,
-      limit: 20,
+      limit: 100,
     };
     const resultAuth = await userStore.getTickers(tickersParams);
     tradeList.value = resultAuth.data || [];
@@ -954,7 +954,7 @@ const handleTabChange = (tab: any, index: number) => {
 .results-list {
   display: flex;
   flex-direction: column;
-  gap: 30rpx;
+  // gap: 30rpx;
 }
 
 .result-item {
@@ -966,6 +966,7 @@ const handleTabChange = (tab: any, index: number) => {
   border-radius: 20rpx;
   background-color: #2a2a2a;
   position: relative;
+  margin-top: 30rpx;
 }
 
 .result-item .item-left {

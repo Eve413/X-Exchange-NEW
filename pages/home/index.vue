@@ -41,9 +41,9 @@
         </view>
 
         <!-- Baris 3 -->
-        <view class="row amount-row" @click="goToRecharge">
+        <view class="row amount-row">
           <text class="amount">0.00</text>
-          <view class="recharge-btn">{{
+          <view class="recharge-btn" @click="goToRecharge">{{
             $t("home.go_to_top_up")
           }}</view>
         </view>
@@ -261,7 +261,7 @@ onLoad(async (options) => {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type: "",
-      limit: 20,
+      limit: 100,
     };
 
     const resultAuth = await userStore.getTickers(tickersParams);
@@ -320,6 +320,20 @@ const selectItem = (id: any) => {
       fail: (err) => console.error("❌ 跳转失败:", err),
     });
     // }, 100)
+  } else if (id == 3) {
+    // 点击空投按钮跳转到空投页面
+    uni.navigateTo({
+      url: "/pages/airdrop/index",
+      success: () => console.log("✅ 跳转到空投页面"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
+    });
+  } else if (id == 4) {
+    // 点击打新按钮跳转到打新页面
+    uni.navigateTo({
+      url: "/pages/wealth/newlisting",
+      success: () => console.log("✅ 跳转到打新页面"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
+    });
   }
 };
 

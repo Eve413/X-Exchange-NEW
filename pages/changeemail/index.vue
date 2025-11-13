@@ -88,7 +88,7 @@ function confirmBind() {
 
 <style scoped>
 .page {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   height: 100vh;
   display: flex;
@@ -101,7 +101,8 @@ function confirmBind() {
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 50rpx;
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
 }
 .back-btn {
   width: 40px;
@@ -136,7 +137,7 @@ function confirmBind() {
 .input-row {
   display: flex;
   align-items: center;
-  background-color: #1c1c1e;
+  background-color: #2A2A2A;
   border-radius: 10px;
   padding: 0 10px;
   height: 44px;
@@ -152,7 +153,7 @@ function confirmBind() {
 }
 .btn-send {
   padding: 6px 12px;
-  background: linear-gradient(90deg, #9b5cff, #ff5fa2);
+  background: linear-gradient(175deg, #5565B9, #CD5890);
   border-radius: 20px;
   font-size: 13px;
   color: #fff;
@@ -169,7 +170,7 @@ function confirmBind() {
 .code-input {
   width: 44px;
   height: 44px;
-  background-color: #1c1c1e;
+  background-color: #2A2A2A;
   border-radius: 8px;
   text-align: center;
   color: #fff;
@@ -189,13 +190,15 @@ function confirmBind() {
 
 /* 确认按钮 */
 .btn-confirm {
-  width: 100%;
+  width: 680rpx;
   height: 44px;
   border-radius: 22px;
   text-align: center;
   line-height: 44px;
   font-size: 15px;
   color: #fff;
-  background: linear-gradient(90deg, #9b5cff, #ff5fa2);
+  position: absolute;
+  bottom: 100rpx;
+  background: linear-gradient(175deg, #5565B9, #CD5890);
 }
 </style>

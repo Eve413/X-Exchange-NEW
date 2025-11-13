@@ -850,7 +850,7 @@ function getMockMarketData() {
       code: "ETH",
       pair: "ETH/USDT",
       quoteAsset: "USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 2509.75,
       percentChange24h: -21.0,
       sparkline: "/static/icons/line_chart.png",
@@ -938,7 +938,7 @@ function getMockMarketData() {
       code: "UNI",
       pair: "UNI/USDT",
       quoteAsset: "USDT",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 6.78,
       percentChange24h: 1.92,
       sparkline: "/static/icons/line_chart.png",
@@ -961,7 +961,7 @@ function getMockMarketData() {
       code: "0700.HK",
       pair: "0700.HK/HKD",
       quoteAsset: "HKD",
-      icon: "/static/logo/logos_ethereum.png",
+  icon: "/static/logo/logos_eth.png",
       lastPrice: 324.6,
       percentChange24h: -1.23,
       sparkline: "/static/icons/line_chart.png",
@@ -998,7 +998,7 @@ async function loadData(type: string = "") {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type,
-      limit: 20,
+      limit: 100,
     };
     const resultAuth = await userStore.getTickers(tickersParams);
     marketData.value = resultAuth.data || [];

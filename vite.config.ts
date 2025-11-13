@@ -95,7 +95,9 @@ export default {
     __VUE_PROD_DEVTOOLS__: false,
     __VUE_I18N_FULL_INSTALL__: true,
     __VUE_I18N_LEGACY_API__: false,
-    __INTLIFY_PROD_DEVTOOLS__: false
+    __INTLIFY_PROD_DEVTOOLS__: false,
+    // 在运行时代码中可读取平台常量（'h5' | 'app-plus' | 'mp-*'）
+    UNI_PLATFORM: JSON.stringify(UNI)
   },
   build: {
     sourcemap: false,

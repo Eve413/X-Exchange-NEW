@@ -48,7 +48,7 @@ const goBack = () => {
 
 <style scoped>
 .settings-page {
-  background-color: #1e1e1e;
+  background-color: #202020;
   min-height: 100vh;
   padding: 0 30rpx;
   color: #fff;
@@ -114,11 +114,11 @@ const goBack = () => {
 
 .item-value {
   font-size: 28rpx;
-  color: #b3b3b3;
+  color: #9AA4AE;
 }
 
 .arrow {
   font-size: 20rpx;
-  color: #b3b3b3;
+  color: #9AA4AE;
 }
 </style>

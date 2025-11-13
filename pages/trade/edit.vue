@@ -140,7 +140,7 @@ function getMockData() {
       name: 'ETH',
       code: 'ETH',
       pair: 'ETH/USDT',
-      icon: '/static/logo/logos_ethereum.png',
+  icon: '/static/logo/logos_eth.png',
       lastPrice: 16687000000,
       percentChange24h: -21.0,
       leverage: '5X',
@@ -243,7 +243,7 @@ async function loadData() {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type: '',
-      limit: 20
+      limit: 100
     }
 
     const resultAuth = await userStore.getTickers(tickersParams)

@@ -87,7 +87,7 @@ function confirmPin() {
 
 <style scoped>
 .page {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   height: 100vh;
   display: flex;
@@ -100,7 +100,8 @@ function confirmPin() {
   display: flex;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
+  padding-top: 50rpx;
 }
 .back-btn {
   width: 40px;
@@ -148,7 +149,7 @@ function confirmPin() {
 .code-input {
   width: 44px;
   height: 44px;
-  background-color: #1c1c1e;
+  background-color: #2a2a2a;
   border-radius: 8px;
   text-align: center;
   color: #fff;
@@ -169,13 +170,15 @@ function confirmPin() {
 
 /* 确认按钮 */
 .btn-confirm {
-  width: 100%;
+  width: 680rpx;
   height: 44px;
   border-radius: 22px;
   text-align: center;
   line-height: 44px;
   font-size: 15px;
   color: #fff;
-  background: linear-gradient(90deg, #9b5cff, #ff5fa2);
+  background: linear-gradient(175deg, #5565B9, #CD5890);
+  position: absolute;
+  bottom: 100rpx;
 }
 </style>

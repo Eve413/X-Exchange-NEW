@@ -183,7 +183,7 @@ const goBack = () => {
 
 <style scoped>
 .alert-page-stock {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   min-height: 100vh;
   box-sizing: border-box;
@@ -196,11 +196,11 @@ const goBack = () => {
   left: 0;
   right: 0;
   z-index: 99;
-  background-color: #111;
+  background-color: #202020;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40rpx 30rpx;
+  padding:60rpx 40rpx 30rpx;
 }
 .back-icon-stock {
   position: absolute;
@@ -215,7 +215,7 @@ const goBack = () => {
 
 /* Scrollable content di bawah header */
 .scroll-content-stock {
-  padding-top: 140rpx; /* beri jarak agar tidak tertutup header */
+  padding-top: 180rpx; /* beri jarak agar tidak tertutup header */
   padding-left: 30rpx;
   padding-right: 30rpx;
   box-sizing: border-box;
@@ -239,24 +239,24 @@ const goBack = () => {
   font-weight: 600;
 }
 .stock-code-stock {
-  color: #a6a8ad;
+  color: #9AA4AE;
 }
 .stock-right-stock {
   display: flex;
   align-items: center;
   gap: 10rpx;
-  color: #a6a8ad;
+  color: #9AA4AE;
 }
 .night-label-stock {
-  color: #a6a8ad;
+  color: #9AA4AE;
 }
 .stock-percent-stock {
-  color: #a6a8ad;
+  color: #9AA4AE;
 }
 
 /* Labels */
 .label-stock {
-  color: #a6a8ad;
+  color: #9AA4AE;
   font-size: 26rpx;
   margin-top: 30rpx;
   margin-bottom: 10rpx;
@@ -266,7 +266,7 @@ const goBack = () => {
 /* Picker & Input */
 .picker-stock,
 .input-box-stock {
-  background-color: #1b1b1b;
+  background-color: #2a2a2a;
   border-radius: 12rpx;
   padding: 24rpx;
   color: #fff;
@@ -278,13 +278,13 @@ const goBack = () => {
   justify-content: space-between;
 }
 .placeholder-stock {
-  color: #555;
+  color: #9AA4AE;
 }
 
 /* ▼ Arrow style */
 .arrow {
   font-size: 28rpx;
-  color: #888;
+  color: #9AA4AE;
   margin-left: 10rpx;
 }
 
@@ -304,11 +304,11 @@ const goBack = () => {
 }
 .submit-btn-stock {
   width: 90%;
-  background: linear-gradient(90deg, #9c4df4, #ff4d6d);
+  background: linear-gradient(175deg, #5565B9, #CD5890);
   color: #fff;
   border: none;
-  border-radius: 40rpx;
-  padding: 24rpx 0;
+  border-radius: 20rpx;
+  padding: 14rpx 0;
   font-size: 30rpx;
 }
 </style>

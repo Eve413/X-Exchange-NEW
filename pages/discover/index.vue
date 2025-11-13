@@ -322,6 +322,18 @@ const selectItem = (text: string) => {
       console.error("跳转到打新页面函数执行出错:", error);
     }
   }
+  // 点击活动按钮跳转到活动页面
+  else if (text === t('discover.menu_activity')) {
+    try {
+      uni.navigateTo({
+        url: "/pages/activity/index",
+        success: () => console.log("✅ 跳转到活动页面成功"),
+        fail: (err) => console.error("❌ 跳转到活动页面失败:", err),
+      });
+    } catch (error) {
+      console.error("跳转到活动页面函数执行出错:", error);
+    }
+  }
 };
 
 // 交易员数据

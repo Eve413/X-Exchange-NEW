@@ -2,6 +2,78 @@
   "app": {
     "name": "X交易所",
     "title": "专业的数字资产交易平台"
+  },,
+  "activity": {
+    "pageTitle": "活动",
+    "stats": {
+      "title": "优惠项目的代币分发计划",
+      "totalRewards": "总奖励价值",
+      "participants": "参与用户数"
+    },
+    "welfareTabs": {
+      "newUser": "新人专享",
+      "dailyCheckin": "每日签到",
+      "dailyRewards": "天天得奖",
+      "couponCenter": "卡券中心"
+    },
+    "limitedWelfare": {
+      "title": "限时新人福利",
+      "maxAmount": "最高可达6,200 USDT",
+      "btcReward": "BTC 福利",
+      "subtext": "完成指定任务可领取奖励"
+    },
+    "btcWelfare": {
+      "title": "新人BTC福利",
+      "condition": "使用条件: 新手 {id}"
+    },
+    "taskInstruction": {
+      "title": "完成以下任意任务即可解锁奖励",
+      "item1": "邀请注册并完成身份认证",
+      "item2": "持有3个月并完成买入到"
+    },
+    "buttons": {
+      "goInvite": "去邀请",
+      "goSign": "去签到",
+      "goVerify": "去认证",
+      "goDeposit": "去充值",
+      "goTrade": "去交易",
+      "goFinance": "去理财"
+    },
+    "taskSection": {
+      "title": "新人任务"
+    },
+    "tasks": {
+      "verify": {
+        "title": "身份认证",
+        "description": "完成身份认证，即可获取200USDT"
+      },
+      "deposit": {
+        "title": "首次充值",
+        "description": "首次充值≥1000USDT，即可获得300USDT"
+      },
+      "trade": {
+        "title": "首次交易",
+        "description": "首次交易≥250USDT，即可获得400USDT"
+      }
+    },
+    "finance": {
+      "title": "新人专享理财",
+      "period": "{days}天",
+      "amount": "投资金额{amount} USDT",
+      "reward": "预期年化收益{rate}%",
+      "note": "活动期间新用户可额外获得10%收益"
+    },
+    "countdown": {
+      "day": "D",
+      "hour": "H",
+      "minute": "M",
+      "second": "S"
+    },
+    "task": {
+      "or": "或",
+      "inviteRegister": "邀请注册",
+      "countSeparator": "/"
+    }
   },
   "common": {
     "appName": "X交易所",
@@ -155,6 +227,7 @@
     "new_user": "新用户专属",
     "total_airdrop": "总空投",
     "participants": "参与人数",
+    "remaining_time": "剩余时间",
     "countdown": "距结束",
     "ending_in": "距结束",
     "trading_task_info": "合约交易空投最高可得200000 PAWS",

@@ -3,6 +3,78 @@
     "name": "X Exchange",
     "title": "Professional Digital Asset Trading Platform"
   },
+   "activity": {
+    "pageTitle": "Activities",
+    "stats": {
+      "title": "Token Distribution Plan for Promotion Programs",
+      "totalRewards": "Total Reward Value",
+      "participants": "Number of Participants"
+    },
+    "welfareTabs": {
+      "newUser": "New User Exclusive",
+      "dailyCheckin": "Daily Check-in",
+      "dailyRewards": "Daily Rewards",
+      "couponCenter": "Coupon Center"
+    },
+    "limitedWelfare": {
+      "title": "Limited New User Benefits",
+      "maxAmount": "Up to 6,200 USDT",
+      "btcReward": "BTC Benefits",
+      "subtext": "Complete designated tasks to claim rewards"
+    },
+    "btcWelfare": {
+      "title": "New User BTC Benefits",
+      "condition": "Usage Condition: New User {id}"
+    },
+    "taskInstruction": {
+      "title": "Complete any of the following tasks to unlock rewards",
+      "item1": "Invite registration and complete identity verification",
+      "item2": "Hold for 3 months and complete purchase"
+    },
+    "buttons": {
+      "goInvite": "Go Invite",
+      "goSign": "Go Check-in",
+      "goVerify": "Go Verify",
+      "goDeposit": "Go Deposit",
+      "goTrade": "Go Trade",
+      "goFinance": "Go Finance"
+    },
+    "taskSection": {
+      "title": "New User Tasks"
+    },
+    "tasks": {
+      "verify": {
+        "title": "Identity Verification",
+        "description": "Complete identity verification to get 200USDT"
+      },
+      "deposit": {
+        "title": "First Deposit",
+        "description": "First deposit ≥1000USDT to get 300USDT"
+      },
+      "trade": {
+        "title": "First Trade",
+        "description": "First trade ≥250USDT to get 400USDT"
+      }
+    },
+    "finance": {
+      "title": "New User Exclusive Finance",
+      "period": "{days} days",
+      "amount": "Investment Amount {amount} USDT",
+      "reward": "Expected Annual Return {rate}%",
+      "note": "New users can get an additional 10% return during the event"
+    },
+    "countdown": {
+      "day": "D",
+      "hour": "H",
+      "minute": "M",
+      "second": "S"
+    },
+    "task": {
+      "or": "or",
+      "inviteRegister": "Invite Registration",
+      "countSeparator": "/"
+    }
+  },
   "common": {
     "appName": "X Exchange",
     "loading": "Loading...",
@@ -155,6 +227,7 @@
     "new_user": "New User Exclusive",
     "total_airdrop": "Total Airdrop",
     "participants": "Participants",
+    "remaining_time": "Remaining Time",
     "countdown": "Time Left",
     "ending_in": "Ending In",
     "trading_task_info": "Up to 200,000 PAWS from contract trading airdrop",

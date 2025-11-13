@@ -292,12 +292,90 @@ export interface WithdrawParams {
   amount:string;
 }
 
+export interface DepositParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+}
+
+export interface StakingsParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+}
+
+export interface StakingsDetilsParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  staking_id:number;
+}
+
+export interface StakingsSubscriptionParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  staking_id:number;
+  amount:string;
+}
+
 export interface ResetFundPasswordParams {
   phone: string
   smsCode: string
   captchaId: string
   captchaCode: string
   newFundPassword: string
+}
+
+export interface AirdropsParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+}
+export interface AirdropsDetilsParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  airdrop_id:number;
+}
+
+export interface AirdropsSubscriptionParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  airdrop_id:number;
+}
+
+export interface AirdropsSubscriptionDetilParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  id:number;
+}
+
+export interface EventParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  type: string;
 }
 
 export interface SocialLoginParams {
@@ -469,6 +547,44 @@ export class AuthAPI {
     return request.post('/withdraw.json', params)
   }
 
+  static getDeposit(params: DepositParams) {
+    return request.post('/deposit.json', params)
+  }
+   static getStakings(params: StakingsParams) {
+    return request.post('/stakings.json', params)
+  }
+   static getStakingsDetil(params: StakingsDetilsParams) {
+    return request.post('/staking.json', params)
+  }
+
+    static postStakingsSubscriptionParams(params: StakingsSubscriptionParams) {
+    return request.post('/staking/subscription.json', params)
+  }
+
+  static getAirdrops(params: AirdropsParams) {
+    return request.post('/airdrops.json', params)
+  }
+   static getAirdropsDetil(params: AirdropsDetilsParams) {
+    return request.post('/airdrop.json', params)
+  }
+  
+  static postAirdropsSubscription(params: AirdropsSubscriptionParams) {
+    return request.post('/airdrop/subscription.json', params)
+  }
+   static postAirdropsSubscriptionDetil(params: AirdropsSubscriptionDetilParams) {
+    return request.post('/airdrop/subscription_detail.json', params)
+  }
+
+   static getEvents(params: EventParams) {
+    return request.post('/events.json', params)
+  }
+   static getSubscriptions(params: AirdropsParams) {
+    return request.post('/airdrop/subscriptions.json', params)
+  }
+  
+  
+
+  
 
   
 

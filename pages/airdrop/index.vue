@@ -12,7 +12,7 @@
       </view>
       <text class="page-title">{{ t('airdrop.title') }}</text>
       <view class="header-actions">
-        <image class="refresh-icon" src="/static/icons/ic_headphone.png" mode="aspectFit" @click="refreshData" />
+        <image class="refresh-icon" src="/static/icons/ic_headphone.png" mode="aspectFit" @click="goToCustomerService" />
         <image class="notification-icon" src="/static/icons/ic_bell.png" mode="aspectFit" @click="goToNotification" />
       </view>
     </view>
@@ -24,12 +24,12 @@
         <text class="overview-title">{{ t('airdrop.complete_tasks') }}</text>
         <view class="stats-container">
           <view class="stat-item">
-            <text class="stat-label">{{ t('airdrop.total_airdrop_usdt') }}</text>
-            <text class="stat-value">{{ overviewStats.totalAirdrop }}</text>
+            <text class="stat-label">{{overviewStats?.TotalAirdrop?.title}}</text>
+            <text class="stat-value">{{ overviewStats?.TotalAirdrop?.value }}</text>
           </view>
           <view class="stat-item">
-            <text class="stat-label">{{ t('airdrop.total_participants') }}</text>
-            <text class="stat-value">{{ overviewStats.participants }}</text>
+            <text class="stat-label">{{overviewStats?.TotalUsers?.title}}</text>
+            <text class="stat-value">{{ overviewStats?.TotalUsers?.value}}</text>
           </view>
         </view>
         <image class="treasure-icon" src="/static/icons/airpotIcon.png" mode="aspectFit" />
@@ -48,18 +48,18 @@
         <view v-for="item in airdropList" :key="item.id" class="airdrop-card">
           <!-- 卡片头部 -->
           <view class="card-header">
-            <image class="airdrop-logo" :src="item.logo" mode="aspectFit" />
-            <text class="airdrop-name">{{ item.name }}</text>
-            <view class="tag-container" v-if="item.tag">
-              <text class="tag-text">{{ item.tag }}</text>
+            <image class="airdrop-logo" :src="item.icon" mode="aspectFit" />
+            <text class="airdrop-name">{{ item.baseAsset }}</text>
+            <view class="tag-container" v-if="item.AirdropType">
+              <text class="tag-text">{{ item.label }}</text>
             </view>
           </view>
 
           <!-- 卡片内容 -->
           <view class="card-content">
             <view class="airdrop-title">{{ t('airdrop.total_airdrop') }}</view>
-            <view class="airdrop-amount">{{ item.totalAirdrop }}</view>
-            <view class="airdrop-value">(≈{{ item.conversionRate }})</view>
+            <view class="airdrop-amount">{{ item.total_investment }}</view>
+            <view class="airdrop-value">(≈{{ item.total_airdrop_usdt }})</view>
 
             <view class="stats-row">
               <text class="stat-label">{{ t('airdrop.participants') }}</text>
@@ -73,8 +73,9 @@
           </view>
 
           <!-- 任务信息 -->
-          <view class="task-info" v-if="item.taskInfo">
-            <text class="task-text">{{ item.taskInfo }}</text>
+          <view class="task-info" v-if="item.reward">
+            <!-- <text class="task-text">{{ item.taskInfo }}</text> -->
+             <view class="task-text" v-html="item.short_description"></view>
             <!-- <image class="share-icon" src="/static/icons/share.png" mode="aspectFit" @click="shareAirdrop(item.id)" /> -->
           </view>
 
@@ -98,6 +99,10 @@
 import { ref, computed } from "vue";
 import { tl } from "@/utils/i18n";
 import { useSafeArea } from "@/utils/composables/useSafeArea";
+import { onLoad } from "@dcloudio/uni-app";
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
+import {useUserStore, AirdropsParams} from '@/store/modules/user'
 
 const { getTopStyle } = useSafeArea();
 const t = tl;
@@ -107,10 +112,75 @@ const goBack = () => {
   uni.navigateBack();
 };
 
-const refreshData = () => {
-  console.log('刷新数据');
-  // 这里可以实现数据刷新逻辑
-};
+onLoad(async (options) => {
+
+     try {
+          const airdropsParams: AirdropsParams = {
+            passkey: userStore.pasKeyAuth,
+            device:userStore.deviceAuth,
+            appversion:userStore.appversionAuth,
+            token: userInfo.data.token,
+            lang: "en"
+          }
+
+          
+
+          const resultAirdrops = await userStore.getAirdrops(airdropsParams)
+
+      
+              if (resultAirdrops.data.status === -1){
+                            handleLogout()
+                        }
+          overviewStats.value = resultAirdrops.data.summary
+          airdropList.value = resultAirdrops.data.data
+          // coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+         
+
+          // Update reactive array dengan assignment, bukan push loop
+          // cryptoData.value = resultAuth.data
+
+        } catch (e) {
+          console.error('❌ Failed to load tickers:', e)
+        }
+
+  })
+
+  const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
+
+
+// 跳转到客服页面
+const goToCustomerService = () => {
+  uni.navigateTo({
+    url: '/pages/customerservice/index',
+    success: () => console.log('✅ 跳转到客服页面成功'),
+    fail: (err) => console.error('❌ 跳转到客服页面失败:', err)
+  })
+}
 
 const goToNotification = () => {
   uni.navigateTo({
@@ -136,38 +206,13 @@ const switchTab = (tabKey: string) => {
 };
 
 // 总览数据
-const overviewStats = {
+const overviewStats = ref({
   totalAirdrop: '1.21M',
   participants: '47,894'
-};
+});
 
 // 空投列表数据
-const airdropList = [
-  {
-    id: 1,
-    name: 'PAWS',
-    logo: '/static/icons/giftDark.png',
-    rewardLabel: t('airdrop.bonus_reward'),
-    tag: '',
-    totalAirdrop: '500,000 PROMPT',
-    conversionRate: '246,565 USD',
-    participants: '2,371',
-    countdown: '04D:15H:23M:11S',
-    taskInfo: t('airdrop.trading_task_info')
-  },
-  {
-    id: 2,
-    name: 'PAWS',
-    logo: '/static/icons/giftDark.png',
-    rewardLabel: t('airdrop.bonus_reward'),
-    tag: t('airdrop.new_user'),
-    totalAirdrop: '500,000 PROMPT',
-    conversionRate: '246,565 USD',
-    participants: '2,371',
-    countdown: '04D:15H:23M:11S',
-    taskInfo: t('airdrop.trading_task_info')
-  }
-];
+const airdropList =  ref([]);
 
 // 加入空投
 const joinAirdrop = (airdropId: number) => {

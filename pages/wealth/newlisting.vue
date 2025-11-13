@@ -7,7 +7,13 @@
       </view>
       <text class="page-title">{{ t('newlisting.title') }}</text>
       <view class="header-actions">
-        <image src="/static/icons/refresh.png" mode="aspectFit" class="refresh-icon" @click="refreshData" />
+        <view class="notification-wrapper" @click="goToCustomerService">
+          <image class="header-icon" src="/static/icons/ic_headphone.png" mode="aspectFit" />
+        </view>
+        <view class="notification-wrapper" @click="goToNotification">
+          <image class="header-icon" src="/static/icons/ic_bell.png" mode="aspectFit" />
+          <view class="notification-badge"></view>
+        </view>
       </view>
     </view>
 
@@ -22,13 +28,13 @@
       <!-- 统计数据 -->
       <view class="stats-section">
         <view class="stat-item">
-          <text class="stat-label">{{ t('newlisting.total_projects') }}</text>
-          <text class="stat-value">1.21M</text>
+          <text class="stat-label">{{summary?.TotalAirdrop?.title}}</text>
+          <text class="stat-value">{{summary?.TotalAirdrop?.value}}</text>
         </view>
         <!-- <view class="stat-divider"></view> -->
         <view class="stat-item">
-          <text class="stat-label">{{ t('newlisting.total_users') }}</text>
-          <text class="stat-value">47,894</text>
+          <text class="stat-label">{{summary?.TotalUsers?.title}}</text>
+          <text class="stat-value">{{summary?.TotalUsers?.value}}</text>
         </view>
       </view>
 
@@ -47,14 +53,15 @@
           <!-- 项目头部 -->
           <view class="project-header">
             <image :src="project.icon" mode="aspectFit" class="project-icon" />
-            <text class="project-name">{{ project.name }}</text>
-            <view :class="['project-status', getStatusClass(project.status)]">
-              <text class="status-text">{{ getStatusText(project.status) }}</text>
+            <text class="project-name">{{ project.baseAsset }}</text>
+            <view :class="['project-status', getStatusClass(project.airdrop_status)]">
+              <text class="status-text">{{ getStatusText(project.airdrop_status) }}</text>
             </view>
           </view>
 
           <!-- 项目描述 -->
-          <view class="project-description">{{ project.description }}</view>
+           <text class="project-desc" v-html="item?.description"></text>
+          <view class="project-description" v-html="project.description"></view>
 
           <!-- 项目链接 -->
           <view class="project-links">
@@ -62,11 +69,11 @@
               <!-- <image src="/static/icons/website.png" mode="aspectFit" class="link-icon" /> -->
               <text class="link-text">{{ t('newlisting.official_website') }}</text>
             </view>
-            <view class="link-item" @click="viewRules(project.id)">
+            <view class="link-item" @click="goToWebsite(project.rule_details)">
               <!-- <image src="/static/icons/rules.png" mode="aspectFit" class="link-icon" /> -->
               <text class="link-text">{{ t('newlisting.rules') }}</text>
             </view>
-            <view class="link-item" @click="viewListingAnnouncement(project.id)">
+            <view class="link-item" @click="goToWebsite(project.announcement_url)">
               <!-- <image src="/static/icons/announcement.png" mode="aspectFit" class="link-icon" /> -->
               <text class="link-text">{{ t('newlisting.listing_announcement') }}</text>
             </view>
@@ -75,28 +82,28 @@
           <!-- 分发信息 -->
           <view class="distribution-info">
             <text class="info-label">{{ t('newlisting.total_distribution') }}</text>
-            <text class="info-value">{{ project.totalDistribution }}</text>
+            <text class="info-value">{{ project.reward_amount }}</text>
           </view>
-          <text class="time-info">{{ project.timeRange }}</text>
+          <text class="time-info">{{ project.period }}</text>
 
           <!-- 投入信息 -->
           <view class="investment-info">
             <view class="invest-header">
               <image src="/static/icons/invest.png" mode="aspectFit" class="invest-icon" />
-              <text class="invest-label">{{ t('newlisting.invest_in', { coin: project.investCoin }) }}</text>
+              <text class="invest-label">{{ t('newlisting.invest_in', { coin: project.name }) }}</text>
             </view>
-            <text class="invest-subtitle">{{ t('newlisting.invest_coin', { coin: project.investCoin }) }}</text>
+            <text class="invest-subtitle">{{ t('newlisting.invest_coin', { coin: project.title }) }}</text>
 
 
             <!-- 投资详情 -->
             <view class="investment-details">
               <view class="detail-item">
                 <text class="detail-label">{{ t('newlisting.purchase_price') }}</text>
-                <text class="detail-value">{{ project.purchasePrice }}</text>
+                <text class="detail-value">{{ project.rate }}</text>
               </view>
               <view class="detail-item">
                 <text class="detail-label">{{ t('newlisting.distribution_amount') }}</text>
-                <text class="detail-value">{{ project.distributionAmount }}</text>
+                <text class="detail-value">{{ project.total_volume }}</text>
               </view>
               <view class="detail-item">
                 <text class="detail-label">{{ t('newlisting.participants') }}</text>
@@ -104,11 +111,11 @@
               </view>
               <view class="detail-item">
                 <text class="detail-label">{{ t('newlisting.total_investment') }}</text>
-                <text class="detail-value">{{ project.totalInvestment }}</text>
+                <text class="detail-value">{{ project.total_volume_usdt }}</text>
               </view>
               <view class="detail-item">
                 <text class="detail-label">{{ t('newlisting.funding_target') }}</text>
-                <text class="detail-value target-achieved">0 USDT</text>
+                <text class="detail-value target-achieved">{{ item?.funds_raised_usdt }}</text>
               </view>
             </view>
           </view>
@@ -126,120 +133,131 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { tl } from '@/utils/i18n';
+import {useUserStore, AirdropsParams} from '@/store/modules/user'
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
 
 const t = tl;
-
+const summary = ref(null)
 // 标签页数据
 const tabs = ref([
-  { key: 'ongoing', label: t('newlisting.tab_ongoing'), count: 2 },
-  { key: 'upcoming', label: t('newlisting.tab_upcoming'), count: 1 },
-  { key: 'past', label: t('newlisting.tab_past'), count: 2 },
-  { key: 'airdrop', label: t('newlisting.tab_airdrop'), count: 1 }
+  { key: 'ongoing', label: t('newlisting.tab_ongoing'), count: 0 },
+  { key: 'upcoming', label: t('newlisting.tab_upcoming'), count: 0 },
+  { key: 'past', label: t('newlisting.tab_past'), count: 0 },
+  { key: 'airdrop', label: t('newlisting.tab_airdrop'), count: 0 }
 ]);
 
 const activeTab = ref('past');
 
 // 假数据集合
-const mockData = {
-  ongoing: [
-    {
-      id: 1,
-      name: 'ABC Token',
-      icon: '/static/icons/ic_new.png',
-      status: 'ongoing',
-      description: 'ABC Token是一个创新的区块链项目，致力于打造去中心化金融生态系统，为用户提供安全、高效的金融服务。',
-      website: 'https://www.abctoken.com',
-      totalDistribution: '50,000,000 ABC',
-      timeRange: '2024-07-10 14:00 ~ 2024-07-15 14:00(UTC+8)',
-      investCoin: 'USDT',
-      purchasePrice: '1ABC = 0.05 USDT',
-      distributionAmount: '25,000,000 ABC',
-      participants: '15,321',
-      totalInvestment: '1,265,432 USDT'
-    },
-    {
-      id: 2,
-      name: 'XYZ Coin',
-      icon: '/static/icons/news.png',
-      status: 'ongoing',
-      description: 'XYZ Coin是基于Layer2技术的高性能公链，专注于解决现有区块链的扩展性问题，支持每秒处理上万笔交易。',
-      website: 'https://www.xyzcoin.io',
-      totalDistribution: '100,000,000 XYZ',
-      timeRange: '2024-07-08 10:00 ~ 2024-07-13 10:00(UTC+8)',
-      investCoin: 'USDT',
-      purchasePrice: '1XYZ = 0.025 USDT',
-      distributionAmount: '40,000,000 XYZ',
-      participants: '28,765',
-      totalInvestment: '1,058,923 USDT'
-    }
-  ],
-  upcoming: [
-    {
-      id: 3,
-      name: 'DEF Protocol',
-      icon: '/static/icons/star.png',
-      status: 'upcoming',
-      description: 'DEF Protocol是新一代跨链互操作协议，旨在连接不同区块链网络，实现资产无缝转移和数据共享。',
-      website: 'https://www.defprotocol.com',
-      totalDistribution: '20,000,000 DEF',
-      timeRange: '2024-07-20 16:00 ~ 2024-07-25 16:00(UTC+8)',
-      investCoin: 'BTC',
-      purchasePrice: '1DEF = 0.000005 BTC',
-      distributionAmount: '10,000,000 DEF',
-      participants: '0',
-      totalInvestment: '0 BTC'
-    }
-  ],
-  past: [
-    {
-      id: 4,
-      name: 'BWB',
-      icon: '/static/icons/ic_gmail.png',
-      status: 'ended',
-      description: 'BitgetWallet作为全球领先的一站式交易加密钱包，集合了钱包 Swap 交易、NFT市场、DApp浏览器等多种功能。',
-      website: 'https://www.bitget.com',
-      totalDistribution: '10,000,000 BWB',
-      timeRange: '2024-06-01 11:00 ~ 2024-06-06 16:00(UTC+8)',
-      investCoin: 'BGB',
-      purchasePrice: '1BWB = 0.10828204BGB',
-      distributionAmount: '5,000,000 BWB',
-      participants: '20,603',
-      totalInvestment: '80,828,403.98 BGB'
-    },
-    {
-      id: 5,
-      name: 'GHI Network',
-      icon: '/static/icons/link.png',
-      status: 'ended',
-      description: 'GHI Network是专注于去中心化身份验证的区块链项目，为用户提供安全、隐私的数字身份解决方案。',
-      website: 'https://www.ghinetwork.org',
-      totalDistribution: '30,000,000 GHI',
-      timeRange: '2024-05-15 09:00 ~ 2024-05-20 09:00(UTC+8)',
-      investCoin: 'ETH',
-      purchasePrice: '1GHI = 0.0002 ETH',
-      distributionAmount: '15,000,000 GHI',
-      participants: '12,345',
-      totalInvestment: '3,012.5 ETH'
-    }
-  ],
-  airdrop: [
-    {
-      id: 6,
-      name: 'JKL Token',
-      icon: '/static/icons/share.png',
-      status: 'airdropping',
-      description: 'JKL Token是专注于社交网络的区块链项目，通过代币激励机制促进优质内容创作和社区建设。',
-      website: 'https://www.jkltoken.com',
-      totalDistribution: '100,000,000 JKL',
-      timeRange: '2024-07-01 00:00 ~ 2024-07-31 23:59(UTC+8)',
-      investCoin: 'Free',
-      purchasePrice: 'Airdrop',
-      distributionAmount: '20,000,000 JKL',
-      participants: '45,678',
-      totalInvestment: '0'
-    }
-  ]
-};
+// const mockData = ref({
+//   ongoing: [
+//     {
+//       id: 1,
+//       name: 'ABC Token',
+//       icon: '/static/icons/ic_new.png',
+//       status: 'ongoing',
+//       description: 'ABC Token是一个创新的区块链项目，致力于打造去中心化金融生态系统，为用户提供安全、高效的金融服务。',
+//       website: 'https://www.abctoken.com',
+//       totalDistribution: '50,000,000 ABC',
+//       timeRange: '2024-07-10 14:00 ~ 2024-07-15 14:00(UTC+8)',
+//       investCoin: 'USDT',
+//       purchasePrice: '1ABC = 0.05 USDT',
+//       distributionAmount: '25,000,000 ABC',
+//       participants: '15,321',
+//       totalInvestment: '1,265,432 USDT'
+//     },
+//     {
+//       id: 2,
+//       name: 'XYZ Coin',
+//       icon: '/static/icons/news.png',
+//       status: 'ongoing',
+//       description: 'XYZ Coin是基于Layer2技术的高性能公链，专注于解决现有区块链的扩展性问题，支持每秒处理上万笔交易。',
+//       website: 'https://www.xyzcoin.io',
+//       totalDistribution: '100,000,000 XYZ',
+//       timeRange: '2024-07-08 10:00 ~ 2024-07-13 10:00(UTC+8)',
+//       investCoin: 'USDT',
+//       purchasePrice: '1XYZ = 0.025 USDT',
+//       distributionAmount: '40,000,000 XYZ',
+//       participants: '28,765',
+//       totalInvestment: '1,058,923 USDT'
+//     }
+//   ],
+//   upcoming: [
+//     {
+//       id: 3,
+//       name: 'DEF Protocol',
+//       icon: '/static/icons/star.png',
+//       status: 'upcoming',
+//       description: 'DEF Protocol是新一代跨链互操作协议，旨在连接不同区块链网络，实现资产无缝转移和数据共享。',
+//       website: 'https://www.defprotocol.com',
+//       totalDistribution: '20,000,000 DEF',
+//       timeRange: '2024-07-20 16:00 ~ 2024-07-25 16:00(UTC+8)',
+//       investCoin: 'BTC',
+//       purchasePrice: '1DEF = 0.000005 BTC',
+//       distributionAmount: '10,000,000 DEF',
+//       participants: '0',
+//       totalInvestment: '0 BTC'
+//     }
+//   ],
+//   past: [
+//     {
+//       id: 4,
+//       name: 'BWB',
+//       icon: '/static/icons/ic_gmail.png',
+//       status: 'ended',
+//       description: 'BitgetWallet作为全球领先的一站式交易加密钱包，集合了钱包 Swap 交易、NFT市场、DApp浏览器等多种功能。',
+//       website: 'https://www.bitget.com',
+//       totalDistribution: '10,000,000 BWB',
+//       timeRange: '2024-06-01 11:00 ~ 2024-06-06 16:00(UTC+8)',
+//       investCoin: 'BGB',
+//       purchasePrice: '1BWB = 0.10828204BGB',
+//       distributionAmount: '5,000,000 BWB',
+//       participants: '20,603',
+//       totalInvestment: '80,828,403.98 BGB'
+//     },
+//     {
+//       id: 5,
+//       name: 'GHI Network',
+//       icon: '/static/icons/link.png',
+//       status: 'ended',
+//       description: 'GHI Network是专注于去中心化身份验证的区块链项目，为用户提供安全、隐私的数字身份解决方案。',
+//       website: 'https://www.ghinetwork.org',
+//       totalDistribution: '30,000,000 GHI',
+//       timeRange: '2024-05-15 09:00 ~ 2024-05-20 09:00(UTC+8)',
+//       investCoin: 'ETH',
+//       purchasePrice: '1GHI = 0.0002 ETH',
+//       distributionAmount: '15,000,000 GHI',
+//       participants: '12,345',
+//       totalInvestment: '3,012.5 ETH'
+//     }
+//   ],
+//   airdrop: [
+//     {
+//       id: 6,
+//       name: 'JKL Token',
+//       icon: '/static/icons/share.png',
+//       status: 'airdropping',
+//       description: 'JKL Token是专注于社交网络的区块链项目，通过代币激励机制促进优质内容创作和社区建设。',
+//       website: 'https://www.jkltoken.com',
+//       totalDistribution: '100,000,000 JKL',
+//       timeRange: '2024-07-01 00:00 ~ 2024-07-31 23:59(UTC+8)',
+//       investCoin: 'Free',
+//       purchasePrice: 'Airdrop',
+//       distributionAmount: '20,000,000 JKL',
+//       participants: '45,678',
+//       totalInvestment: '0'
+//     }
+//   ]
+// });
+
+const mockData = ref({
+  ongoing: [],
+  upcoming: [],
+  past: [],
+  airdropping: []
+})
+
 
 // 项目列表数据
 const projectList = ref([]);
@@ -279,7 +297,7 @@ const getStatusText = (status: string) => {
 // 加载指定标签页的数据
 const loadTabData = (tabKey: string) => {
   // 根据标签页键名获取对应的数据
-  projectList.value = mockData[tabKey] || [];
+  projectList.value = mockData.value[tabKey] || [];
 };
 
 // 切换标签页
@@ -293,13 +311,23 @@ const goBack = () => {
   uni.navigateBack();
 };
 
-// 刷新数据
-const refreshData = () => {
-  // 模拟刷新操作
-  console.log('刷新数据');
-  // 重新加载当前标签页的数据
-  loadTabData(activeTab.value);
-};
+// 跳转到客服页面
+const goToCustomerService = () => {
+  uni.navigateTo({
+    url: '/pages/customerservice/index',
+    success: () => console.log('✅ 跳转到客服页面成功'),
+    fail: (err) => console.error('❌ 跳转到客服页面失败:', err)
+  })
+}
+
+// 跳转到消息通知页面
+const goToNotification = () => {
+  uni.navigateTo({
+    url: '/pages/notification/index',
+    success: () => console.log('✅ 跳转到消息通知页面成功'),
+    fail: (err) => console.error('❌ 跳转到消息通知页面失败:', err)
+  })
+}
 
 // 跳转到官网
 const goToWebsite = (url: string) => {
@@ -326,9 +354,112 @@ const viewProjectDetail = (projectId: number) => {
 };
 
 // 组件挂载时初始化数据
-onMounted(() => {
-  loadTabData(activeTab.value);
+onMounted(async () => {
+  
+  try {
+          const airdropsParams: AirdropsParams = {
+            passkey: userStore.pasKeyAuth,
+            device:userStore.deviceAuth,
+            appversion:userStore.appversionAuth,
+            token: userInfo.data.token,
+            lang: "en"
+          }
+
+          
+
+          const resultAirdrops = await userStore.getSubscriptions(airdropsParams)
+
+      
+              if (resultAirdrops.data.status === -1){
+                            handleLogout()
+                        }
+
+          resultAirdrops.data.data.forEach(item => {
+           
+
+                switch (item.airdrop_status.toLowerCase()) {
+                  case 'ongoing':
+                    mockData.value.ongoing.push(item)
+                    tabs.value[0].count += 1
+                    break
+                  case 'upcoming':
+                    mockData.value.upcoming.push(item)
+                    tabs.value[1].count += 1
+                    break
+                  case 'past':
+                    mockData.value.past.push(item)
+                    tabs.value[2].count += 1
+                    break
+                  case 'airdrop':
+                      mockData.value.airdrop.push(item)
+                      tabs.value[3].count += 1
+                    break
+                  case 'claim':
+                    mockData.value.airdrop.push(item)
+                    tabs.value[4].count += 1
+                    break
+                  default:
+                    // abaikan status yang tidak dikenal
+                    break
+                }
+              })
+
+              loadTabData(activeTab.value);
+          summary.value = resultAirdrops.data.summary
+          // data.value = resultAirdrops.data.data
+
+          // tabs.value = removeEventListener
+
+          tabs.value = tabs.value.map(tab => {
+              const match = resultAirdrops.data.tab.find(item => {
+                // Samakan status dari tabData dengan key tabs
+                if (tab.key === 'past') return item.status === 'ended'
+                if (tab.key === 'airdrop') return item.status === 'claim'
+                return item.status === tab.key
+              })
+              return {
+                ...tab,
+                count: match ? Number(match.value) || 0 : 0
+              }
+            })
+          // coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+         
+
+          // Update reactive array dengan assignment, bukan push loop
+          // cryptoData.value = resultAuth.data
+
+        } catch (e) {
+          console.error('❌ Failed to load tickers:', e)
+        }
 });
+
+
+  const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -380,9 +511,33 @@ onMounted(() => {
   align-items: center;
 }
 
-.refresh-icon {
-  width: 40rpx;
-  height: 40rpx;
+.header-right {
+  // width: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24rpx;
+  flex: 1;
+}
+
+.notification-wrapper {
+  position: relative;
+}
+
+.header-icon {
+  width: 46rpx;
+  height: 46rpx;
+  margin-left: 24rpx;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 15rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background-color: #EF4444;
+  border-radius: 50%;
 }
 
 .content {

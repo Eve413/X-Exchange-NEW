@@ -424,7 +424,9 @@ function onInvite() {
   box-sizing: border-box;
   height: 100rpx;
   background-color: #202020;
+  padding-top: 40rpx;
   z-index: 10;
+  box-sizing: content-box;
   /* border-bottom: 1rpx solid #2a2a2a; */
 }
 .back-icon-dialog {

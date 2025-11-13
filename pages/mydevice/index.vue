@@ -83,7 +83,7 @@ function goBack() {
 
 <style scoped>
 .device-page-dialog {
-  background-color: #111;
+  background-color: #202020;
   color: #fff;
   min-height: 100vh;
   display: flex;
@@ -97,8 +97,10 @@ function goBack() {
   justify-content: center;
   position: relative;
   height: 100rpx;
-  background-color: #1e1e1e;
-  border-bottom: 1rpx solid #2a2a2a;
+  background-color: #202020;
+  padding-top: 50rpx;
+  box-sizing: content-box;
+  /* border-bottom: 1rpx solid #2a2a2a; */
 }
 .back-icon-dialog {
   position: absolute;
@@ -118,7 +120,7 @@ function goBack() {
 
 /* Card */
 .device-card-dialog {
-  background-color: #1e1e1e;
+  background-color: #2A2A2A;
   border-radius: 16rpx;
   padding: 24rpx;
   margin-bottom: 24rpx;
@@ -173,7 +175,7 @@ function goBack() {
 
 /* Gradient button */
 .logout-btn-dialog {
-  background: linear-gradient(90deg, #9c4df4, #ff4d6d);
+  background: linear-gradient(175deg, #5565B9, #CD5890);
   padding: 12rpx 28rpx;
   border-radius: 40rpx;
   font-size: 26rpx;

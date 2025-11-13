@@ -7,12 +7,13 @@
     <view class="header">
       <view class="back-button" @click="goBack">
         <text class="back-arrow">
-          <image class="back-arrow-icon" src="/static/icons/ic_arrow_left.png" mode="aspectFit" @click="refreshData" />
+          <image class="back-arrow-icon" src="/static/icons/ic_arrow_left.png" mode="aspectFit" />
         </text>
       </view>
       <text class="page-title">{{ t('wealth.title') }}</text>
       <view class="header-actions">
-        <image class="refresh-icon" src="/static/icons/ic_headphone.png" mode="aspectFit" @click="refreshData" />
+        <image class="refresh-icon" src="/static/icons/ic_headphone.png" mode="aspectFit"
+          @click="goToCustomerService" />
         <image class="notification-icon" src="/static/icons/ic_bell.png" mode="aspectFit" @click="goToNotification" />
       </view>
     </view>
@@ -24,13 +25,13 @@
         <text class="airdrop-title">{{ t('wealth.airdrop_reward_title') }}</text>
         <view class="airdrop-stats">
           <view class="stat-item">
-            <text class="stat-label">{{ t('wealth.total_airdrop') }}</text>
-            <text class="stat-value">{{ totalAirdrop }}</text>
+            <text class="stat-label">{{summary?.TotalAirdrop?.title}}</text>
+            <text class="stat-value">{{summary?.TotalAirdrop?.value}}</text>
           </view>
           <!-- <view class="stat-divider"></view> -->
           <view class="stat-item">
-            <text class="stat-label">{{ t('wealth.participants') }}</text>
-            <text class="stat-value">{{ participantCount }}</text>
+            <text class="stat-label">{{summary?.TotalUsers?.title}}</text>
+            <text class="stat-value">{{summary?.TotalUsers?.value}}</text>
           </view>
         </view>
         <view class="airdrop-image">
@@ -56,12 +57,12 @@
           <view class="product-header">
             <view class="product-info">
               <image class="product-icon" :src="product.icon" mode="aspectFit" />
-              <text class="product-name">{{ product.name }}</text>
-              <image v-if="product.isHot" class="hot-icon" src="/static/icons/hot.png" mode="aspectFit" />
+              <text class="product-name">{{ product.baseAsset }}</text>
+              <image v-if="product.category" class="hot-icon" src="/static/icons/hot.png" mode="aspectFit" />
             </view>
             <view class="product-tags">
-              <view v-if="product.tags" class="tag-item" :class="product.tagClass">
-                <text class="tag-text">{{ product.tags }}</text>
+              <view v-if="product.label" class="tag-item" :class="product.label">
+                <text class="tag-text">{{ product.label }}</text>
               </view>
             </view>
           </view>
@@ -69,15 +70,15 @@
           <view class="product-rates">
             <view class="rate-item">
               <text class="rate-label">{{ t('wealth.regular_apr') }}</text>
-              <text class="rate-value">{{ product.regularApr }}%</text>
+              <text class="rate-value">{{ product.apr_percent }}%</text>
             </view>
             <view class="rate-item">
               <text class="rate-label">{{ t('wealth.seven_day_rate') }}</text>
-              <text class="rate-value">{{ product.sevenDayRate }}%</text>
+              <text class="rate-value">{{ product.apr_7d_percent }}%</text>
             </view>
             <view class="rate-item">
               <text class="rate-label">{{ t('wealth.thirty_day_rate') }}</text>
-              <text class="rate-value">{{ product.thirtyDayRate }}%</text>
+              <text class="rate-value">{{ product.apr_30d_percent }}%</text>
             </view>
           </view>
         </view>
@@ -88,8 +89,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { onLoad } from '@dcloudio/uni-app'
+import {useUserStore, StakingsParams} from '@/store/modules/user'
 import { tl } from "@/utils/i18n";
 import { useSafeArea } from "@/utils/composables/useSafeArea";
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
 
 const { getTopStyle } = useSafeArea();
 const t = tl;
@@ -100,123 +105,99 @@ const participantCount = "47,894";
 
 // 标签页数据
 const activeTab = ref('ongoing');
-const tabs = [
-  { key: 'ongoing', label: t('wealth.ongoing'), count: 3 },
-  { key: 'upcoming', label: t('wealth.upcoming'), count: 2 },
-  { key: 'past', label: t('wealth.past'), count: 2 },
-  { key: 'airdropping', label: t('wealth.airdropping'), count: 1 }
-];
+const tabs = ref([
+  { key: 'ongoing', label: t('wealth.ongoing'), count: 0 },
+  { key: 'upcoming', label: t('wealth.upcoming'), count: 0 },
+  { key: 'past', label: t('wealth.past'), count: 0 },
+  { key: 'airdropping', label: t('wealth.airdropping'), count: 0 }
+]);
 
 // 产品列表数据
 const productList = ref([]);
+const summary = ref(null)
 
-// 不同标签页的假数据
-const tabData = {
-  ongoing: [
-    {
-      id: 1,
-      name: 'BTC',
-      icon: '/static/logo/logos_bitcoin.png',
-      isHot: true,
-      tags: t('wealth.hot_recommended'),
-      tagClass: 'hot-tag',
-      regularApr: '4.37',
-      sevenDayRate: '4.37',
-      thirtyDayRate: '4.37'
-    },
-    {
-      id: 2,
-      name: 'USDT',
-      icon: '/static/tubiao/bizhong/usdt.png',
-      isHot: true,
-      tags: t('wealth.hot_recommended'),
-      tagClass: 'hot-tag',
-      regularApr: '3.25',
-      sevenDayRate: '3.21',
-      thirtyDayRate: '3.18'
-    },
-    {
-      id: 3,
-      name: 'ETH',
-      icon: '/static/logo/logos_ethereum.png',
-      isHot: false,
-      tags: t('wealth.stable_yield'),
-      tagClass: 'stable-tag',
-      regularApr: '3.85',
-      sevenDayRate: '3.82',
-      thirtyDayRate: '3.79'
-    }
-  ],
-  upcoming: [
-    {
-      id: 101,
-      name: 'SOL',
-      icon: '/static/tubiao/bizhong/sol.png',
-      isHot: false,
-      tags: t('wealth.coming_soon'),
-      tagClass: 'coming-tag',
-      regularApr: '5.20',
-      sevenDayRate: '0.00',
-      thirtyDayRate: '0.00'
-    },
-    {
-      id: 102,
-      name: 'AVAX',
-      icon: '/static/tubiao/bizhong/avax.png',
-      isHot: true,
-      tags: t('wealth.hot_upcoming'),
-      tagClass: 'upcoming-tag',
-      regularApr: '4.95',
-      sevenDayRate: '0.00',
-      thirtyDayRate: '0.00'
-    }
-  ],
-  past: [
-    {
-      id: 201,
-      name: 'DOT',
-      icon: '/static/tubiao/bizhong/dot.png',
-      isHot: false,
-      tags: t('wealth.ended'),
-      tagClass: 'ended-tag',
-      regularApr: '4.50',
-      sevenDayRate: '4.48',
-      thirtyDayRate: '4.45'
-    },
-    {
-      id: 202,
-      name: 'ADA',
-      icon: '/static/tubiao/bizhong/ada.png',
-      isHot: false,
-      tags: t('wealth.ended'),
-      tagClass: 'ended-tag',
-      regularApr: '3.90',
-      sevenDayRate: '3.88',
-      thirtyDayRate: '3.85'
-    }
-  ],
-  airdropping: [
-    {
-      id: 301,
-      name: 'ARB',
-      icon: '/static/tubiao/bizhong/arb.png',
-      isHot: true,
-      tags: t('wealth.airdropping_now'),
-      tagClass: 'airdrop-tag',
-      regularApr: '6.50',
-      sevenDayRate: '6.48',
-      thirtyDayRate: '6.45'
-    }
-  ]
-};
+
+const tabData = ref({
+  ongoing: [],
+  upcoming: [],
+  past: [],
+  airdropping: []
+})
+
+onLoad(async () => {
+  try {
+          const stakingsParams: StakingsParams = {
+            passkey: userStore.pasKeyAuth,
+            device:userStore.deviceAuth,
+            appversion:userStore.appversionAuth,
+            token: userInfo.data.token,
+            lang: "en"
+          }
+
+          
+
+          const resultStakings = await userStore.getStakings(stakingsParams)
+
+      
+              if (resultStakings.data.status === -1){
+                            handleLogout()
+                        }
+          // cards.value = resultStakings.data.data
+          summary.value = resultStakings.data.summary
+
+          resultStakings.data.data.forEach(item => {
+           
+
+                switch (item.staking_status.toLowerCase()) {
+                  case 'ongoing':
+                    tabData.value.ongoing.push(item)
+                    tabs.value[0].count += 1
+                    break
+                  case 'upcoming':
+                    tabData.value.upcoming.push(item)
+                    tabs.value[1].count += 1
+                    break
+                  case 'ended':
+                    tabData.value.past.push(item)
+                    tabs.value[2].count += 1
+                    break
+                  case 'airdrop':
+                      tabData.value.airdropping.push(item)
+                      tabs.value[3].count += 1
+                    break
+                  case 'claim':
+                    tabData.value.airdropping.push(item)
+                    tabs.value[4].count += 1
+                    break
+                  default:
+                    // abaikan status yang tidak dikenal
+                    break
+                }
+              })
+              loadTabData('ongoing');
+
+              // 初始化时加载ongoing标签的数据
+
+             
+          // coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+         
+
+          // Update reactive array dengan assignment, bukan push loop
+          // cryptoData.value = resultAuth.data
+
+        } catch (e) {
+          console.error('❌ Failed to load tickers:', e)
+        }
+})
 
 // 初始化加载默认标签页数据
 const loadTabData = (tabKey) => {
-  productList.value = tabData[tabKey] || [];
+  console.log("Asuuuuu >> ", tabKey)
+  console.log(tabData.value[tabKey])
+  productList.value = tabData.value[tabKey] || [];
 };
 
-// 初始化时加载ongoing标签的数据
-loadTabData('ongoing');
+
 
 // 切换标签页
 const switchTab = (tabKey: string) => {
@@ -230,12 +211,14 @@ const goBack = () => {
   uni.navigateBack();
 };
 
-// 刷新数据
-const refreshData = () => {
-  console.log('刷新数据');
-  // 这里可以添加刷新逻辑
-};
-
+// 跳转到客服页面
+const goToCustomerService = () => {
+  uni.navigateTo({
+    url: '/pages/customerservice/index',
+    success: () => console.log('✅ 跳转到客服页面成功'),
+    fail: (err) => console.error('❌ 跳转到客服页面失败:', err)
+  })
+}
 // 跳转到通知页面
 const goToNotification = () => {
   uni.navigateTo({
@@ -255,6 +238,33 @@ const goToProductDetail = (productId: number) => {
     console.error('跳转到产品详情页面函数执行出错:', error);
   }
 };
+
+const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -277,7 +287,7 @@ const goToProductDetail = (productId: number) => {
 }
 
 .back-button {
-  width: 100rpx;
+  width: 180rpx;
   height: 60rpx;
   display: flex;
   align-items: center;
@@ -288,10 +298,12 @@ const goToProductDetail = (productId: number) => {
   font-size: 44rpx;
   color: #ffffff;
 }
-.back-arrow-icon{
+
+.back-arrow-icon {
   width: 40rpx;
   height: 32rpx;
 }
+
 .page-title {
   font-size: 36rpx;
   font-weight: 600;
@@ -303,16 +315,22 @@ const goToProductDetail = (productId: number) => {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 32rpx;
-  width: 100rpx;
+  // gap: 32rpx;
+  width: 160rpx;
   justify-content: flex-end;
 }
 
 .refresh-icon,
 .notification-icon {
-  width: 44rpx;
-  height: 44rpx;
-  opacity: 0.8;
+  img {
+    width: 48rpx;
+    height: 48rpx;
+  }
+
+  width: 48rpx;
+  height: 48rpx;
+  margin-left: 20rpx;
+  // opacity: 0.8;
 }
 
 // 内容滚动区域

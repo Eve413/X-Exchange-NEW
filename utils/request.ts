@@ -19,18 +19,11 @@ interface ResponseData<T = any> {
   timestamp: number
 }
 
-// 基础配置（在非 HTTP 环境，强制使用 HTTPS 域名，避免解析为 file://）
-const isHttpEnv = (() => {
-  try {
-    // H5 环境可读取 location.protocol；App、小程序环境此值可能不可用
-    const proto = (globalThis as any)?.location?.protocol || ''
-    return proto.startsWith('http')
-  } catch (e) {
-    return true
-  }
-})()
-
-const DEV_USE_PROXY = import.meta.env.DEV && isHttpEnv
+// 仅在 H5 开发环境使用本地代理，其它平台直接走线上域名
+// 平台常量由 vite.config.ts 的 define 注入到运行时
+const UNI_PLATFORM = (globalThis as any)?.UNI_PLATFORM || ''
+const isH5Platform = UNI_PLATFORM === 'h5'
+const DEV_USE_PROXY = import.meta.env.DEV && isH5Platform
 
 const BASE_URL = DEV_USE_PROXY
   ? '/apiBase'
@@ -104,7 +97,7 @@ class Request {
 
     // 在开发环境输出当前基础地址，便于诊断 file:// 场景
     if (import.meta.env.DEV) {
-      console.log('[HTTP] BASE_URL:', BASE_URL, 'CRYPTO:', BASE_URL_CRYPTO, 'isHttpEnv:', isHttpEnv)
+      console.log('[HTTP] BASE_URL:', BASE_URL, 'CRYPTO:', BASE_URL_CRYPTO, 'UNI_PLATFORM:', UNI_PLATFORM, 'useProxy:', DEV_USE_PROXY)
     }
   }
 
