@@ -378,6 +378,14 @@ export interface EventParams {
   type: string;
 }
 
+export interface LoginGoogleParams {
+  id_token: string;
+  passkey: string;
+  device: string;
+  appversion: string;
+  lang: string;
+}
+
 export interface SocialLoginParams {
   provider: string
   token: string
@@ -447,6 +455,11 @@ export class AuthAPI {
   static login(params: LoginParams) {
     return request.post<LoginResponse>('/login.json', params)
   }
+   static loginGoogle(params: LoginGoogleParams) {
+    return request.post<LoginResponse>('/login/gmail.json', params)
+  }
+
+  
 
     static verifyPhone(params: VerifyPhoneParams) {
     return request.post<LoginResponse>('/verify.json', params)

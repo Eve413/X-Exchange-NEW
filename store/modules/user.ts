@@ -45,6 +45,14 @@ device: string;
 appversion: string
 }
 
+export interface LoginGoogleParams {
+  id_token: string;
+  passkey: string;
+  device: string;
+  appversion: string;
+  lang: string;
+}
+
 export interface VerifyPhoneParams {
 phone_code: string;
 username: string;
@@ -314,6 +322,14 @@ export interface EventParams {
   type: string;
 }
 
+export interface LoginGoogleParams {
+  id_token: string;
+  passkey: string;
+  device: string;
+  appversion: string;
+  lang: string;
+}
+
 
 
 
@@ -438,6 +454,45 @@ export const useUserStore = defineStore('user', () => {
       } else {
         throw new Error('登录数据格式错误')
       }
+    } catch (error: any) {
+      console.error('登录失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '登录失败，请重试' 
+      }
+    } finally {
+      loginLoading.value = false
+    }
+  }
+
+   const loginGoogle = async (loginGoogleParams: LoginGoogleParams) => {
+    try {
+      loginLoading.value = true
+      
+      const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
+
+      
+        const response = await authApi.authenticated(params);
+
+        // 假设API返回格式
+        if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+         const responseLogin = await authApi.loginGoogle(loginGoogleParams);
+
+          return responseLogin
+        } else {
+          
+        return response;
+        }
     } catch (error: any) {
       console.error('登录失败:', error)
       return { 
@@ -1902,6 +1957,7 @@ export const useUserStore = defineStore('user', () => {
     clearUserData,
     authenticateds,
     login,
+    loginGoogle,
     verifyPhone,
     register,
     logout,

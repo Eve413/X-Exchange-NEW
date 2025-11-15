@@ -110,7 +110,7 @@
             />
             <text class="oauth-txt">QQ</text>
           </view>
-          <view class="oauth-item">
+          <view class="oauth-item" @click="loginWithGoogle">
             <image
               class="oauth-ic"
               :src="googleIcon"
@@ -151,6 +151,7 @@ import {
   RegisterParams,
   useUserStore,
   VerifyPhoneParams,
+  LoginGoogleParams
 } from "@/store/modules/user";
 import FloatingInput from "@/components/FloatingInput.vue";
 import CountryPicker from "@/components/CountryPicker.vue";
@@ -165,6 +166,8 @@ const showAlert = ref(false);
 const messageAlert = ref("");
 const verifyInput = ref(null);
 const { t, locale } = useI18n();
+  const userStore = useUserStore();
+let oauth;
 var showPicker: Ref<boolean, boolean> = ref(false);
 const selectedCountry = ref({
   flag: "/static/flags/cn.png",
@@ -237,9 +240,31 @@ const imgOk = computed(
 );
 
 onMounted(() => {
+    const cache = uni.getStorageSync("login_cache");
   // 获取状态栏高度
   const systemInfo = uni.getSystemInfoSync();
   statusBarHeight.value = systemInfo.statusBarHeight || 0;
+
+  // Pastikan Google API sudah siap
+  if (!window.google) {
+    console.error("Google login script belum dimuat.");
+    return;
+  }
+
+  oauth = google.accounts.oauth2.initTokenClient({
+    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+    scope: "email profile openid",
+    callback: handleGoogleResponse,
+  });
+  if (!cache) return;
+  try {
+    const obj = JSON.parse(cache);
+    mobile.value = obj.mobile || "";
+    if (obj.remember && obj.pwd) {
+      password.value = decodeURIComponent(escape(atob(obj.pwd)));
+      remember.value = true;
+    }
+  } catch {}
 });
 
 async function onSendSms() {
@@ -248,7 +273,7 @@ async function onSendSms() {
     return;
   }
 
-  const userStore = useUserStore();
+
 
   const params: VerifyPhoneParams = {
     phone_code: "+" + selectedCountry.value.dial,
@@ -278,7 +303,6 @@ function goLogin() {
 }
 
 async function onSubmit() {
-  const userStore = useUserStore();
   if (!mobileOk.value) return tip(t("auth.phoneRequired"));
   if (!form.value.smsCode || form.value.smsCode.length < 4)
     return tip(t("auth.smsCodeInvalid"));
@@ -357,6 +381,65 @@ function goToLogin() {
 }
 
 function tip(title: string) {
+  uni.showToast({ title, icon: "none" });
+}
+
+function loginWithGoogle() {
+  oauth.requestAccessToken();   // <- membuka popup Google Login
+}
+
+async function handleGoogleResponse(response) {
+  console.log("Google Access Token:", response.access_token);
+
+ try {
+    const paramsLogin: LoginGoogleParams = {
+      id_token: response.access_token,
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      lang: 'en',
+    };
+
+    const resultAuth = await userStore.loginGoogle(paramsLogin);
+
+    if (resultAuth.data.status == 1) {
+      // TODO: 调用后端登录
+      if (remember.value) {
+        const encoded = btoa(unescape(encodeURIComponent(password.value)));
+        uni.setStorageSync("login_cache", JSON.stringify(resultAuth));
+      } else {
+        uni.removeStorageSync("login_cache");
+      }
+
+      // 保存用户登录状态
+      const userInfo = {
+        mobile: mobile.value,
+        loginTime: new Date().toISOString(),
+      };
+      uni.setStorageSync("userInfo", userInfo);
+      uni.setStorageSync("isRegistered", true);
+      uni.setStorageSync("isLoggedIn", true);
+      uni.setStorage({
+        key: "userData",
+        data: resultAuth,
+        success: () => {
+          console.log("Data saved to local storage");
+        },
+      });
+
+      setTimeout(() => goHome(), 500);
+    } else {
+      messageAlert.value = resultAuth.data.msg;
+      showAlert.value = true;
+    }
+  } catch (e) {
+    toast(t("auth.loginFail"));
+  } finally {
+    submitting.value = false;
+  }
+}
+
+function toast(title: string) {
   uni.showToast({ title, icon: "none" });
 }
 </script>
