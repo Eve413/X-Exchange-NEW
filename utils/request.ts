@@ -33,6 +33,14 @@ const BASE_URL_CRYPTO = DEV_USE_PROXY
   ? '/cryptoBase'
   : 'https://crypto.icoinkey.com'
 
+// const BASE_URL_TRADER = process.env.NODE_ENV === 'development' 
+// ? 'https://trading.icoinkey.com' 
+// : 'https://trading.icoinkey.com'
+
+const BASE_URL_TRADER = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:8080' 
+  : 'http://localhost:8080'
+
 const DEFAULT_TIMEOUT = 20000
 
 class Request {
@@ -300,6 +308,74 @@ class Request {
       })
     })
   }
+  
+  postTrading<T = any>(url: string, data?: any, config?: Partial<RequestConfig>) {
+      return this.requestTrader<T>({
+        url,
+        method: 'POST',
+        data,
+        ...config
+      })
+    }
+  
+  
+  
+    async requestTrader<T = any>(config: RequestConfig): Promise<ResponseData<T>> {
+      // Debug: Entry log
+      console.log('[requestTrader] Entered', config)
+      if (config.loading !== false) {
+        uni.showLoading({ title: '加载中...' })
+      }
+  
+      try {
+        // 应用请求拦截器
+        let processedConfig = config
+       for (const interceptor of this.interceptors.request) {
+          processedConfig = interceptor(processedConfig)
+        }
+        // Log headers after interceptors
+        console.log('[requestTrader] Final Headers:', processedConfig.header)
+  
+        // 构建完整URL - always use BASE_URL_TRADER
+        const fullUrl = processedConfig.url.startsWith('http') 
+          ? processedConfig.url 
+          : `${BASE_URL_TRADER}${processedConfig.url}`
+  
+        // 发起请求
+        const response = await uni.request({
+          url: fullUrl,
+          method: processedConfig.method || 'GET',
+          data: processedConfig.data,
+          header: processedConfig.header,
+          timeout: processedConfig.timeout || DEFAULT_TIMEOUT
+        })
+  
+        // 应用响应拦截器
+        let processedResponse = response
+        for (const interceptor of this.interceptors.response) {
+          processedResponse = interceptor(processedResponse)
+        }
+  
+        return processedResponse as ResponseData<T>
+  
+      } catch (error: any) {
+        console.error('请求错误:', error)
+        
+        if (config.showError !== false) {
+          uni.showToast({
+            title: error.message || '网络请求失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        
+        throw error
+      } finally {
+        if (config.loading !== false) {
+          uni.hideLoading()
+        }
+      }
+    }
 }
 
 export const request = new Request()
