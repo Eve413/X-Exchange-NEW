@@ -245,17 +245,6 @@ onMounted(() => {
   const systemInfo = uni.getSystemInfoSync();
   statusBarHeight.value = systemInfo.statusBarHeight || 0;
 
-  // Pastikan Google API sudah siap
-  if (!window.google) {
-    console.error("Google login script belum dimuat.");
-    return;
-  }
-
-  oauth = google.accounts.oauth2.initTokenClient({
-    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-    scope: "email profile openid",
-    callback: handleGoogleResponse,
-  });
   if (!cache) return;
   try {
     const obj = JSON.parse(cache);
@@ -385,15 +374,24 @@ function tip(title: string) {
 }
 
 function loginWithGoogle() {
-  oauth.requestAccessToken();   // <- membuka popup Google Login
+  uni.login({
+      provider: 'google',
+      success: function (res) {
+          console.log('Google Login Result:', res);
+          handleGoogleResponse(res?.authResult?.openid)
+      },
+      fail: function (err) {
+          console.error('Login Error:', err);
+      }
+  });
 }
 
-async function handleGoogleResponse(response) {
-  console.log("Google Access Token:", response.access_token);
+async function handleGoogleResponse(id_token) {
+  console.log("Google Access Token:", id_token);
 
  try {
     const paramsLogin: LoginGoogleParams = {
-      id_token: response.access_token,
+      id_token: id_token,
       passkey: userStore.pasKeyAuth,
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
