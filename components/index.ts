@@ -22,6 +22,10 @@ export { default as PercentChange } from './common/PercentChange.vue'
 export { default as PriceDisplay } from './common/PriceDisplay.vue'
 export { default as VirtualList } from './common/VirtualList.vue'
 
+export { default as Banner } from './common/Banner.vue'
+export { default as TradeCard } from './common/TraderCard.vue'
+export { default as AirdropCard } from './common/AirdropCard.vue'
+
 // ===== 💼 业务组件 =====
 export { default as TradingPair } from './business/TradingPair.vue'
 

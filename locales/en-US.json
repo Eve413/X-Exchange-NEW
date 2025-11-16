@@ -1107,7 +1107,37 @@
     "participants": "Participants",
     "countdown": "Countdown",
     "join_airdrop": "Join Airdrop",
-    "product_price": "$29,732.54"
+    "product_price": "$29,732.54",
+	"success": {
+	      "copy-title": "Copy Trade Detail",
+	      "copy-success": "Copy Trade Successful",
+	      "copy-success-desc": "You have started following trader",
+	      "setting": {
+	        "title": "Copy Trading Settings",
+	        "amount": "Copy Trading Amount",
+	        "stop-loss-ratio": "Stop Loss Ratio",
+	        "take-profit-ratio": "Take Profit Ratio"
+	      },
+	      "realtime": {
+	        "title": "Real-time Status",
+	        "following-trader": "Following Trades",
+	        "current-pnl": "Current P&L",
+	        "today-copy-trade": "Today's Copy Trade",
+	        "win-rate": "Win Rate"
+	      },
+	      "trader-info": {
+	        "title": "Trader Information",
+	        "followers": "Followers",
+	        "active": "Active",
+	        "day-return-rate": "30-day Return Rate",
+	        "aum": "AUM"
+	      },
+	      "recent-order": {
+	        "title": "Recent Orders",
+	        "go-long": "Go Long",
+	        "to-short": "To Short"
+	      }
+	    }
   },
   "notification": {
     "title": "Notifications",
