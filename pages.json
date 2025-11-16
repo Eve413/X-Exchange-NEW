@@ -351,7 +351,14 @@
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
-    }
+    },
+	 {
+	      "path": "pages/discover/success",
+	      "style": {
+	        "navigationBarTitleText": "交易",
+	        "navigationStyle": "custom"
+	      }
+	    },
   ],
 
   

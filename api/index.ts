@@ -8,9 +8,10 @@ import { AuthAPI } from './modules/auth'
 import { marketApi } from './modules/market'
 import { tradeApi } from './modules/trade'
 import { userApi } from './modules/user'
+import { TradingApi } from './modules/trading'
 
 // 导出所有API模块
-export { AuthAPI as authApi, marketApi, tradeApi, userApi }
+export { AuthAPI as authApi, marketApi, tradeApi, userApi, TradingApi as tradingApi }
 
 // 公告API模块
 export const announcementApi = {
