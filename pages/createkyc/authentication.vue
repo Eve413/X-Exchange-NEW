@@ -69,8 +69,13 @@
     <view class="btn-continue" @click="agree">{{ $t('kyc.openAccount.continue') }}</view>
 
     <!-- Alert -->
-    <Alert :show="showAlert" :title="titleAlert" :description="messageAlert" :cancelText="''"
-      :confirmText="$t('common.confirm')" @confirm="handleConfirm" />
+    <Alert 
+    :show="showAlert" 
+    :title="titleAlert" 
+    :description="messageAlert" 
+    :cancelText="''"
+    :confirmText="$t('common.confirm')" 
+    @confirm="handleConfirm" />
 
     <!-- 身份信息确认弹窗 -->
     <view class="identity-modal" v-if="showIdentityModal">

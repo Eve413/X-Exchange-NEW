@@ -43,11 +43,11 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\" />"
                 ],
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ],
-				"oauth": {
-				  "google": {
-				    "clientid": "834921019147-3i84548nkm30t4esl4imnotc2odqc43m.apps.googleusercontent.com"
-				  }
-				}
+                "oauth" : {
+                    "google" : {
+                        "clientid" : "834921019147-3i84548nkm30t4esl4imnotc2odqc43m.apps.googleusercontent.com"
+                    }
+                }
             },
             "ios" : {
                 "dSYMs" : false

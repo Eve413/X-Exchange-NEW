@@ -92,14 +92,14 @@
 
   </view>
 
-  <Alert
+  <!-- <Alert
       :show="showAlert"
       :title="titleAlert"
       :description="messageAlert"
       :cancelText="''" 
       :confirmText="t('common.confirm')"
       @confirm="handleConfirm"
-    />
+    /> -->
 
 </template>
 
@@ -180,6 +180,13 @@ async function onSendSms() {
           messageAlert.value =  result.data.msg
           showAlert.value = true
 
+          uni.showModal({
+              title: t('error.unauthorized'),
+              content: result.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
+
   // TODO: 接后端短信发送
   // await api.sendSms({ mobile: mobile.value, scene: 'reset' })
   uni.showToast({ title: t('auth.smsCodeSent'), icon: 'none' })
@@ -231,6 +238,12 @@ async function onSubmit() {
       messageAlert.value =  result.data.msg
       showAlert.value = true
       titleAlert.value = t('auth.forgotPasswordTitle')
+      uni.showModal({
+              title: t('auth.forgotPasswordTitle'),
+              content: result.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
     }
 
    

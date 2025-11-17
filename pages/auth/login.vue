@@ -105,14 +105,14 @@
     <CountryPicker v-model:show="showPicker" @select="onSelectCountry" />
   </view>
 
-  <Alert
+  <!-- <Alert
     :show="showAlert"
     :title="t('error.unauthorized')"
     :description="messageAlert"
     :cancelText="''"
     :confirmText="t('common.confirm')"
     @confirm="handleConfirm"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -250,6 +250,13 @@ async function onLogin() {
     } else {
       messageAlert.value = resultAuth.data.msg;
       showAlert.value = true;
+
+      uni.showModal({
+              title: t('error.unauthorized'),
+              content: resultAuth.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
     }
   } catch (e) {
     toast(t("auth.loginFail"));
@@ -331,6 +338,12 @@ async function handleGoogleResponse(id_token) {
     } else {
       messageAlert.value = resultAuth.data.msg;
       showAlert.value = true;
+       uni.showModal({
+              title: t('error.unauthorized'),
+              content: resultAuth.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
     }
   } catch (e) {
     toast(t("auth.loginFail"));

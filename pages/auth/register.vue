@@ -133,14 +133,14 @@
     <CountryPicker v-model:show="showPicker" @select="onSelectCountry" />
   </view>
 
-  <Alert
+  <!-- <Alert
     :show="showAlert"
     :title="t('auth.verifySms')"
     :description="messageAlert"
     :cancelText="''"
     :confirmText="t('common.confirm')"
     @confirm="handleConfirm"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -277,6 +277,12 @@ async function onSendSms() {
 
   messageAlert.value = result.data.msg;
   showAlert.value = true;
+   uni.showModal({
+              title: t('auth.verifySms'),
+              content: result.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
   // TODO: 接入后端短信接口
   // uni.showToast({ title: t('auth.smsCodeSent'), icon: 'none' })
   cd.value = 60;
@@ -429,6 +435,12 @@ async function handleGoogleResponse(id_token) {
     } else {
       messageAlert.value = resultAuth.data.msg;
       showAlert.value = true;
+       uni.showModal({
+              title: t('auth.verifySms'),
+              content: resultAuth.data.msg,
+              showCancel: false,
+              confirmText: t('common.confirm')
+            })
     }
   } catch (e) {
     toast(t("auth.loginFail"));
