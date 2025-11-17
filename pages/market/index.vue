@@ -24,7 +24,7 @@
 
 						<view class="profile-info">
 							<view class="name-row">
-								<text class="name">{{ traderPerformanceDetail.traderName }}</text>
+								<text class="name">{{ traderPerformanceDetail?.traderName }}</text>
 							</view>
 							<view class="desc-container">
 								<text class="desc" :class="{ expanded: expandDesc }">
@@ -564,7 +564,7 @@
 	import { useSafeArea } from "@/utils/composables/useSafeArea";
 	import { useI18n } from "vue-i18n";
 	import { useTradingStore } from '@/store/modules/trading';
-import { redirectTo } from "@/utils";
+	import { redirectTo } from "@/utils";
 
 	const { t, locale } = useI18n();
 	const { statusBarHeight, getTopStyle: safeAreaGetTopStyle } = useSafeArea();
@@ -628,6 +628,14 @@ import { redirectTo } from "@/utils";
 	const exchangeRate = ref("10.1");
 	const swapFee = ref(0);
 	const slippage = ref("<0.001");
+
+
+	// format helpers
+	function formatSharpe(val : any) : string {
+		const n = Number(val)
+		if (!isFinite(n)) return '0.00'
+		return n.toFixed(2)
+	}
 
 	// 交换货币
 	function swapCoins() {
@@ -832,6 +840,7 @@ import { redirectTo } from "@/utils";
 	async function loadData(options ?: any) {
 		console.log("Type : " + options?.type)
 		console.log("Trader ID : " + options?.traderId)
+		const type = options?.type || "follow";
 		try {
 			const tickersParams : TickersParams = {
 				passkey: userStore.pasKeyAuth,

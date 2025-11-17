@@ -38,6 +38,7 @@ const search = ref("");
 const countries = ref([
   { name: "中国大陆(CN)", dial: 86, code: "CN", flag: "/static/flags/cn.png" },
   { name: "中国香港(HK)", dial: 852, code: "HK", flag: "/static/flags/cn.png" },
+  { name: "马来西亚(MY)", dial: 60, code: "MY", flag: "/static/flags/my_1.png" },
 ]);
 
 const filteredCountries = computed(() => {
