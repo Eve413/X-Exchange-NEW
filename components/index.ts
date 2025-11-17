@@ -26,6 +26,11 @@ export { default as Banner } from './common/Banner.vue'
 export { default as TradeCard } from './common/TraderCard.vue'
 export { default as AirdropCard } from './common/AirdropCard.vue'
 
+export { default as CopyTradeSummaryCard } from './common/CopyTradeSummaryCard.vue'
+export { default as RealTimeStatus } from './common/RealTimeStatus.vue'
+export { default as TraderInformationSuccess } from './common/TraderInformationSuccess.vue'
+export { default as RecentOrders } from './common/RecentOrders.vue'
+
 // ===== 💼 业务组件 =====
 export { default as TradingPair } from './business/TradingPair.vue'
 
