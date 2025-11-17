@@ -1292,7 +1292,7 @@ async function toggleFavorite() {
   padding-right: 30rpx;
   padding-bottom: 170rpx;
   // box-sizing: border-box;
-  padding-top: 220rpx !important;
+  padding-top: 150rpx !important;
 }
 
 .price-section {

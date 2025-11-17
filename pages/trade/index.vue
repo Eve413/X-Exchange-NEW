@@ -568,7 +568,7 @@ const handleTabChange = (tab: any, index: number) => {
 .tab-top {
   position: fixed;
   /* 动态计算顶部位置：状态栏高度 + navbar高度 */
-  top: 180rpx;
+  top: 196rpx;
   left: 0;
   right: 0;
   background-color: #202020;
@@ -587,7 +587,7 @@ const handleTabChange = (tab: any, index: number) => {
 
 /* 当tab-top显示时的样式 */
 .scroll-area.has-tab-top {
-  padding-top: 200rpx;
+  padding-top: 100rpx;
   height: calc(100vh - 200rpx);
 }
 

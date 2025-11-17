@@ -800,7 +800,9 @@ const goToWithdraw = () => {
 .asset-list-dialog {
   /* background-color: #1e1e1e;  */
   border-radius: 16rpx;
-  padding: 20rpx;
+  /* padding: 20rpx; */
+  padding-left: 20rpx;
+  padding-right: 20rpx;
   display: flex;
   flex-direction: column;
   gap: 20rpx;
