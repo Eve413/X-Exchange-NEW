@@ -580,7 +580,9 @@
     "registerFailed": "註冊失敗",
     "loginFailed": "登入失敗",
     "resetPasswordFailed": "重設密碼失敗",
-    "invitationCode": "输入邀请码"
+    "invitationCode": "输入邀请码",
+     "email":"邮箱地址",
+     "emailRequired": "需要电子邮件"
   },
   "airdrop": {
     "title": "空投",

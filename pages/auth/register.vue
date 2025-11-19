@@ -43,6 +43,8 @@
         @selectCountry="onOpenSelectCountry"
       />
 
+      
+
       <!-- 短信验证码 -->
       <FloatingInput
         v-model="form.smsCode"
@@ -51,6 +53,13 @@
         type="text"
       />
 
+
+      <FloatingInput
+        v-model="form.email"
+        :label="t('auth.email')"
+        :placeholder="t('auth.email')"
+        type="text"
+      />
       <!-- 登录密码 -->
       <FloatingInput
         v-model="form.password"
@@ -197,6 +206,7 @@ const form = ref({
   payPwd: "",
   invite: "",
   imgCodeInput: "",
+  email:""
 });
 
 const submitting = ref(false);
@@ -298,6 +308,7 @@ function goLogin() {
 }
 
 async function onSubmit() {
+ 
   if (!mobileOk.value) return tip(t("auth.phoneRequired"));
   if (!form.value.smsCode || form.value.smsCode.length < 4)
     return tip(t("auth.smsCodeInvalid"));
@@ -307,6 +318,9 @@ async function onSubmit() {
   // if (!payPwdOk.value) return tip(t('auth.fundPasswordRequired'))
   // if (!inviteOk.value) return tip(t('auth.inviteCodeInvalid'))
   if (!imgOk.value) return tip(t("auth.captchaInvalid"));
+  if (!form.value.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) {
+  return tip(t("auth.emailRequired"));
+}
 
   submitting.value = true;
   try {
@@ -320,6 +334,7 @@ async function onSubmit() {
       referral_code: form.value.referralCode,
       verification_code: form.value.smsCode,
       lang: "zh",
+      email:form.value.email,
     };
 
     const result = await userStore.register(params);

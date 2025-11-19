@@ -72,7 +72,8 @@ export interface RegisterParams {
     password: string;
     referral_code: string;
     verification_code: string;
-    lang: string
+    lang: string;
+    email:string;
 }
 
 export interface ResetPasswordParams {

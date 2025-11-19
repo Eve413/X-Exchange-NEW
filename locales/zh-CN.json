@@ -1357,7 +1357,9 @@
 			"address": "地址",
 			"email": "邮箱地址",
 			"feature_in_development": "功能开发中"
-		}
+		},
+     "email":"邮箱地址",
+     "emailRequired": "需要电子邮件"
 	},
 	"min_withdraw": "最小提现",
 	"confirm_withdraw": "确认提现",

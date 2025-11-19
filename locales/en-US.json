@@ -729,7 +729,9 @@
     "registerFailed": "Registration failed",
     "loginFailed": "Login failed",
     "resetPasswordFailed": "Reset password failed",
-    "invitationCode": "Enter invitation code"
+    "invitationCode": "Enter invitation code",
+     "email": "Email Address",
+     "emailRequired": "Email Required"
   },
   "kyc": {
     "intro": {
