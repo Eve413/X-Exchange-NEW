@@ -5,7 +5,10 @@
       <image class="avatar" :src="avatar" mode="aspectFill" />
       <view class="user-info">
         <text class="username">{{ username }}</text>
-        <text class="followers">👤 {{ followers }}/{{ maxFollowers }}</text>
+        <view class="followers-row">
+          <image class="follower-icon" src="/static/icons/humanIcon.png" mode="aspectFit" />
+          <text class="followers">{{ followers }}/{{ maxFollowers }}</text>
+        </view>
       </view>
 
       <view class="actions">
@@ -145,10 +148,21 @@ const handleFollow = () => {
   font-weight: 600;
 }
 
+.followers-row {
+  display: flex;
+  align-items: center;
+  margin-top: 4rpx;
+}
+
+.follower-icon {
+  width: 20rpx;
+  height: 20rpx;
+  margin-right: 4rpx;
+}
+
 .followers {
   font-size: 24rpx;
   color: #9a9a9a;
-  margin-top: 4rpx;
 }
 
 /* Actions */

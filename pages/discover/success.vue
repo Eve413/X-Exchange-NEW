@@ -25,7 +25,7 @@
 
         <text class="success-text"> {{ $t('discover.success.copy-success') }}</text>
         <text class="desc">
-            {{ $t('discover.success.copy-success-desc') }} {{ copyTradeSummary.data.expertCode }}
+            {{ $t('discover.success.copy-success-desc') }} {{ copyTradeSummary?.data?.expertCode ?? '' }}
         </text>
     </view>
         <view class="card-margin">
@@ -54,9 +54,9 @@
                 avatar="https://via.placeholder.com/80"
                 :name="copyTradeSummary?.data?.fullName ?? ''"
                 :followers="copyTradeSummary?.data?.totalFollower ?? 0"
-                :status="Active"
-                :returnRate="copyTradeSummary?.data?.returnRate ?? 0"
-                :aum="copyTradeSummary?.data?.aum ?? 0"
+                status="Active"
+                :returnRate="String(copyTradeSummary?.data?.returnRate ?? 0)"
+                :aum="String(copyTradeSummary?.data?.aum ?? 0)"
             />
         
         <!-- Recent Orders -->
@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-    import { CopyTradeSummaryCard,RealTimeStatus, TraderInformationSuccess, RecentOrders } from '@/components';
+    import { CopyTradeSummaryCard, RealTimeStatus, TraderInformationSuccess, RecentOrders, BottomTabBar } from '@/components';
     import { onLoad } from '@dcloudio/uni-app'
     import { ref, computed } from 'vue'
     import { useUserStore } from '@/store/modules/user'
@@ -82,8 +82,8 @@
     const currentRoute = ref('/pages/discover/index')
     const userStore = useUserStore()
     const tradingStore = useTradingStore()
-    const copyTradeSummary = ref(null)
-    const recentOrdersData = ref([])
+    const copyTradeSummary = ref<any>(null)
+    const recentOrdersData = ref<any[]>([])
 
     const { t } = useI18n()
     
