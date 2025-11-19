@@ -33,13 +33,13 @@ const BASE_URL_CRYPTO = DEV_USE_PROXY
   ? '/cryptoBase'
   : 'https://crypto.icoinkey.com'
 
-// const BASE_URL_TRADER = process.env.NODE_ENV === 'development' 
-// ? 'https://trading.icoinkey.com' 
-// : 'https://trading.icoinkey.com'
-
 const BASE_URL_TRADER = process.env.NODE_ENV === 'development' 
-  ? 'http://localhost:8080' 
-  : 'http://localhost:8080'
+? 'https://trading.icoinkey.com' 
+: 'https://trading.icoinkey.com'
+
+// const BASE_URL_TRADER = process.env.NODE_ENV === 'development' 
+//   ? 'http://localhost:8080' 
+//   : 'http://localhost:8080'
 
 const DEFAULT_TIMEOUT = 20000
 
