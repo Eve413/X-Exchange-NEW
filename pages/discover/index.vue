@@ -420,13 +420,10 @@
 
 			// Extract the array from the response
 			if (airdropsResponse?.data?.data) {
-				console.log("Kesini");
 				listAirdrops.value = airdropsResponse.data.data;
 			} else if (Array.isArray(airdropsResponse?.data)) {
-				console.log("Kesitu");
 				listAirdrops.value = airdropsResponse.data;
 			} else {
-				console.log("ga kemana2");
 				listAirdrops.value = [];
 			}
 
@@ -451,6 +448,10 @@
 	    title: '已加入空投',
 	    icon: 'success'
 	  })
+	}
+	
+	const handleBannerClick = () => {
+		console.log("Banner")
 	}
 
 	// 处理Tab切换

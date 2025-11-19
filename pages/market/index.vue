@@ -1169,13 +1169,21 @@
 							// Call the subscribe API
 							const response = await tradingStore.subscribeToTrader(amount, expertId, copyAllTrade)
 							console.log('✅ Subscription successful:', response)
-
-							// Navigate to success page after successful subscription
-							uni.navigateTo({
-								url: `/pages/discover/success?expertId=${expertId}`,
-								success: () => console.log('✅ Navigated to success page'),
-								fail: (err) => console.error('❌ Navigation failed:', err)
-							})
+							if (response?.status == 1){
+								// Navigate to success page after successful subscription
+								uni.navigateTo({
+									url: `/pages/discover/success?expertId=${expertId}`,
+									success: () => console.log('✅ Navigated to success page'),
+									fail: (err) => console.error('❌ Navigation failed:', err)
+								})
+							}else{
+								uni.showToast({
+									title: t('market.operationFailed'),
+									icon: "none",
+									duration: 2000
+								});
+							}
+							
 						} catch (e) {
 							console.error('❌ Error during subscription:', e)
 							uni.showToast({
