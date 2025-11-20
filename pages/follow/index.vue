@@ -51,7 +51,7 @@
             </view>
           </view>
 
-          <view class="sort-item1">
+          <view class="sort-item1" @click="goToProfitLossReport">
             <image class="sort-icon" src="/static/icons/TransactionDetails.png" mode="aspectFit" />
           </view>
         </view>
@@ -384,6 +384,13 @@ watch(() => locale.value, (newLocale) => {
 onMounted(() => {
   console.log('跟单页面加载完成')
 })
+const goToProfitLossReport = () => {
+  uni.navigateTo({
+    url: '/pages/profitlossreport/index',
+    success: () => console.log('✅ 跳转到盈亏报表页面成功'),
+    fail: (err) => console.error('❌ 跳转到盈亏报表页面失败:', err)
+  })
+}
 </script>
 
 <style lang="scss" scoped>

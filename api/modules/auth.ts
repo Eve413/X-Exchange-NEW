@@ -385,6 +385,16 @@ export interface LoginGoogleParams {
   appversion: string;
   lang: string;
 }
+export interface ProfitLossParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  period: string;
+  calendar: string;
+}
+
 
 export interface SocialLoginParams {
   provider: string
@@ -595,7 +605,9 @@ export class AuthAPI {
     return request.post('/airdrop/subscriptions.json', params)
   }
   
-  
+   static getProfitLoss(params: ProfitLossParams) {
+    return request.post('/profit_loss.json', params)
+  }
 
   
 

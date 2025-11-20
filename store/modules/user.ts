@@ -323,6 +323,7 @@ export interface EventParams {
   type: string;
 }
 
+
 export interface LoginGoogleParams {
   id_token: string;
   passkey: string;
@@ -331,7 +332,15 @@ export interface LoginGoogleParams {
   lang: string;
 }
 
-
+export interface ProfitLossParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token:string;
+  lang: string;
+  period: string;
+  calendar: string;
+}
 
 
 export const useUserStore = defineStore('user', () => {
@@ -1800,6 +1809,48 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+   const getProfitLoss = async (profitLossParams: ProfitLossParams) => {
+    try {
+      registerLoading.value = true
+       const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
+
+      
+        const response = await authApi.authenticated(params);
+
+         if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+          const responseProfitLossParams= await authApi.getProfitLoss(profitLossParams)
+
+          return responseProfitLossParams
+        } else {
+          
+        return response;
+        }
+      
+      
+
+      return response
+    } catch (error: any) {
+      console.error('注册失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '注册失败，请重试' 
+      }
+    } finally {
+      registerLoading.value = false
+    }
+  }
+
+  
    const getSubscriptions = async (airdropsParams: AirdropsParams) => {
     try {
       registerLoading.value = true
@@ -1996,6 +2047,7 @@ export const useUserStore = defineStore('user', () => {
     postAirdropsSubscriptionDetil,
     getEvent,
     getSubscriptions,
+    getProfitLoss,
     init,
     getBannerTrading,
 

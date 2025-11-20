@@ -112,13 +112,12 @@
       }
     },
     {
-    	"path" : "pages/auth/startup",
-    	"style" : 
-    	{
-    		 "navigationStyle": "custom",
-    		        "disableScroll": false,
-    		        "app-plus": { "bounce": "none" }
-    	}
+      "path": "pages/auth/startup",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": false,
+        "app-plus": { "bounce": "none" }
+      }
     },
     {
       "path": "pages/auth/status",
@@ -246,42 +245,42 @@
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/changepassword/index",
       "style": {
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/setpincode/index",
       "style": {
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/phoneverify/index",
       "style": {
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/assetsoverview/index",
       "style": {
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/transfer/index",
       "style": {
         "navigationBarTitleText": "交易",
         "navigationStyle": "custom"
       }
     },
-     {
+    {
       "path": "pages/withdraw/index",
       "style": {
         "navigationBarTitleText": "交易",
@@ -352,13 +351,23 @@
         "navigationStyle": "custom"
       }
     },
-	 {
-	      "path": "pages/discover/success",
-	      "style": {
-	        "navigationBarTitleText": "交易",
-	        "navigationStyle": "custom"
-	      }
-	    }
+    {
+      "path": "pages/discover/success",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/profitlossreport/index",
+      "style": {
+        "navigationBarTitleText": "盈亏报表",
+        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#202020",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#202020"
+      }
+    }
   ],
 
   
