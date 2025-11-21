@@ -200,7 +200,10 @@ onLoad(() => {
   // flex-direction: column;
   gap: 12px;
 }
-
+.user-info{
+  display: flex;
+  flex-direction: column;
+}
 .avatar {
   width: 60px;
   height: 60px;
@@ -228,7 +231,8 @@ onLoad(() => {
   border-radius: 16px;
   align-self: flex-start;
   margin-top: 8px;
-  margin-left: 40rpx;
+  margin-left: 5rpx;
+  width: 250rpx;
 }
 
 .badge-icon {
@@ -239,6 +243,7 @@ onLoad(() => {
 .badge-text {
   font-size: 12px;
   color: #ffffff;
+  text-align: center;
 }
 
 /* 升级认证卡片 */
@@ -278,7 +283,8 @@ onLoad(() => {
   font-size: 28rpx;
   font-weight: 500;
   width: 100%;
-  margin-top: 30rpx;
+  margin-top: 15rpx;
+  margin-bottom: 10rpx;
 }
 
 /* 限额卡片 */
@@ -292,7 +298,6 @@ onLoad(() => {
 .card-title {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 16px;
 }
 
 .limit-item {
@@ -330,7 +335,6 @@ onLoad(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
 }
 
 .update-text {
