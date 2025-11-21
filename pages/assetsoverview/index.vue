@@ -28,7 +28,7 @@
           </view>
           <view class="right">
             <image class="chart-icon" src="/static/icons/ic_chart.png" mode="aspectFit" />
-            <image class="record-icon" src="/static/icons/ic_record.png" mode="aspectFit" />
+            <image class="record-icon" src="/static/icons/ic_record.png" mode="aspectFit" @click="goToProfitLossReport" />
           </view>
         </view>
 
@@ -68,7 +68,7 @@
         </view>
         <view class="footer-right">
           <image class="search-icon " src="/static/icons/ic_search.png" mode="aspectFit" />
-          <image class="icon" src="/static/icons/ic_record.png" mode="aspectFit" />
+          <image class="icon" src="/static/icons/ic_record.png" mode="aspectFit" @click="goToProfitLossReport"/>
         </view>
       </view>
 
@@ -472,7 +472,13 @@ const goToWithdraw = () => {
 
 }
 
-
+const goToProfitLossReport = () => {
+  uni.navigateTo({
+    url: '/pages/profitlossreport/index',
+    success: () => console.log('✅ 跳转到盈亏报表页面成功'),
+    fail: (err) => console.error('❌ 跳转到盈亏报表页面失败:', err)
+  })
+}
 </script>
 
 <style scoped>
