@@ -17,41 +17,41 @@
     <view class="content">
       <!-- 时间标签切换 -->
       <view class="time-tabs">
-        <view :class="['time-tab', activeTab === 'today' ? 'active' : '']" @click="activeTab = 'today'">今日</view>
-        <view :class="['time-tab', activeTab === 'week' ? 'active' : '']" @click="activeTab = 'week'">本周</view>
-        <view :class="['time-tab', activeTab === 'month' ? 'active' : '']" @click="activeTab = 'month'">本月</view>
+        <view :class="['time-tab', activeTab === 'today' ? 'active' : '']" @click="handleActiveTab('today')">{{t('profitleLose.today')}}</view>
+        <view :class="['time-tab', activeTab === 'week' ? 'active' : '']" @click="handleActiveTab('week') ">{{t('profitleLose.this_week')}}</view>
+        <view :class="['time-tab', activeTab === 'month' ? 'active' : '']" @click="handleActiveTab('month')">{{t('profitleLose.this_month')}}</view>
       </view>
 
       <!-- 总盈亏卡片 -->
       <view class="summary-card">
         <view class="summary-header">
-          <view class="summary-title">总盈亏</view>
+          <view class="summary-title">{{t('profitleLose.total_profit_loss')}}</view>
           <view class="card-right">
-            <text class="summary-value positive">+323.12</text>
-            <text class="summary-label-bottom">USDT</text>
+            <text class="summary-value positive">{{ dataProfit?.TotalProfitLoss?.total }}</text>
+            <text class="summary-label-bottom">{{ dataProfit?.TotalProfitLoss?.baseAsset }}</text>
           </view>
         </view>
-        <view class="summary-percentage positive">+2.54%</view>
+        <view class="summary-percentage positive">{{ dataProfit?.TotalProfitLoss?.percent }}</view>
       </view>
 
       <!-- 盈亏类型卡片 -->
       <view class="profit-loss-cards">
         <view class="profit-loss-card">
-          <text class="profit-loss-label">已实现盈亏</text>
-          <text class="profit-loss-value positive">+280.50</text>
-          <text class="profit-loss-label-bottom">USDT</text>
+          <text class="profit-loss-label">{{t('profitleLose.realized_profit_loss')}}</text>
+          <text class="profit-loss-value positive">{{ dataProfit?.RealizedProfitLoss?.total }}</text>
+          <text class="profit-loss-label-bottom">{{ dataProfit?.RealizedProfitLoss?.baseAsset }}</text>
         </view>
         <view class="profit-loss-card">
-          <text class="profit-loss-label">未实现盈亏</text>
-          <text class="profit-loss-value positive">+52.64</text>
-          <text class="profit-loss-label-bottom">USDT</text>
+          <text class="profit-loss-label">{{t('profitleLose.unrealized_profit_loss')}}</text>
+          <text class="profit-loss-value positive">{{ dataProfit?.UnrealizedProfitLoss?.total }}</text>
+          <text class="profit-loss-label-bottom">{{ dataProfit?.UnrealizedProfitLoss?.baseAsset }}</text>
         </view>
       </view>
 
       <!-- 盈亏日历 -->
       <view class="calendar-section">
         <view class="calendar-header">
-          <text class="section-title">盈亏日历</text>
+          <text class="section-title">{{t('profitleLose.profit_loss_calendar')}}</text>
           <view class="calendar-nav">
             <text class="nav-button" @click="prevMonth">&laquo;</text>
             <text class="nav-button" @click="prevYear">&lt;</text>
@@ -91,15 +91,15 @@
         <view class="calendar-legend">
           <view class="legend-item">
             <view class="legend-color profit"></view>
-            <text class="legend-text">盈利</text>
+            <text class="legend-text">{{t('profitleLose.profit')}}</text>
           </view>
           <view class="legend-item">
             <view class="legend-color loss"></view>
-            <text class="legend-text">亏损</text>
+            <text class="legend-text">{{t('profitleLose.loss')}}</text>
           </view>
           <view class="legend-item">
             <view class="legend-color flat"></view>
-            <text class="legend-text">持平</text>
+            <text class="legend-text">{{t('profitleLose.breakeven')}}</text>
           </view>
         </view>
       </view>
@@ -107,16 +107,15 @@
       <!-- 交易列表 -->
       <view class="trade-list-section">
         <view class="section-header">
-          <text class="section-title">交易明细</text>
-          <text class="trade-count">{{ tradeList.length }}笔</text>
+          <text class="section-title">{{t('profitleLose.trade_details')}}</text>
+          <text class="trade-count">{{ tradeList.length }}{{t('profitleLose.count')}}</text>
         </view>
 
         <!-- 交易记录项 -->
         <view class="trade-item" v-for="(trade, index) in tradeList" :key="index">
           <view class="trade-main">
             <view class="trade-symbol">{{ trade.symbol }}</view>
-            <view class="trade-status" :class="trade.isRealized ? 'realized' : 'unrealized'">{{ trade.isRealized ? '已实现'
-              : '未实现' }}</view>
+            <view class="trade-status" :class="trade.isRealized ? 'realized' : 'unrealized'">{{ trade.type }}</view>
           </view>
           <view class="trade-center">
             <view class="trade-time">{{ trade.time }}</view>
@@ -125,9 +124,9 @@
             </view>
           </view>
           <view class="trade-details">
-            <view class="trade-leverage">{{ trade.leverage }}X</view>
+            <view class="trade-leverage">{{ trade.leverage }}</view>
             <view class="trade-percentage" :class="trade.profit > 0 ? 'positive' : 'negative'">
-              {{ trade.profit > 0 ? '+' : '' }}{{ trade.percentage }}%
+              {{ trade.profit > 0 ? '+' : '' }}{{ trade.percentage }}
             </view>
           </view>
         </view>
@@ -141,6 +140,8 @@ import { ref, onMounted } from 'vue'
 const userInfo = uni.getStorageSync('userData')
 const userStore = useUserStore()
 import {useUserStore, ProfitLossParams} from '@/store/modules/user'
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
 
 // 当前选中的时间标签
 const activeTab = ref('today')
@@ -171,9 +172,9 @@ const currentMonth = ref(11)
 
 // 模拟的日历盈亏数据
 const calendarProfitData = ref({
-  1: { status: 'profit', amount: '+120' },
-  2: { status: 'loss', amount: '-120' },
-  3: { status: 'profit', amount: '+120' }
+//   1: { status: 'profit', amount: '+120' },
+//   2: { status: 'loss', amount: '-120' },
+//   3: { status: 'profit', amount: '+120' }
 })
 
 // 生成日历数据
@@ -257,41 +258,18 @@ const nextYear = () => {
 }
 
 // 模拟交易数据
-const tradeList = ref([
-  {
-    time: '14:34:22',
-    profit: -300,
-    percentage: 0.80,
-    symbol: 'BTCUSDT',
-    leverage: 100,
-    isRealized: true
-  },
-  {
-    time: '14:34:22',
-    profit: 300,
-    percentage: 0.80,
-    symbol: 'BTCUSDT',
-    leverage: 100,
-    isRealized: true
-  },
-  {
-    time: '14:34:22',
-    profit: 300,
-    percentage: 0.80,
-    symbol: 'BTCUSDT',
-    leverage: 100,
-    isRealized: false
-  },
-  {
-    time: '14:34:22',
-    profit: 300,
-    percentage: 0.80,
-    symbol: 'BTCUSDT',
-    leverage: 100,
-    isRealized: false
-  }
-])
+const tradeList = ref<Array<{
+  time: string
+  profit: number
+  percentage: number
+  symbol: string
+  leverage: number
+  isRealized: boolean,
+  type:string
+  
+}>>([])
 
+const dataProfit = ref(null)
 // 返回上一页
 const goBack = () => {
   uni.navigateBack()
@@ -310,6 +288,7 @@ getProfitLoss();
 
 const getProfitLoss = async () =>  {
   try {
+     tradeList.value = [];
           const profitLossParams: ProfitLossParams = {
             passkey: userStore.pasKeyAuth,
             device:userStore.deviceAuth,
@@ -325,9 +304,38 @@ const getProfitLoss = async () =>  {
           const resultAirdrops = await userStore.getProfitLoss(profitLossParams)
 
       
-              if (resultAirdrops.data.status === -1){
+              if (resultAirdrops?.data?.status === -1){
                             handleLogout()
                         }
+
+     interface Trade {
+            time: string
+            profit: number
+            percentage: number
+            symbol: string
+            leverage: number
+            isRealized: boolean,
+            type:string
+            }
+
+            let tradeData: Trade[] = []
+
+            resultAirdrops?.data?.data?.List?.forEach(item => {
+            tradeData.push({
+                time: item?.time ?? '',
+                profit: item?.total ?? 0,
+                percentage: item?.percent ?? 0,
+                symbol: item?.symbol ?? '',
+                leverage: item?.leverage ?? 0,
+                isRealized: item?.type === "Unrealized" ? false : true,
+                type: item?.type 
+            })
+            })
+
+        tradeList.value = tradeData
+
+        dataProfit.value = resultAirdrops?.data?.data
+
         //   overviewStats.value = resultAirdrops.data.summary
         //   airdropList.value = resultAirdrops.data.data
           // coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
@@ -366,6 +374,11 @@ const handleLogout = () => {
       }
     }
   })
+}
+
+const handleActiveTab = (value:string) => {
+activeTab.value = value
+getProfitLoss()
 }
 
 </script>

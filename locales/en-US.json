@@ -3,7 +3,7 @@
     "name": "X Exchange",
     "title": "Professional Digital Asset Trading Platform"
   },
-   "activity": {
+  "activity": {
     "pageTitle": "Activities",
     "stats": {
       "title": "Token Distribution Plan for Promotion Programs",
@@ -730,8 +730,8 @@
     "loginFailed": "Login failed",
     "resetPasswordFailed": "Reset password failed",
     "invitationCode": "Enter invitation code",
-     "email": "Email Address",
-     "emailRequired": "Email Required"
+    "email": "Email Address",
+    "emailRequired": "Email Required"
   },
   "kyc": {
     "intro": {
@@ -1110,36 +1110,36 @@
     "countdown": "Countdown",
     "join_airdrop": "Join Airdrop",
     "product_price": "$29,732.54",
-	"success": {
-	      "copy-title": "Copy Trade Detail",
-	      "copy-success": "Copy Trade Successful",
-	      "copy-success-desc": "You have started following trader",
-	      "setting": {
-	        "title": "Copy Trading Settings",
-	        "amount": "Copy Trading Amount",
-	        "stop-loss-ratio": "Stop Loss Ratio",
-	        "take-profit-ratio": "Take Profit Ratio"
-	      },
-	      "realtime": {
-	        "title": "Real-time Status",
-	        "following-trader": "Following Trades",
-	        "current-pnl": "Current P&L",
-	        "today-copy-trade": "Today's Copy Trade",
-	        "win-rate": "Win Rate"
-	      },
-	      "trader-info": {
-	        "title": "Trader Information",
-	        "followers": "Followers",
-	        "active": "Active",
-	        "day-return-rate": "30-day Return Rate",
-	        "aum": "AUM"
-	      },
-	      "recent-order": {
-	        "title": "Recent Orders",
-	        "go-long": "Go Long",
-	        "to-short": "To Short"
-	      }
-	    }
+    "success": {
+      "copy-title": "Copy Trade Detail",
+      "copy-success": "Copy Trade Successful",
+      "copy-success-desc": "You have started following trader",
+      "setting": {
+        "title": "Copy Trading Settings",
+        "amount": "Copy Trading Amount",
+        "stop-loss-ratio": "Stop Loss Ratio",
+        "take-profit-ratio": "Take Profit Ratio"
+      },
+      "realtime": {
+        "title": "Real-time Status",
+        "following-trader": "Following Trades",
+        "current-pnl": "Current P&L",
+        "today-copy-trade": "Today's Copy Trade",
+        "win-rate": "Win Rate"
+      },
+      "trader-info": {
+        "title": "Trader Information",
+        "followers": "Followers",
+        "active": "Active",
+        "day-return-rate": "30-day Return Rate",
+        "aum": "AUM"
+      },
+      "recent-order": {
+        "title": "Recent Orders",
+        "go-long": "Go Long",
+        "to-short": "To Short"
+      }
+    }
   },
   "notification": {
     "title": "Notifications",
@@ -1311,5 +1311,21 @@
     "open_wallet": "Open Chain Wallet",
     "account_type": "Account Type",
     "funding": "Funding"
+  },
+  "profitleLose": {
+    "today": "Today",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "total_profit_loss": "Total Profit and Loss",
+    "realized_profit_loss": "Realized Profit and Loss",
+    "unrealized_profit_loss": "Unrealized Profit and Loss",
+    "profit_loss_calendar": "Profit and Loss Calendar",
+
+    "profit": "Profit",
+    "loss": "Loss",
+    "breakeven": "Breakeven",
+    "trade_details": "Trade Details",
+    "count": "Times",
+    "profit_loss_report": "Profit and Loss Report"
   }
 }
