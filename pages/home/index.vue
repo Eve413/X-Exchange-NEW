@@ -286,6 +286,11 @@ onLoad(async (options) => {
                     }
  let dataBlogs: dataBlog[] = []
 
+
+    if (resulDashboard?.data?.status === -1){
+          handleLogout()
+      }
+
     resulDashboard?.data?.data?.Blog?.forEach(item => {
             dataBlogs.push({
                "title": item?.title,
@@ -311,6 +316,49 @@ onMounted(() => {
     currentRoute.value = `/${currentPage.route}`;
   }
 });
+
+
+const handleLogout = () => {
+  uni.showModal({
+      title: t('profile.confirm_logout'),
+      content: t('profile.confirm_logout_message'),
+    success: (res) => {
+      if (res.confirm) {
+        try {
+          // 清除所有用户相关数据
+          uni.removeStorageSync("userInfo");
+          uni.removeStorageSync("isRegistered");
+          uni.removeStorageSync("isLoggedIn");
+          uni.removeStorageSync("login_cache");
+          uni.removeStorageSync("token"); // 额外清除token以提高安全性
+          uni.removeStorageSync("userData"); // 清除初始化时使用的userData
+          
+          console.log("✅ 成功清除所有用户数据");
+          
+          // 显示退出成功提示
+          uni.showToast({
+            title: t('profile.logged_out'),
+            icon: "success",
+          });
+          
+          // 关闭设置弹窗
+          showSettingDialog.value = false;
+          
+          // 跳转到登录页
+          setTimeout(() => {
+            uni.reLaunch({ url: "/pages/auth/login" });
+          }, 1000);
+        } catch (error) {
+          console.error("❌ 清除用户数据时出错:", error);
+          // 即使出错也尝试跳转到登录页
+          setTimeout(() => {
+            uni.reLaunch({ url: "/pages/auth/login" });
+          }, 1000);
+        }
+      }
+    },
+  });
+};
 
 // 快捷操作
 const goToMarket = () => {
@@ -340,7 +388,17 @@ const selectItem = (id: any) => {
   // activeItem.value = id;
   // 点击跟单按钮跳转到跟单页面
   console.log(id, '?????????')
-  if (id == 2) {
+
+  if (id == 1) {
+    // setTimeout(() => {
+    uni.navigateTo({
+      url: "/pages/share/index",
+      success: () => console.log("✅ 跳转到跟单页面"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
+    });
+    // }, 100)
+  }
+  else if (id == 2) {
     // setTimeout(() => {
     uni.navigateTo({
       url: "/pages/follow/index",
