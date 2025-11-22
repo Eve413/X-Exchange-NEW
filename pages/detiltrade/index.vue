@@ -335,10 +335,10 @@
         </view>
 
         <!-- Tombol Buy / Sell -->
-        <view class="action-buttons">
+        <!-- <view class="action-buttons">
           <view class="btn buy">{{ t('trade.buy') }}</view>
           <view class="btn sell">{{ t('trade.sell') }}</view>
-        </view>
+        </view> -->
       </view>
     </view>
   </view>
@@ -363,7 +363,7 @@ const t = tl;
 const userStore = useUserStore();
 let marketResponse = ref({});
 
-const tabs = ["detiltrade.tabs.market_quotes", "detiltrade.tabs.data", "detiltrade.tabs.square"];
+const tabs = ["detiltrade.tabs.market_quotes", "detiltrade.tabs.data"];//["detiltrade.tabs.market_quotes", "detiltrade.tabs.data", "detiltrade.tabs.square"];
 const currentTab = ref(0);
 const chartContainer = ref(null);
 const marketQuotes = ref(true);

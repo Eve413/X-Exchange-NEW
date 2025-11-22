@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import eyeOpenSrc from "@/static/icons/ic_eye.png";
 import eyeCloseSrc from "@/static/icons/ic_eye_close.png";
@@ -102,6 +102,9 @@ const code = ref("WW6ERX");
 const { t } = useI18n();
 const sendLabel = computed(() => t('auth.sendCode'))
 
+onMounted(() => {
+  refreshCode();
+});
 const inputType = computed(() => {
   if (props.isPassword) {
     return showPassword.value ? "text" : "password";
