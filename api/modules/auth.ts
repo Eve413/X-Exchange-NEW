@@ -394,6 +394,13 @@ export interface ProfitLossParams {
   period: string;
   calendar: string;
 }
+export interface DashboardParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+}
 
 
 export interface SocialLoginParams {
@@ -608,6 +615,12 @@ export class AuthAPI {
    static getProfitLoss(params: ProfitLossParams) {
     return request.post('/profit_loss.json', params)
   }
+
+  static getDashboard(params: DashboardParams) {
+    return request.post('/dashboard.json', params)
+  }
+
+  
 
   
 

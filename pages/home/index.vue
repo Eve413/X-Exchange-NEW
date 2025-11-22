@@ -35,14 +35,14 @@
 
           <!-- Unit + Arrow -->
           <view class="unit-wrapper">
-            <text class="unit">{{ $t("home.usdt") }}</text>
+            <text class="unit">{{ dashboardData?.User?.Currency?.alias }}</text>
             <image class="arrow-down" src="/static/icons/ic_arrow_down.png" mode="widthFix" />
           </view>
         </view>
 
         <!-- Baris 3 -->
         <view class="row amount-row">
-          <text class="amount">0.00</text>
+          <text class="amount">{{ dashboardData?.User?.balance }}</text>
           <view class="recharge-btn" @click="goToRecharge">{{
             $t("home.go_to_top_up")
           }}</view>
@@ -51,8 +51,8 @@
         <!-- Baris 4 -->
         <view class="row bottom-row">
           <text class="label">{{ $t("home.todays_profit_and_loss") }}</text>
-          <text class="value">0.00</text>
-          <text class="percent">0.00%</text>
+          <text class="value">{{ dashboardData?.OrderHistory?.pnl }}</text>
+          <text class="percent">{{ dashboardData?.OrderHistory?.pnl_percentage }}</text>
         </view>
       </view>
 
@@ -68,11 +68,9 @@
 
       <view class="contractTrading">
         <view class="contractTrading-left">
-          <text class="contractTrading-title">{{
-            $t("home.contract_trading_100_percent_loss_coverage")
-          }}</text>
+          <view class="contractTrading-title"  v-html="dashboardData?.Mission?.description"></view>
           <view class="contractTrading-sub">
-            <text class="contractTrading-amount">{{ $t('home.contract_amount') }}</text>
+            <text class="contractTrading-amount">{{dashboardData?.Mission?.bonus}} {{dashboardData?.Mission?.baseAsset}}</text>
             <text class="contractTrading-desc">{{ $t('home.waiting_for_you') }}</text>
             <text class="contractTrading-arrow">›</text>
           </view>
@@ -88,13 +86,13 @@
                 <image src="/static/icons/testAvatar.png" class="avatar-img" mode="aspectFit"></image>
               </view>
               <view class="token-details">
-                <view class="token-name">{{ $t('home.bgb') }}</view>
+                <view class="token-name">{{dashboardData?.Mission?.baseAsset}}</view>
                 <view class="token-description">{{ $t('home.bitget_token') }}</view>
               </view>
             </view>
             <view class="info-right">
               <view class="token-price">
-                <view class="price-num"> 8.200 </view>
+                <view class="price-num">{{dashboardData?.Mission?.bonus}} </view>
                 <view class="price-title"> {{ $t('home.latest_price') }} </view>
               </view>
               <view class="token-price1">
@@ -244,15 +242,16 @@
 import { SafeTop, BottomTabBar } from "@/components";
 import { onMounted, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useUserStore, TickersParams } from "@/store/modules/user";
+import { useUserStore, TickersParams, DashboardParams } from "@/store/modules/user";
 import { onLoad } from "@dcloudio/uni-app";
 import { goMarket, goTrade } from "@/utils/navigation";
-
+const userInfo = uni.getStorageSync('userData')
 const { t } = useI18n();
 
 const userStore = useUserStore();
 
 let cryptoData = ref([]);
+let dashboardData = ref(null);
 // ✅ Lifecycle: onLoad
 onLoad(async (options) => {
   console.log("options:", options);
@@ -264,12 +263,41 @@ onLoad(async (options) => {
       limit: 100,
     };
 
-    const resultAuth = await userStore.getTickers(tickersParams);
+    const dashboardParams: DashboardParams = {
+          passkey: userStore.pasKeyAuth,
+          device:userStore.deviceAuth,
+          appversion:userStore.appversionAuth,
+          token: userInfo.data.token,
+          lang: "en"
+        }
 
+    const resultAuth = await userStore.getTickers(tickersParams);
+    const resulDashboard = await userStore.getDashboard(dashboardParams);
+
+    dashboardData.value = resulDashboard.data.data
     // Update reactive array dengan assignment, bukan push loop
     cryptoData.value = resultAuth.data;
 
-    console.log("✅ API Result:???????", resultAuth);
+    interface dataBlog {
+                      "title": string;
+                      "source": string;
+                      "time": string;
+                      "image": string;
+                    }
+ let dataBlogs: dataBlog[] = []
+
+    resulDashboard?.data?.data?.Blog?.forEach(item => {
+            dataBlogs.push({
+               "title": item?.title,
+               "source": item?.source_name,
+               "time": item?.date,
+               "image": item?.banner
+            })
+            })
+
+    newsList.value = dataBlogs
+
+    console.log("✅ API Result:???????", dashboardData.value);
   } catch (e) {
     console.error("❌ Failed to load tickers:", e);
   }
@@ -372,44 +400,13 @@ const cryptoDatas = [
   },
 ];
 
-const newsList = [
-  {
-    title: "数据:以太坊现货 ETF昨日总净流入230.72万美元，持续15日净流入",
-    source: "Chaincatcher",
-    time: "23小时前",
-    image: "/static/icons/news.png", // Ganti URL dengan gambar aslimu
-  },
-  {
-    title: "比特币ETF资金净流入持续上升，市场情绪回暖",
-    source: "Chaincatcher",
-    time: "20小时前",
-    image: "/static/icons/news.png",
-  },
-  {
-    title: "BGB价格上涨，交易量创历史新高",
-    source: "CryptoToday",
-    time: "18小时前",
-    image: "/static/icons/news.png",
-  },
-  {
-    title: "BGB价格上涨，交易量创历史新高",
-    source: "CryptoToday",
-    time: "18小时前",
-    image: "/static/icons/news.png",
-  },
-  {
-    title: "BGB价格上涨，交易量创历史新高",
-    source: "CryptoToday",
-    time: "18小时前",
-    image: "/static/icons/news.png",
-  },
-  {
-    title: "BGB价格上涨，交易量创历史新高",
-    source: "CryptoToday",
-    time: "18小时前",
-    image: "/static/icons/news.png",
-  },
-];
+const newsList  = ref<Array<{
+    "title": string;
+    "source": string;
+    "time": string;
+    "image": string;
+  }>>([])
+  
 
 const goToVerification = () => {
   // Arahkan ke halaman verifikasi

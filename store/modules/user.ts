@@ -342,6 +342,14 @@ export interface ProfitLossParams {
   calendar: string;
 }
 
+export interface DashboardParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+}
+
 
 export const useUserStore = defineStore('user', () => {
 
@@ -1850,6 +1858,48 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const getDashboard = async (dashboardParams: DashboardParams) => {
+    try {
+      registerLoading.value = true
+       const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
+
+      
+        const response = await authApi.authenticated(params);
+
+         if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+          const responseProfitLossParams= await authApi.getDashboard(dashboardParams)
+
+          return responseProfitLossParams
+        } else {
+          
+        return response;
+        }
+      
+      
+
+      return response
+    } catch (error: any) {
+      console.error('注册失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '注册失败，请重试' 
+      }
+    } finally {
+      registerLoading.value = false
+    }
+  }
+  
+
   
    const getSubscriptions = async (airdropsParams: AirdropsParams) => {
     try {
@@ -2048,6 +2098,7 @@ export const useUserStore = defineStore('user', () => {
     getEvent,
     getSubscriptions,
     getProfitLoss,
+    getDashboard,
     init,
     getBannerTrading,
 

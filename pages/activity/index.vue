@@ -403,12 +403,40 @@ onMounted(async () => {
 //     String(remaining_time?.d).padStart(2, '0'),
 //     String(remaining_time?.h).padStart(2, '0'),
 //     String(remaining_time?.i).padStart(2, '0'),
+
 //     String(remaining_time?.s).padStart(2, '0')
 //   ]
   } catch (e) {
     console.error('❌ Failed to load airdrops:', e)
   }
 })
+
+ const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

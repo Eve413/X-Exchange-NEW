@@ -46,7 +46,7 @@
 
         <!-- 按钮组 -->
         <view class="action-row">
-          <view class="btn add-fund">{{ $t('transaction.add_funds') }}</view>
+          <view class="btn add-fund" @click="goToDeposit">{{ $t('transaction.add_funds') }}</view>
           <view class="btn normal" @click="goToWithdraw">{{ $t('transaction.transfer_out') }}</view>
           <view class="btn normal" @click="goToTransfer">{{ $t('transaction.transfer') }}</view>
         </view>
@@ -458,6 +458,14 @@ const goToTransfer = () => {
   }, 500)
 
 }
+
+const goToDeposit = () => {
+    uni.navigateTo({
+        url: '/pages/recharge/index',
+        success: () => console.log('✅ 跳转到充值页面成功'),
+        fail: (err) => console.error('❌ 跳转到充值页面失败:', err)
+    });
+};
 
 const goToWithdraw = () => {
   // Arahkan ke halaman verifikasi

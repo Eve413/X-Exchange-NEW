@@ -175,9 +175,7 @@
         <view class="promo-card" @click="goToTeamDashboard">
           <view class="team-logo">{{ dataProfile?.Hot?.name ?? "-" }}</view>
           <view class="team-title">{{ $t('profile.my_team_title') }}</view>
-          <view class="team-desc">{{
-            dataProfile?.Hot?.description || $t('profile.team_description')
-          }}</view>
+          <view class="team-desc"  v-html="dataProfile?.Hot?.description || $t('profile.team_description')"></view>
           <view class="link">{{ $t('profile.team_dashboard') }}</view>
           <view class="link link1">&gt;</view>
         </view>

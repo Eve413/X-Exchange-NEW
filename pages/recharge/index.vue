@@ -20,47 +20,49 @@
               @click="toggleBalanceVisibility"></image>
           </view>
           <view class="balance-amount">
-            <text class="currency-symbol">$</text>
-            <text class="amount">{{ getDisplayBalance() }}</text>
+            <text class="currency-symbol">{{showBalance ? "$" : "******"}}</text>
+            <text class="amount">{{ showBalance ? dataDeposit?.UserWallet?.balance  : "********" }}</text>
           </view>
         </view>
         <image class="wallet-icon" src="/static/icons/rechargeImg.png" mode="aspectFit"></image>
       </view>
 
       <!-- 选择币种 -->
+       <picker mode="selector" :range="currencyList" range-key="desc" @change="onCurrencyChange">
       <view class="section">
         <view class="section-label">{{ t('recharge.select_currency') }}</view>
         <view class="currency-item">
           <view class="currency-info">
-<image class="currency-logo" src="/static/tubiao/bizhong/USDT.png" mode="aspectFit"></image>
+          <image class="currency-logo"  :src="currency.logo"  mode="aspectFit"></image>
             <view class="currency-bottom">
-              <text class="currency-name">USDT</text>
-            <text class="currency-desc">Tether</text>
+              <text class="currency-name">{{ currency?.baseAsset }}</text>
+            <text class="currency-desc">{{ currency?.desc }}</text>
             </view>
           </view>
           <text class="arrow-icon">›</text>
         </view>
       </view>
+      </picker>
 
       <!-- 充值金额 -->
-      <view class="section">
+      <!-- <view class="section">
         <view class="section-label">{{ t('recharge.amount') }}</view>
         <input class="amount-input" type="digit" :placeholder="t('recharge.enter_amount')" v-model="rechargeAmount" />
-      </view>
+      </view> -->
 
       <!-- 网络选择 -->
       <view class="section">
         <view class="section-label">{{ t('recharge.network') }}</view>
         <view class="network-item active">
-          <text class="network-name">TRX(TRC20)</text>
-          <text class="network-tip">{{ t('recharge.min_amount', { amount: 1 }) }}</text>
+          <text class="network-name">{{currency?.desc}} </text>
+          <text class="network-tip">{{ t('recharge.min_amount', { amount: currency?.deposit_min_amount }, {baseAsset: currency?.baseAsset}) }}</text>
         </view>
       </view>
 
       <!-- 充值地址 -->
       <view class="address-content">
         <view class="address-top">
-          <view class="section-label">{{ t('recharge.address') }}</view>
+          <view class="section-label">{{currency?.baseAsset}} {{ t('recharge.address') }} {{currency?.desc}}</view>
           <view class="qrcode-actions">
             <!-- <text class="download-btn"> -->
             <image class="load-arrow" src="/static/icons/load-arrow.png" mode="aspectFit"></image>
@@ -74,7 +76,7 @@
         <view class="qrcode-section">
 
           <view class="qrcode-container">
-            <image class="qrcode-image" src="/static/icons/qrcodeImgTest.png" mode="aspectFit"></image>
+            <image class="qrcode-image" :src="dataDeposit?.UserWallet.qr" mode="aspectFit"></image>
           </view>
           <view class="address-display">{{ rechargeAddress }}
             <!-- <text class="copy-text"> -->
@@ -83,11 +85,11 @@
           </view>
 
         </view>
-        <view class="payment-info">
+        <!-- <view class="payment-info">
           <view class="payment-title">{{ t('recharge.pay_amount', { amount: '50.91981' }) }}</view>
           <view class="payment-time">{{ t('recharge.payment_time', { time: '2025-09-10 23:52:01' }) }}</view>
           <view class="payment-warning">{{ t('recharge.payment_warning') }}</view>
-        </view>
+        </view> -->
       </view>
 
 
@@ -98,14 +100,14 @@
       <view class="notice-section">
         <view class="notice-title">
           <image class="notice-icon" src="/static/icons/warnWhite.png" mode="aspectFit"></image>
-          {{ t('recharge.notice_title') }}
+          {{ dataDeposit?.Tnc?.title }}
         </view>
         <view class="notice-content">
           <view class="notice-item">
-            <text class="notice-number">1.</text>
-            <text class="notice-text">{{ t('recharge.notice_1') }}</text>
+            <!-- <text class="notice-number">1.</text> -->
+            <text class="notice-text" v-html="dataDeposit.Tnc.content"></text>
           </view>
-          <view class="notice-item">
+          <!-- <view class="notice-item">
             <text class="notice-number">2.</text>
             <text class="notice-text">{{ t('recharge.notice_2') }}</text>
           </view>
@@ -116,16 +118,16 @@
           <view class="notice-item">
             <text class="notice-number">4.</text>
             <text class="notice-text">{{ t('recharge.notice_4') }}</text>
-          </view>
+          </view> -->
         </view>
       </view>
     </view>
 
     <!-- 底部按钮 -->
-    <view class="footer">
+    <!-- <view class="footer">
       <button class="cancel-btn" @click="cancelOrder">{{ t('recharge.cancel_order') }}</button>
       <button class="confirm-btn" @click="confirmPayment">{{ t('recharge.paid') }}</button>
-    </view>
+    </view> -->
 
     <!-- 支付确认弹窗 -->
     <view v-if="showPaymentPopup" class="popup-overlay" @click.self="closePaymentPopup">
@@ -151,6 +153,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import {useUserStore, DepositParams} from '@/store/modules/user'
+import { onLoad } from '@dcloudio/uni-app'
+
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
+const dataDeposit = ref(null)
+const currency = ref()
+const currencyList = ref([])
 
 // 国际化
 const { t, locale } = useI18n()
@@ -163,7 +173,7 @@ watch(() => locale.value, () => {
 
 // 响应式数据
 const rechargeAmount = ref('')
-const rechargeAddress = ref('0xc8d4...320f')
+const rechargeAddress = ref(null)
 const showQrCode = ref(true)
 
 // 新增：余额显示控制
@@ -172,6 +182,38 @@ const actualBalance = ref('1411')
 
 // 新增：支付确认弹窗控制
 const showPaymentPopup = ref(false)
+
+ onLoad(async (options) => {
+
+     try {
+          const depositParams: DepositParams = {
+            passkey: userStore.pasKeyAuth,
+            device:userStore.deviceAuth,
+            appversion:userStore.appversionAuth,
+            token: userInfo.data.token,
+            lang: "en"
+          }
+
+          
+
+          const resultDeposit = await userStore.getDeposit(depositParams)
+
+      
+              if (resultDeposit.data.status === -1){
+                            handleLogout()
+                        }
+          dataDeposit.value = resultDeposit.data.data
+          rechargeAddress.value = resultDeposit.data.data.UserWallet.address 
+          currencyList.value = resultDeposit.data.data.Network
+          currency.value = resultDeposit.data.data.Network[0]
+        //   coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+         
+
+        } catch (e) {
+          console.error('❌ Failed to load tickers:', e)
+        }
+
+  })
 
 // 切换余额显示状态
 const toggleBalanceVisibility = () => {
@@ -282,6 +324,38 @@ const confirmPayment = () => {
 // 关闭支付确认弹窗
 const closePaymentPopup = () => {
   showPaymentPopup.value = false
+}
+
+ const handleLogout = () => {
+  uni.showModal({
+    title: '确认退出',
+    content: '您确定要退出登录吗？',
+    success: (res) => {
+      if (res.confirm) {
+        // 清除所有用户相关数据
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+
+        // 显示退出成功提示
+        uni.showToast({
+          title: '已退出登录',
+          icon: 'success'
+        })
+
+        // 跳转到启动页
+        setTimeout(() => {
+          uni.reLaunch({ url: '/pages/auth/startup' })
+        }, 1000)
+      }
+    }
+  })
+}
+
+const onCurrencyChange = (e) => {
+  const index = e.detail.value
+  currency.value = currencyList.value[index]
 }
 </script>
 
