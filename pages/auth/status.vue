@@ -16,11 +16,11 @@
         <view class="info-right">
           <view class="user-info">
             <view class="welcome-text">{{ t('auth.status.welcome') }}</view>
-            <view class="uid-text">UID : 128374963</view>
+            <view class="uid-text">UID : {{dataProfile?.User?.id  }}</view>
           </view>
           <view class="verify-badge">
             <!-- <image src="/static/icons/ic_check_circle.png" class="badge-icon" /> -->
-            <text class="badge-text">{{ t('auth.status.standard_verified') }}</text>
+            <text class="badge-text">{{dataProfile?.User?.MemberGroup?.name  }}</text>
           </view>
         </view>
       </view>
@@ -38,12 +38,12 @@
     <view class="limit-card">
       <text class="card-title">{{ t('auth.status.limits') }}</text>
 
-      <view class="limit-item">
-        <text class="limit-label">{{ t('auth.status.fiat_withdrawal_limit') }}</text>
-        <text class="limit-value">50K USD 每日</text>
+      <view v-for="(item, index) in dataProfile?.AccountLimits" :key="index" class="limit-item">
+        <text class="limit-label">{{ item?.name }}</text>
+        <text class="limit-value">{{ item?.value }}</text>
       </view>
 
-      <view class="limit-item">
+      <!-- <view class="limit-item">
         <text class="limit-label">{{ t('auth.status.crypto_deposit_limit') }}</text>
         <text class="limit-value">无限额</text>
       </view>
@@ -56,7 +56,7 @@
       <view class="limit-item">
         <text class="limit-label">{{ t('auth.status.c2c_limit') }}</text>
         <text class="limit-value">无限额</text>
-      </view>
+      </view> -->
     </view>
 
     <!-- 个人信息卡片 -->
@@ -103,9 +103,16 @@
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { useI18n } from 'vue-i18n';
+import {
+  useUserStore,
+  ProfileParams,
+  BannerParams,
+} from "@/store/modules/user";
 
 const { t } = useI18n();
-
+const userInfo = uni.getStorageSync("userData");
+const userStore = useUserStore();
+const dataProfile = ref({});
 // 返回上一页
 const goBack = () => {
   uni.navigateBack();
@@ -127,9 +134,71 @@ const updateInfo = () => {
   });
 };
 
-onLoad(() => {
+onLoad(async (option) => {
   // 页面加载时的逻辑
   console.log('认证中心页面加载');
+
+  try {
+    // 确保用户信息存在
+    if (!userInfo || !userInfo.data || !userInfo.data.token) {
+      console.warn("❌ User token not found, using mock data");
+      // 使用模拟数据
+      dataProfile.value = mockProfileData;
+      banners.value = mockBannerData;
+      console.log("✅ Using mock data for profile and banners");
+      return;
+    }
+
+    const profileParams: ProfileParams = {
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      token: userInfo.data.token,
+      lang: "en",
+    };
+
+    const bannerParams: BannerParams = {
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      lang: "en",
+    };
+
+    console.log("🔄 Fetching profile data...");
+    const resultProfile = await userStore.getProfile(profileParams);
+
+    // 详细记录API返回状态
+    console.log("🔍 Profile API result status:", resultProfile.data?.status);
+    console.log("🔍 Profile API full result:", resultProfile);
+
+    // 当API返回状态码为 -1（例如：账号在另一设备登录）时，强制退出并返回登录页
+    if (resultProfile.data?.status === -1 || String(resultProfile.data?.data?.msg || '').includes('another device')) {
+      uni.showToast({ title: '该账号已在另一设备登录，请重新登录', icon: 'none', duration: 2000 })
+      try {
+        uni.removeStorageSync('userInfo')
+        uni.removeStorageSync('isRegistered')
+        uni.removeStorageSync('isLoggedIn')
+        uni.removeStorageSync('login_cache')
+        uni.removeStorageSync('token')
+      } catch (_) {}
+      setTimeout(() => {
+        uni.reLaunch({ url: '/pages/auth/login' })
+      }, 300)
+      return
+    } else {
+      // 正常情况：使用API返回的数据
+      if (resultProfile.data?.data) {
+        dataProfile.value = resultProfile.data.data;
+        console.log("✅ Successfully loaded profile data");
+      }
+    }
+  } catch (e) {
+    console.error("❌ Failed to load profile data:", e);
+    // 捕获错误时使用模拟数据渲染页面
+    console.log("⚠️  Using mock data due to API error");
+    dataProfile.value = mockProfileData;
+    banners.value = mockBannerData;
+  }
 });
 </script>
 
