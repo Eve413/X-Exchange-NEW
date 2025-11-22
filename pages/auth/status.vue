@@ -296,7 +296,7 @@ onLoad(() => {
 }
 
 .card-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -338,7 +338,7 @@ onLoad(() => {
 }
 
 .update-text {
-  font-size: 14px;
+  font-size: 16px;
   color: #667eea;
 }
 
