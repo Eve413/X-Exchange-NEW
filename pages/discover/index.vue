@@ -139,20 +139,20 @@
         </view> -->
 
 				<scroll-view class="products-scroll" scroll-x>
-					<view class="product-card" v-for="product in productList" :key="product.id">
+					<view class="product-card" v-for="product in listMarketData" :key="product.id">
 						<view class="product-header">
 							<image class="product-icon" :src="product.icon" mode="aspectFit" />
 							<view class="product-info">
-								<text class="product-name">{{ product.name }}/USDT</text>
+								<text class="product-name">{{ product.baseAsset }} / {{ product.quoteAsset }}</text>
 								<text class="product-price">{{ t('discover.product_price') }}</text>
 							</view>
 						</view>
-						<image class="product-chart" :src="product.chart" mode="aspectFit" />
+						<image class="product-chart" :src="product.sparkline" mode="aspectFit" />
 						<view class="product-stats">
 							<text class="rate-label">{{ t('discover.annual_rate') }}</text>
 							<view class="rate-container">
 								<view class="up-arrow"></view>
-								<text class="product-rate">{{ product.annualRate }}%</text>
+								<text class="product-rate">{{ formatSharpe(product.percentChange24h) }}%</text>
 								<!-- <image class="" src="/static/icons/arrow_up.png" mode="aspectFit" /> -->
 							</view>
 						</view>
@@ -212,6 +212,7 @@
 	import { onLoad } from '@dcloudio/uni-app'
 	import { useSafeArea } from "@/utils/composables/useSafeArea";
 	import { useTradingStore } from '@/store/modules/trading';
+	import { useUserStore, TickersParams } from "@/store/modules/user";
 
 
 	const { getTopStyle } = useSafeArea();
@@ -379,6 +380,8 @@
 	const traderList = ref<any[]>([])
 
 	 const listAirdrops = ref<any[]>([])
+	 const userStore = useUserStore();
+	 const listMarketData = ref<any[]>([])
 
 	onLoad(async (option) => {
 		try {
@@ -397,6 +400,28 @@
 			console.log('Banners loaded:', bannerList.value);
 		} catch (e) {
 			console.error('❌ Failed to load banners:', e)
+		}
+
+		try {
+			const tickersParams : TickersParams = {
+				passkey: userStore.pasKeyAuth,
+				limit: 10,
+				type: "",
+			};
+			const resultAuth = await userStore.getTickers(tickersParams);
+			listMarketData.value = resultAuth.data || [];
+			console.log("✅ Loaded market data:", listMarketData.value);
+
+			// 如果API返回的数据为空，使用模拟数据
+			if (!listMarketData.value || listMarketData.value.length === 0) {
+				console.log("⚠️  API returned empty data, using mock data");
+				listMarketData.value = productList;
+			}
+		} catch (e) {
+			console.error("❌ Failed to load market data:", e);
+			// 如果加载失败，使用模拟数据
+			listMarketData.value = productList;
+			console.log("⚠️  Using mock data due to API error");
 		}
 
 		try {
@@ -559,6 +584,13 @@
 			console.error("跳转到跟单页面函数执行出错:", error);
 		}
 	};
+
+		// format helpers
+	function formatSharpe(val : any) : string {
+		const n = Number(val)
+		if (!isFinite(n)) return '0.00'
+		return n.toFixed(2)
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -908,7 +940,7 @@
 		background: #2a2a2a;
 		border-radius: 20rpx;
 		padding: 12rpx 38rpx;
-		width: 264rpx;
+		width: 330rpx;
 		margin-right: 20rpx;
 		color: #fff;
 	}
