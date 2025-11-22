@@ -150,7 +150,7 @@
                 </view>
 
                 <view class="faq-answer-dialog" v-if="faq.open">
-                  <text>{{ faq.answer }}</text>
+                  <div  v-html="faq.answer"></div>
                 </view>
               </view>
             </view>

@@ -105,7 +105,7 @@
       </view>
 
       <view class="asset-list-dialog">
-        <view v-for="(item, index) in assets" :key="index" class="asset-item-dialog" v-if="activeTab <= 2">
+        <view v-for="(item, index) in assets" :key="index" class="asset-item-dialog" v-if="activeTab <= 2 || activeTab == 4">
           <!-- Kiri: icon dan nama -->
           <view class="asset-left-dialog">
             <image :src="item.icon" class="asset-icon-dialog" mode="aspectFit" />
@@ -126,7 +126,7 @@
         </view>
       </view>
 
-      <view v-if="activeTab == 4">
+      <view v-if="(activeTab <= 2 || activeTab == 4) && assets.length < 0">
         <!-- 理财tab底部区域 -->
         <view class="earn-empty-container">
           <!-- 图标区域 -->
@@ -439,7 +439,9 @@ function setActiveTab(index) {
   } else if (index == 2) {
     tabs2.value = [t('transaction.assets')]
     assets.value = masterAssets.value.filter(item => item.type === 'spot')
-  }
+  }else if (index == 4) {
+    assets.value = masterAssets.value.filter(item => item.type === 'funding')
+  } 
 }
 
 function goBack() {
