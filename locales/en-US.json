@@ -318,7 +318,9 @@
     "buy": "BUY",
     "confirmFollow": "Confirm Follow",
     "confirmFollowAmount": "Confirm to follow with {amount} USDT?{autoFollow}",
+	"confirmStopFollow": "Confirm Stop Copy Trade",
     "confirm": "Confirm",
+	"stop": "Stop",
     "cancel": "Cancel",
     "followSuccess": "Followed successfully",
     "operationFailed": "Operation failed, please retry",
@@ -1111,9 +1113,11 @@
     "join_airdrop": "Join Airdrop",
     "product_price": "$29,732.54",
     "success": {
-      "copy-title": "Copy Trade Detail",
+      "copy-title": "Copy Trade",
       "copy-success": "Copy Trade Successful",
       "copy-success-desc": "You have started following trader",
+	  "stop" : "Stop Copy Trade",
+	  "modify" : "Modify Settings",
       "setting": {
         "title": "Copy Trading Settings",
         "amount": "Copy Trading Amount",

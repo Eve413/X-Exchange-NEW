@@ -349,7 +349,9 @@
     "buy": "买入",
     "confirmFollow": "确认跟单",
     "confirmFollowAmount": "确定要跟单 {amount} USDT 吗？{autoFollow}",
+	"confirmStopFollow": "Confirm Stop Copy Trade",
     "confirm": "确认",
+	"stop": "Stop",
     "create_reminder": "创建提醒",
     "tesla": "特斯拉",
     "night_session": "夜间时段",
@@ -1419,6 +1421,8 @@
       "copy-title": "跟单详情",
       "copy-success": "跟单成功",
       "copy-success-desc": "已开始跟随交易员 ",
+	  "stop" : "停止跟单",
+	  "modify" : "修改配置",
       "setting": {
         "title": "跟单配置",
         "amount": "跟单金额",

@@ -65,6 +65,14 @@
                 :orders="recentOrder"
             />  
         </view> 
+		<view class="button-row">
+			<view class="modify-btn" @click="handleModifyFollow">
+				<text>{{ $t('discover.success.modify') }}</text>
+			</view>
+			<view class="stop-btn" @click="handleStopFollow">
+				<text>{{ $t('discover.success.stop') }}</text>
+			</view>
+		</view>
         </view>
         <BottomTabBar :currentPath="currentRoute" @change="handleTabChange" />
     </view>
@@ -98,8 +106,11 @@
     })
     
     // Read expertId from URL parameters
+	const expertID = ref(0);
+	
     onLoad((options) => {
         if (options?.expertId) {
+			      expertID.value = parseInt(options.expertId)
             expertId.value = parseInt(options.expertId)
             console.log('Received expertId:', expertId.value)
 
@@ -129,6 +140,71 @@
 	const handleTabChange = (tab: any, index: number) => {
 	  console.log('Tab切换:', tab.label, index)
 	  currentRoute.value = tab.path
+	}
+	
+	const handleStopFollow = () => {
+		uni.showModal({
+			title: t('discover.success.stop'),
+			content: t('market.confirmStopFollow'),
+			confirmText: t('market.stop'),
+			cancelText: t('market.cancel'),
+			success: async (res) => {
+				if (res.confirm) {
+					try {
+						// Prepare subscription parameters
+						console.log("Expert ID", expertID.value);
+						// Call the subscribe API
+						const response = await tradingStore.unSubscribeCopyTrader(expertID.value)
+						console.log('✅ Un Subscription successful:', response)
+						if (response?.status == 1) {
+							// Navigate to success page after successful subscription
+							uni.navigateTo({
+								url: `/pages/discover/index`,
+								success: () => console.log('✅ Navigated to success page'),
+								fail: (err) => console.error('❌ Navigation failed:', err)
+							})
+						} else {
+							uni.showToast({
+								title: t('market.operationFailed'),
+								icon: "none",
+								duration: 2000
+							});
+						}
+		
+					} catch (e) {
+						console.error('❌ Error during subscription:', e)
+						uni.showToast({
+							title: t('market.operationFailed'),
+							icon: "none",
+							duration: 2000
+						});
+					}
+		
+					// 临时：显示成功提示
+					uni.showToast({
+						title: t('market.followSuccess'),
+						icon: "success",
+						duration: 2000
+					});
+		
+					// 保险：定时关闭，防止特定环境下Toast不自动消失
+					setTimeout(() => {
+						try { uni.hideToast(); } catch (e) { /* noop */ }
+					}, 2100);
+		
+					console.log("✅ 跟单成功");
+		
+					// 可以在这里跳转到跟单详情页面或返回上一页
+					// setTimeout(() => {
+					//   uni.navigateBack();
+					// }, 1500);
+				}
+			},
+		});
+	}
+	
+	const handleModifyFollow = () => {
+		
 	}
 </script>
     
@@ -244,5 +320,33 @@
   color: #9fa8b7;
   font-size: 24rpx;
   text-align: center;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20rpx;
+  padding: 10rpx;
+}
+
+.stop-btn {
+	background: linear-gradient(175deg, #5246a3, #d75b99);
+	padding: 20rpx;
+	text-align: center;
+	border-radius: 20rpx;
+	font-size: 28rpx;
+	font-weight: 500;
+	flex: 1;
+}
+
+.modify-btn {
+  border: 2rpx solid #666;
+  color: #ccc;
+  background-color: transparent;
+  font-size: 28rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  flex: 1;
 }
 </style>

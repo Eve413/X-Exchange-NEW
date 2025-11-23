@@ -97,6 +97,10 @@ export class TradingApi {
       ///subscribe/summary/expert/{expertId}/user/{userId}
         return request.postTrading<any>(`/api/trading/order/latest-summary/expert/${expertId}/limit/${limit}`, params);
     }
+	
+	static unSubscribeToTrader(expertId: number, userId: number, params: BaseParam) {
+	    return request.postTrading<any>(`/api/copy-trade/unsubscribe/expert/${expertId}/user/${userId}`, params)
+	}
 
      static getAirdrops(params: AirdropParam) {
       ///subscribe/summary/expert/{expertId}/user/{userId}
