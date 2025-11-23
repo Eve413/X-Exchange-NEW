@@ -187,7 +187,7 @@
 								{{ airdrop.participants }}</text>
 							<text class="airdrop-countdown">{{ airdrop.countdown }}</text>
 						</view>
-						<text class="join-btn">{{ t('discover.join_airdrop') }}</text>
+						<text class="join-btn" @click="joinAirdrop(airdrop.id)">{{ t('discover.join_airdrop') }}</text>
 					</view>
 					<!-- <view class="air-drop-container">
 						<AirdropCard v-for="card in listAirdrops" :key="card.id" :icon="card.icon"
@@ -298,6 +298,16 @@ const selectItem = (text: string) => {
 			console.error("跳转到活动页面函数执行出错:", error);
 		}
 	}
+};
+
+const joinAirdrop = (airdropId: number) => {
+  console.log('加入空投:', airdropId);
+  // 跳转到空投活动详情页面
+  uni.navigateTo({
+    url: `/pages/airdrop/detail?id=${airdropId}`,
+    success: () => console.log("✅ 跳转到空投活动详情页面成功"),
+    fail: (err) => console.error("❌ 跳转到空投活动详情页面失败:", err),
+  });
 };
 
 // 交易员数据
@@ -413,6 +423,12 @@ onLoad(async (option) => {
 			type: "",
 		};
 		const resultAuth = await userStore.getTickers(tickersParams);
+
+		if (resultAuth.data.status === -1){
+			handleLogout()
+			return
+		}
+
 		listMarketData.value = resultAuth.data || [];
 		console.log("✅ Loaded market data:", listMarketData.value);
 
@@ -474,6 +490,11 @@ onLoad(async (option) => {
 
 
 		const resultAirdrops = await userStore.getAirdrops(airdropsParams)
+
+		if (resultAirdrops.data.status === -1){
+			handleLogout()
+			return
+		}
 
 		// Extract the array from the response
 		if (resultAirdrops?.data?.data) {
