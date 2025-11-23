@@ -361,7 +361,7 @@ onLoad(async (options) => {
       device: userStore.deviceAuth || '',
       appversion: userStore.appversionAuth || '',
       token: userInfo?.data?.token || '',
-      lang: "en"
+      lang: userStore.language
     }
 
     // 尝试从API获取数据

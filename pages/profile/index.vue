@@ -608,14 +608,14 @@ onLoad(async (options) => {
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
       token: userInfo.data.token,
-      lang: "en",
+      lang: userStore.language,
     };
 
     const bannerParams: BannerParams = {
       passkey: userStore.pasKeyAuth,
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
-      lang: "en",
+      lang: userStore.language,
     };
 
     console.log("🔄 Fetching profile data...");

@@ -166,7 +166,7 @@ async function onSendSms() {
       const params: VerifyPhoneParams = {
               phone_code: "+"+selectedCountry.value.dial,
               username: mobile.value,
-              lang: "zh",
+              lang: userStore.language,
               otp: smsCode.value,
               passkey: userStore.pasKeyAuth,
               device: userStore.deviceAuth,
@@ -218,7 +218,7 @@ async function onSubmit() {
       session_id: sesionId.value,
       password: password.value,
       new_password: password2.value,
-      lang: "zh"
+      lang: userStore.language
     };
 
     const result = await userStore.resetPassword(params)

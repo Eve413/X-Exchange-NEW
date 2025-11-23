@@ -144,7 +144,7 @@ const { t } = useI18n();
 // 用户存储实例
 const userStore = useUserStore()
 const params: SettingsParams = {
-  lang: "zh",
+  lang: userStore.language,
   passkey: userStore.pasKeyAuth,
   device: userStore.deviceAuth,
   appversion: userStore.appversionAuth,

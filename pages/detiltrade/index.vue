@@ -561,7 +561,7 @@ async function getBlog() {
     device: "android",
     appversion: "1.0",
     token: userInfo.token,
-    lang: "eng",
+    lang: userStore.language,
     type: "opinion",
     symbol: detail.value.symbol,
     keyword: "",
@@ -680,7 +680,7 @@ async function getMarkets(detail: {}) {
   try {
     const marketParams: MarketParams = {
       passkey: userStore.pasKeyAuth,
-      lang: "zh",
+      lang: userStore.language,
       symbol: detail.value.symbol,
     };
 
@@ -1264,7 +1264,7 @@ async function toggleFavorite() {
     device: "android",
     appversion: "1.0",
     token: userInfo.data.token,
-    lang: "eng",
+    lang: userStore.language,
     symbol: detail.value.symbol,
     favorite: true,
   };

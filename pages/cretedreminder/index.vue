@@ -118,7 +118,7 @@ onLoad((options) => {
 onMounted(async () => {
 
     const params: SettingsParams = {
-              lang: "zh",
+              lang: userStore.language,
               passkey: userStore.pasKeyAuth,
               device: userStore.deviceAuth,
               appversion: userStore.appversionAuth,
@@ -152,7 +152,7 @@ async function createAlert() {
     device: userStore.deviceAuth,
     appversion: userStore.appversionAuth,
     token: userInfo.data.token,
-    lang: 'zh',
+    lang: userStore.language,
     symbol:detail.value.symbol,
     amount: price.value,
     alert_type: selectedType.value.id,

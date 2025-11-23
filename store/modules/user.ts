@@ -3,6 +3,7 @@ import { AuthUtils } from '@/utils/auth'
 import { storage, STORAGE_KEYS } from '@/utils/storage'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { useI18n } from "vue-i18n";
 type PasKey = PasKey
 
 export interface UserInfo {
@@ -352,7 +353,8 @@ export interface DashboardParams {
 
 
 export const useUserStore = defineStore('user', () => {
-
+  const { t, locale } = useI18n();
+  const language = locale.value.split("-").length > 1 ? locale.value.split("-")[1].toLowerCase() : "en";
   const pasKeyAuth = "68de05da-f258-46a4-805d-f0e365ca98e3-android-api"
   const usernameAuth = "coinauth"
   const passwordAuth = "StableCoinAuth$"
@@ -2105,6 +2107,7 @@ export const useUserStore = defineStore('user', () => {
     pasKeyAuth,
     deviceAuth,
     appversionAuth,
+    language
     
   }
 }, {

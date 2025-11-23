@@ -200,7 +200,7 @@ async function confirmIdentity() {
     passkey: userStore.pasKeyAuth,
     device: userStore.deviceAuth,
     appversion: userStore.appversionAuth,
-    lang: "zh",
+    lang: userStore.language,
     token: "",
     nationality_id: receivedData.value?.nationality_id || '',
     tax_residence_id: receivedData.value?.tax_residence_id || '',

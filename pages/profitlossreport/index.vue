@@ -294,7 +294,7 @@ const getProfitLoss = async () =>  {
             device:userStore.deviceAuth,
             appversion:userStore.appversionAuth,
             token: userInfo.data.token,
-            lang: "en",
+            lang: userStore.language,
             period: activeTab.value,
             calendar: currentYear.value +"-"+ currentMonth.value
           }

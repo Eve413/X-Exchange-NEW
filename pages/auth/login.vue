@@ -170,6 +170,7 @@ let oauth;
 onMounted(() => {
   const cache = uni.getStorageSync("login_cache");
 
+
   if (!cache) return;
   try {
     const obj = JSON.parse(cache);
@@ -213,7 +214,7 @@ async function onLogin() {
       phone_code: "+" + selectedCountry.value.dial, // "+62",
       username: mobile.value, //"812323312324",
       password: password.value, //"Test123456$",
-      lang: "zh",
+      lang: userStore.language,
       passkey: "68de05da-f258-46a4-805d-f0e365ca98e3-android-api",
       device: "android",
       appversion: "1.0",
@@ -304,7 +305,7 @@ async function handleGoogleResponse(id_token) {
       passkey: userStore.pasKeyAuth,
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
-      lang: 'en',
+      lang: userStore.language,
     };
 
     const resultAuth = await userStore.loginGoogle(paramsLogin);

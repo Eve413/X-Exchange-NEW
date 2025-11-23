@@ -252,7 +252,7 @@ const shortAddress = ref(address.value.slice(0, 6) + '...' + address.value.slice
             device: userStore.deviceAuth || '',
             appversion: userStore.appversionAuth || '',
             token: userInfo.data?.token || '',
-            lang: "en"
+            lang: userStore.language
           }
 
           // 尝试从API获取数据，但使用try-catch单独包裹每个请求

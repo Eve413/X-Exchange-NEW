@@ -195,7 +195,7 @@ onMounted(async() => {
             device:userStore.deviceAuth,
             appversion:userStore.appversionAuth,
             token: userInfo.data.token,
-            lang: "en",
+            lang: userStore.language,
             airdrop_id: airdropId.value
           }
 
@@ -368,7 +368,7 @@ const submitParticipation =  async () =>  {
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
       token: userInfo.data.token,
-      lang: "en",
+      lang: userStore.language,
       airdrop_id: airdropId.value
     }
 

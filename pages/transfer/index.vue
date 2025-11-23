@@ -217,7 +217,7 @@ onLoad(async (options) => {
           device:userStore.deviceAuth,
           appversion:userStore.appversionAuth,
           token: userInfo.data.token,
-          lang: "en"
+          lang: userStore.language
         }
 
         
@@ -298,7 +298,7 @@ const submitTransfer = async () => {
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
       token: userInfo.data.token,
-      lang: "en",
+      lang: userStore.language,
 
       from_account: fromAccount.value?.id || "",
       to_account: toAccount.value?.id || "",

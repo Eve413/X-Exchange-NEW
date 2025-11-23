@@ -277,7 +277,7 @@ async function onSendSms() {
   const params: VerifyPhoneParams = {
     phone_code: "+" + selectedCountry.value.dial,
     username: form.value.mobile,
-    lang: "zh",
+    lang: userStore.language,
     passkey: userStore.pasKeyAuth,
     device: userStore.deviceAuth,
     appversion: userStore.appversionAuth,
@@ -333,7 +333,7 @@ async function onSubmit() {
       password: form.value.password,
       referral_code: form.value.referralCode,
       verification_code: form.value.smsCode,
-      lang: "zh",
+      lang: userStore.language,
       email:form.value.email,
     };
 
@@ -416,7 +416,7 @@ async function handleGoogleResponse(id_token) {
       passkey: userStore.pasKeyAuth,
       device: userStore.deviceAuth,
       appversion: userStore.appversionAuth,
-      lang: 'en',
+      lang: userStore.language,
     };
 
     const resultAuth = await userStore.loginGoogle(paramsLogin);
