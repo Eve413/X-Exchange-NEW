@@ -1327,5 +1327,6 @@
     "trade_details": "Trade Details",
     "count": "Times",
     "profit_loss_report": "Profit and Loss Report"
-  }
+  },
+  "exchange":"exchange"
 }

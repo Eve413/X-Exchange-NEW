@@ -68,15 +68,39 @@
 
       <view class="contractTrading">
         <view class="contractTrading-left">
-          <view class="contractTrading-title"  v-html="dashboardData?.Mission?.description"></view>
+          <view class="contractTrading-title" v-html="dashboardData?.Mission?.description"></view>
           <view class="contractTrading-sub">
-            <text class="contractTrading-amount">{{dashboardData?.Mission?.bonus}} {{dashboardData?.Mission?.baseAsset}}</text>
+            <text class="contractTrading-amount">{{ dashboardData?.Mission?.bonus }}
+              {{ dashboardData?.Mission?.baseAsset }}</text>
             <text class="contractTrading-desc">{{ $t('home.waiting_for_you') }}</text>
             <text class="contractTrading-arrow">›</text>
           </view>
         </view>
 
         <image src="/static/icons/ic_contract_trading.png" class="contractTrading-img" mode="widthFix" />
+      </view>
+      <view class="myFavorites">
+        <text class="myFavorites-title">{{ $t("home.hot_news") }}</text>
+
+        <view class="myFavorites-more">
+          <text class="myFavorites-link">{{ $t("home.view_more") }}</text>
+          <text class="myFavorites-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="newsContainer">
+        <scroll-view scroll-y class="newsScroll" show-scrollbar="false">
+          <view v-for="(item, index) in newsList" :key="index" class="newsCard">
+            <view class="newsContent">
+              <view class="newsText">
+                <text class="newsTitle">{{ item.title }}</text>
+                <text class="newsSource">{{ item.source }} {{ item.time }}</text>
+              </view>
+              <image class="newsImage" :src="item.image" mode="aspectFill" />
+            </view>
+            <view class="divider"></view>
+          </view>
+        </scroll-view>
       </view>
       <view class="userCard">
         <view class="token-info">
@@ -86,13 +110,13 @@
                 <image src="/static/icons/testAvatar.png" class="avatar-img" mode="aspectFit"></image>
               </view>
               <view class="token-details">
-                <view class="token-name">{{dashboardData?.Mission?.baseAsset}}</view>
+                <view class="token-name">{{ dashboardData?.Mission?.baseAsset }}</view>
                 <view class="token-description">{{ $t('home.bitget_token') }}</view>
               </view>
             </view>
             <view class="info-right">
               <view class="token-price">
-                <view class="price-num">{{dashboardData?.Mission?.bonus}} </view>
+                <view class="price-num">{{ dashboardData?.Mission?.bonus }} </view>
                 <view class="price-title"> {{ $t('home.latest_price') }} </view>
               </view>
               <view class="token-price1">
@@ -208,29 +232,7 @@
         </scroll-view>
       </view>
 
-      <view class="myFavorites">
-        <text class="myFavorites-title">{{ $t("home.hot_news") }}</text>
 
-        <view class="myFavorites-more">
-          <text class="myFavorites-link">{{ $t("home.view_more") }}</text>
-          <text class="myFavorites-arrow">›</text>
-        </view>
-      </view>
-
-      <view class="newsContainer">
-        <scroll-view scroll-y class="newsScroll" show-scrollbar="false">
-          <view v-for="(item, index) in newsList" :key="index" class="newsCard">
-            <view class="newsContent">
-              <view class="newsText">
-                <text class="newsTitle">{{ item.title }}</text>
-                <text class="newsSource">{{ item.source }} {{ item.time }}</text>
-              </view>
-              <image class="newsImage" :src="item.image" mode="aspectFill" />
-            </view>
-            <view class="divider"></view>
-          </view>
-        </scroll-view>
-      </view>
     </view>
 
     <!-- 底部导航栏 -->
@@ -251,6 +253,7 @@ const { t } = useI18n();
 const userStore = useUserStore();
 
 let cryptoData = ref([]);
+let showSettingDialog = ref(false);
 let dashboardData = ref(null);
 // ✅ Lifecycle: onLoad
 onLoad(async (options) => {
@@ -264,12 +267,12 @@ onLoad(async (options) => {
     };
 
     const dashboardParams: DashboardParams = {
-          passkey: userStore.pasKeyAuth,
-          device:userStore.deviceAuth,
-          appversion:userStore.appversionAuth,
-          token: userInfo.data.token,
-          lang: userStore.language
-        }
+      passkey: userStore.pasKeyAuth,
+      device: userStore.deviceAuth,
+      appversion: userStore.appversionAuth,
+      token: userInfo.data.token,
+      lang: userStore.language
+    }
 
     const resultAuth = await userStore.getTickers(tickersParams);
     const resulDashboard = await userStore.getDashboard(dashboardParams);
@@ -279,26 +282,26 @@ onLoad(async (options) => {
     cryptoData.value = resultAuth.data;
 
     interface dataBlog {
-                      "title": string;
-                      "source": string;
-                      "time": string;
-                      "image": string;
-                    }
- let dataBlogs: dataBlog[] = []
+      "title": string;
+      "source": string;
+      "time": string;
+      "image": string;
+    }
+    let dataBlogs: dataBlog[] = []
 
 
-    if (resulDashboard?.data?.status === -1){
-          handleLogout()
-      }
+    if (resulDashboard?.data?.status === -1) {
+      handleLogout()
+    }
 
     resulDashboard?.data?.data?.Blog?.forEach(item => {
-            dataBlogs.push({
-               "title": item?.title,
-               "source": item?.source_name,
-               "time": item?.date,
-               "image": item?.banner
-            })
-            })
+      dataBlogs.push({
+        "title": item?.title,
+        "source": item?.source_name,
+        "time": item?.date,
+        "image": item?.banner
+      })
+    })
 
     newsList.value = dataBlogs
 
@@ -320,8 +323,8 @@ onMounted(() => {
 
 const handleLogout = () => {
   uni.showModal({
-      title: t('profile.confirm_logout'),
-      content: t('profile.confirm_logout_message'),
+    title: t('profile.confirm_logout'),
+    content: t('profile.confirm_logout_message'),
     success: (res) => {
       if (res.confirm) {
         try {
@@ -332,18 +335,18 @@ const handleLogout = () => {
           uni.removeStorageSync("login_cache");
           uni.removeStorageSync("token"); // 额外清除token以提高安全性
           uni.removeStorageSync("userData"); // 清除初始化时使用的userData
-          
+
           console.log("✅ 成功清除所有用户数据");
-          
+
           // 显示退出成功提示
           uni.showToast({
             title: t('profile.logged_out'),
             icon: "success",
           });
-          
+
           // 关闭设置弹窗
           showSettingDialog.value = false;
-          
+
           // 跳转到登录页
           setTimeout(() => {
             uni.reLaunch({ url: "/pages/auth/login" });
@@ -391,9 +394,14 @@ const selectItem = (id: any) => {
 
   if (id == 1) {
     // setTimeout(() => {
+    // uni.navigateTo({
+    //   url: "/pages/share/index",
+    //   success: () => console.log("✅ 跳转到奖励页面"),
+    //   fail: (err) => console.error("❌ 跳转失败:", err),
+    // });
     uni.navigateTo({
-      url: "/pages/share/index",
-      success: () => console.log("✅ 跳转到跟单页面"),
+      url: "/pages/locked/index",
+      success: () => console.log("✅ 跳转到功能未解锁页面"),
       fail: (err) => console.error("❌ 跳转失败:", err),
     });
     // }, 100)
@@ -408,16 +416,28 @@ const selectItem = (id: any) => {
     // }, 100)
   } else if (id == 3) {
     // 点击空投按钮跳转到空投页面
+    // uni.navigateTo({
+    //   url: "/pages/airdrop/index",
+    //   success: () => console.log("✅ 跳转到空投页面"),
+    //   fail: (err) => console.error("❌ 跳转失败:", err),
+    // });
+    // 功能未解锁，跳转到锁定页面
     uni.navigateTo({
-      url: "/pages/airdrop/index",
-      success: () => console.log("✅ 跳转到空投页面"),
+      url: "/pages/locked/index",
+      success: () => console.log("✅ 跳转到功能未解锁页面"),
       fail: (err) => console.error("❌ 跳转失败:", err),
     });
   } else if (id == 4) {
     // 点击打新按钮跳转到打新页面
+    // uni.navigateTo({
+    //   url: "/pages/wealth/newlisting",
+    //   success: () => console.log("✅ 跳转到打新页面"),
+    //   fail: (err) => console.error("❌ 跳转失败:", err),
+    // });
+    // 功能未解锁，跳转到锁定页面
     uni.navigateTo({
-      url: "/pages/wealth/newlisting",
-      success: () => console.log("✅ 跳转到打新页面"),
+      url: "/pages/locked/index",
+      success: () => console.log("✅ 跳转到功能未解锁页面"),
       fail: (err) => console.error("❌ 跳转失败:", err),
     });
   }
@@ -458,13 +478,13 @@ const cryptoDatas = [
   },
 ];
 
-const newsList  = ref<Array<{
-    "title": string;
-    "source": string;
-    "time": string;
-    "image": string;
-  }>>([])
-  
+const newsList = ref<Array<{
+  "title": string;
+  "source": string;
+  "time": string;
+  "image": string;
+}>>([])
+
 
 const goToVerification = () => {
   // Arahkan ke halaman verifikasi

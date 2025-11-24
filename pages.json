@@ -29,6 +29,13 @@
       }
     },
     {
+      "path": "pages/exchange/index",
+      "style": {
+        "navigationBarTitleText": "兑换",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/trade/search",
       "style": {
         "navigationBarTitleText": "搜索",
@@ -366,6 +373,16 @@
         "navigationBarBackgroundColor": "#202020",
         "navigationBarTextStyle": "white",
         "backgroundColor": "#202020"
+      }
+    },
+    {
+      "path": "pages/locked/index",
+      "style": {
+        "navigationBarTitleText": "功能未解锁",
+        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#000000",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#000000"
       }
     }
   ],

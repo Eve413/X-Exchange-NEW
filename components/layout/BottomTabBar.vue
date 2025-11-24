@@ -55,12 +55,12 @@ const tabs = ref<TabItem[]>([
     activeIcon: "/static/icons/tabbar/search1.png",
     label: "navigation.market",
   },
-  {
-    path: "/pages/discover/index",
-    icon: "/static/icons/tabbar/Frame.png",
-    activeIcon: "/static/icons/tabbar/Frame1.png",
-    label: "navigation.discover",
-  },
+  // {
+  //   path: "/pages/discover/index",
+  //   icon: "/static/icons/tabbar/Frame.png",
+  //   activeIcon: "/static/icons/tabbar/Frame1.png",
+  //   label: "navigation.discover",
+  // },
   {
     path: "/pages/profile/index",
     icon: "/static/icons/tabbar/user.png",
@@ -144,12 +144,12 @@ const handleTabClick = (tab: TabItem, index: number) => {
   // box-shadow: 0 0 16rpx rgba(107, 207, 255, 0.25);
 }
 
-.tab-capsule.tab-3 {
-  background: rgba(242, 133, 182, 0.12);
-  // box-shadow: 0 0 16rpx rgba(255, 191, 107, 0.25);
-}
+// .tab-capsule.tab-3 {
+//   background: rgba(242, 133, 182, 0.12);
+//   // box-shadow: 0 0 16rpx rgba(255, 191, 107, 0.25);
+// }
 
-.tab-capsule.tab-4 {
+.tab-capsule.tab-3 {
   background: rgba(79, 206, 0, 0.12);
   // box-shadow: 0 0 16rpx rgba(107, 255, 144, 0.25);
 }
@@ -204,13 +204,13 @@ const handleTabClick = (tab: TabItem, index: number) => {
   white-space: nowrap;
 }
 
-.tab-item:nth-child(4) .tab-label.active {
-  color: #f285b6;
-  font-weight: 600;
-  white-space: nowrap;
-}
+// .tab-item:nth-child(4) .tab-label.active {
+//   color: #f285b6;
+//   font-weight: 600;
+//   white-space: nowrap;
+// }
 
-.tab-item:nth-child(5) .tab-label.active {
+.tab-item:nth-child(4) .tab-label.active {
   color: #4fce00;
   font-weight: 600;
   white-space: nowrap;

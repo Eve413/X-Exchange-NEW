@@ -65,7 +65,7 @@
     </view>
 
     <!-- Baris aset -->
-    <view class="asset-row">
+    <view class="asset-row" @click="goToAsset">
       <image src="/static/icons/ic_eye.png" class="icon-left" />
       <text class="asset-text">{{ $t("profile.total_asset_value") }}</text>
       <text class="asset-unit"
@@ -692,8 +692,13 @@ const onMenuClick = (item) => {
     });
   } else if (item.id === 3) {
     // 点击空投活动，跳转到空投页面
+    // 注释掉原来的跳转路径
+    // uni.navigateTo({
+    //   url: '/pages/airdrop/index'
+    // });
+    // 添加新的跳转路径到locked页面
     uni.navigateTo({
-      url: '/pages/airdrop/index'
+      url: '/pages/locked/index'
     });
   } else if (item.id === 5) {
     // 点击闪兑，跳转到market页面
@@ -706,7 +711,12 @@ const onMenuClick = (item) => {
       url: '/pages/assetsoverview/index'
     });
   } else if (item.id === 7) {
-    goToShare();
+    // 注释掉原来的跳转路径
+    // goToShare();
+    // 添加新的跳转路径到locked页面
+    uni.navigateTo({
+      url: '/pages/locked/index'
+    });
   }
   // uni.showToast({
   //   title: `点击了 ${item.name}`,
@@ -823,6 +833,19 @@ const goToLink = () => {
     });
   }, 500);
 };
+
+const goToAsset = () => {
+  // Arahkan ke halaman verifikasi
+
+  setTimeout(() => {
+    uni.navigateTo({
+      url: "/pages/assetsoverview/index",
+      success: () => console.log("✅ Navigated"),
+      fail: (err) => console.error("❌ Navigation failed:", err),
+    });
+  }, 500);
+};
+
 
 const goToShare = () => {
   // Arahkan ke halaman verifikasi

@@ -1461,5 +1461,6 @@
     "trade_details": "交易明细",
     "count": "笔",
     "profit_loss_report": "盈亏报表"
-  }
+  },
+  "exchange":"兑换"
 }
