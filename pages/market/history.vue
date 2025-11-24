@@ -79,9 +79,6 @@
               :quantity="Number(ord.positionQuantity || 0)"
               :amount="Number(ord.margin ?? 0)"
               @cancelOrder="handleCancel(ord)"
-              @priceChange="(newPrice) => handlePriceChange(ord, newPrice)"
-              @quantityChange="(newQuantity) => handleQuantityChange(ord, newQuantity)"
-              @amountChange="(newAmount) => handleAmountChange(ord, newAmount)"
             />
           </view>
 
@@ -250,63 +247,7 @@ const onClosePosition = (position: any) => {
 
 const handleCancel = (order: any) => {
   console.log('Cancel order:', order)
-  
-  uni.showModal({
-    title: 'Confirm Cancel',
-    content: 'Do you want to cancel this order?',
-    confirmText: 'Yes',
-    cancelText: 'No',
-    success: (res) => {
-      if (res.confirm) {
-        // User confirmed cancellation
-        console.log('User confirmed cancel for order:', order.orderNo)
-        // TODO: Call API to cancel order
-        // For now, remove from local list
-        const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
-        if (orderIndex !== -1) {
-          listCurrentOrders.value.splice(orderIndex, 1)
-        }
-        uni.showToast({ title: 'Order cancelled successfully', icon: 'success' })
-      } else {
-        // User cancelled the action
-        console.log('User cancelled the cancel action')
-      }
-    }
-  })
-}
-
-// Handle order field changes
-const handlePriceChange = (order: any, newPrice: number) => {
-  console.log('Update price for order:', order.orderNo, 'New price:', newPrice)
-  // TODO: Call API to update order price
-  // For now, update local data
-  const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
-  if (orderIndex !== -1) {
-    listCurrentOrders.value[orderIndex].entryPrice = newPrice
-  }
-  uni.showToast({ title: `Price updated to ${newPrice}`, icon: 'success' })
-}
-
-const handleQuantityChange = (order: any, newQuantity: number) => {
-  console.log('Update quantity for order:', order.orderNo, 'New quantity:', newQuantity)
-  // TODO: Call API to update order quantity
-  // For now, update local data
-  const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
-  if (orderIndex !== -1) {
-    listCurrentOrders.value[orderIndex].positionQuantity = newQuantity
-  }
-  uni.showToast({ title: `Quantity updated to ${newQuantity}`, icon: 'success' })
-}
-
-const handleAmountChange = (order: any, newAmount: number) => {
-  console.log('Update amount for order:', order.orderNo, 'New amount:', newAmount)
-  // TODO: Call API to update order amount
-  // For now, update local data
-  const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
-  if (orderIndex !== -1) {
-    listCurrentOrders.value[orderIndex].margin = newAmount
-  }
-  uni.showToast({ title: `Amount updated to ${newAmount}`, icon: 'success' })
+  uni.showToast({ title: t('trade-page.cancel-order'), icon: 'none' })
 }
 
 const handleTabChange = (tab: any, index: number) => {
