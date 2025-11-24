@@ -375,13 +375,6 @@
 				"navigationBarTitleText": "交易",
 				"navigationStyle": "custom"
 			}
-		},
-		{
-			"path": "pages/market/history",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
 		}
 	],
 
