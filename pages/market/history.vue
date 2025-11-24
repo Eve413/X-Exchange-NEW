@@ -138,6 +138,8 @@ import { ref } from 'vue'
 import { TradePositionCard, TradeOrderCard, TradeOrderHistoryCard, TradeFundFlowCard, BottomTabBar } from '@/components';
 import { useTradingStore } from '@/store/modules/trading';
 import { onLoad } from '@dcloudio/uni-app';
+
+
 const tradingStore = useTradingStore()
 const { t } = useI18n();
 
@@ -256,17 +258,32 @@ const handleCancel = (order: any) => {
     content: 'Do you want to cancel this order?',
     confirmText: 'Yes',
     cancelText: 'No',
-    success: (res) => {
+    success: async (res) => {
       if (res.confirm) {
         // User confirmed cancellation
-        console.log('User confirmed cancel for order:', order.orderNo)
-        // TODO: Call API to cancel order
-        // For now, remove from local list
-        const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
-        if (orderIndex !== -1) {
-          listCurrentOrders.value.splice(orderIndex, 1)
+        const orderId = order.id || order.orderNo
+        console.log('User confirmed cancel for order ID:', orderId)
+        
+        try {
+          // Call API to cancel order
+          const result = await tradingStore.cancelOrder(orderId);
+          
+          if (!result || result.status !== 1) {
+            console.error('Error cancelling order:', result);
+            uni.showToast({ title: 'Failed to cancel order', icon: 'none' });
+            return;
+          }
+
+          // Remove from local list on success
+          const orderIndex = listCurrentOrders.value.findIndex(o => (o.id || o.orderNo) === orderId)
+          if (orderIndex !== -1) {
+            listCurrentOrders.value.splice(orderIndex, 1)
+          }
+          uni.showToast({ title: 'Order cancelled successfully', icon: 'success' })
+        } catch (error) {
+          console.error('Exception cancelling order:', error);
+          uni.showToast({ title: 'Failed to cancel order', icon: 'error' });
         }
-        uni.showToast({ title: 'Order cancelled successfully', icon: 'success' })
       } else {
         // User cancelled the action
         console.log('User cancelled the cancel action')
@@ -276,34 +293,77 @@ const handleCancel = (order: any) => {
 }
 
 // Handle order field changes
-const handlePriceChange = (order: any, newPrice: number) => {
+const handlePriceChange = async (order: any, newPrice: number) => {
   console.log('Update price for order:', order.orderNo, 'New price:', newPrice)
   // TODO: Call API to update order price
   // For now, update local data
-  const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
+  const orderIndex = listCurrentOrders.value.findIndex(o => o.id === order.id)
   if (orderIndex !== -1) {
-    listCurrentOrders.value[orderIndex].entryPrice = newPrice
+    
+
+    const orderId = order.id
+    const price = newPrice
+    const quantity = listCurrentOrders.value[orderIndex].positionQuantity
+	const leverage = listCurrentOrders.value[orderIndex].leverage
+	
+	const result = await tradingStore.updateOrder(orderId,price,quantity,leverage);
+	
+	if (!result || result.status !== 1) {
+	  console.error('Error cancelling order:', result);
+	  uni.showToast({ title: 'Failed to cancel order', icon: 'none' });
+	  return;
+	}
+	
+	listCurrentOrders.value[orderIndex].entryPrice = newPrice
+    
   }
   uni.showToast({ title: `Price updated to ${newPrice}`, icon: 'success' })
 }
 
-const handleQuantityChange = (order: any, newQuantity: number) => {
+const handleQuantityChange = async (order: any, newQuantity: number) => {
   console.log('Update quantity for order:', order.orderNo, 'New quantity:', newQuantity)
   // TODO: Call API to update order quantity
   // For now, update local data
   const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
   if (orderIndex !== -1) {
+	  const orderId = order.id
+	  const price = listCurrentOrders.value[orderIndex].entryPrice
+	  const quantity = newQuantity
+	  const leverage = listCurrentOrders.value[orderIndex].leverage
+	  
+	  const result = await tradingStore.updateOrder(orderId,price,quantity,leverage);
+	  
+	  if (!result || result.status !== 1) {
+	    console.error('Error cancelling order:', result);
+	    uni.showToast({ title: 'Failed to cancel order', icon: 'none' });
+	    return;
+	  }
+	  
     listCurrentOrders.value[orderIndex].positionQuantity = newQuantity
   }
   uni.showToast({ title: `Quantity updated to ${newQuantity}`, icon: 'success' })
 }
 
-const handleAmountChange = (order: any, newAmount: number) => {
+const handleAmountChange = async (order: any, newAmount: number) => {
   console.log('Update amount for order:', order.orderNo, 'New amount:', newAmount)
   // TODO: Call API to update order amount
   // For now, update local data
   const orderIndex = listCurrentOrders.value.findIndex(o => o.orderNo === order.orderNo)
   if (orderIndex !== -1) {
+	  
+	  const orderId = order.id
+	  const price = listCurrentOrders.value[orderIndex].entryPrice
+	  const quantity =  listCurrentOrders.value[orderIndex].positionQuantity
+	  const leverage = newAmount
+	  
+	  const result = await tradingStore.updateOrder(orderId,price,quantity,leverage);
+	  
+	  if (!result || result.status !== 1) {
+	    console.error('Error cancelling order:', result);
+	    uni.showToast({ title: 'Failed to cancel order', icon: 'none' });
+	    return;
+	  }
+	  
     listCurrentOrders.value[orderIndex].margin = newAmount
   }
   uni.showToast({ title: `Amount updated to ${newAmount}`, icon: 'success' })

@@ -48,6 +48,17 @@ export interface BaseParam {
   lang: string;
 }
 
+export interface UpdateParam {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+  price: number;
+  quantity: number;
+  leverage: number;
+}
+
 export interface BaseParamOther {
   passkey: string;
   device: string;
@@ -100,6 +111,14 @@ export class TradingApi {
 	
 	static unSubscribeToTrader(expertId: number, userId: number, params: BaseParam) {
 	    return request.postTrading<any>(`/api/copy-trade/unsubscribe/expert/${expertId}/user/${userId}`, params)
+	}
+	
+	static cancelOrder(orderId: number, params: BaseParam) {
+	    return request.postTrading<any>(`/api/trading/order/${orderId}/cancel`, params)
+	}
+
+  static updateOrder(orderId: number, params: UpdateParam) {
+	    return request.postTrading<any>(`/api/trading/order/${orderId}/update`, params)
 	}
 
      static getAirdrops(params: AirdropParam) {
