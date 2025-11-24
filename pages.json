@@ -1,418 +1,399 @@
 {
-	"easycom": {
-		"autoscan": true,
-		"custom": {
-			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
-		}
-	},
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
 
-	"pages": [{
-			"path": "pages/home/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/market/index",
-			"style": {
-				"navigationBarTitleText": "市场",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/trade/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/trade/search",
-			"style": {
-				"navigationBarTitleText": "搜索",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/trade/edit",
-			"style": {
-				"navigationBarTitleText": "编辑自选",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/trade/add",
-			"style": {
-				"navigationBarTitleText": "添加自选",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/discover/index",
-			"style": {
-				"navigationBarTitleText": "发现",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/assets/index",
-			"style": {
-				"navigationBarTitleText": "资产",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/profile/index",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/auth/login",
-			"style": {
-				"navigationBarTitleText": "登录",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/auth/register",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/auth/forgot",
-			"style": {
-				"navigationBarTitleText": "找回密码",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/auth/security",
-			"style": {
-				"navigationBarTitleText": "安全设置",
-				"navigationBarBackgroundColor": "#667eea",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/announcement/list",
-			"style": {
-				"navigationBarTitleText": "公告列表"
-			}
-		},
-		{
-			"path": "pages/announcement/detail",
-			"style": {
-				"navigationBarTitleText": "公告详情"
-			}
-		},
-		{
-			"path": "pages/auth/startup",
-			"style": {
-				"navigationStyle": "custom",
-				"disableScroll": false,
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/auth/status",
-			"style": {
-				"navigationBarTitleText": "认证中心",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/intro",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/createkyc",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/authentication",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/cameraPage",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/agreement",
-			"style": {
-				"navigationBarTitleText": "确认协议",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/createkyc/result",
-			"style": {
-				"navigationBarTitleText": "实名认证",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/detiltrade/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/chartsettings/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/cretedreminder/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/notification/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/linkedaccounts/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/mydevice/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/share/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/customerservice/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/accountsecurity/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/follow/index",
-			"style": {
-				"navigationBarTitleText": "跟单",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/changeemail/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/changepassword/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/setpincode/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/phoneverify/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/assetsoverview/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/transfer/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/withdraw/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/recharge/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/wealth/index",
-			"style": {
-				"navigationBarTitleText": "理财",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/wealth/detail",
-			"style": {
-				"navigationBarTitleText": "理财产品详情",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/wealth/newlisting-detail",
-			"style": {
-				"navigationBarTitleText": "打新详情",
-				"navigationBarBackgroundColor": "#202020",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/wealth/newlisting",
-			"style": {
-				"navigationBarTitleText": "打新",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/airdrop/index",
-			"style": {
-				"navigationBarTitleText": "空投",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/airdrop/detail",
-			"style": {
-				"navigationBarTitleText": "空投活动",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/airdrop/result",
-			"style": {
-				"navigationBarTitleText": "空投活动",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/activity/index",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/discover/success",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/profitlossreport/index",
-			"style": {
-				"navigationBarTitleText": "盈亏报表",
-				"navigationStyle": "custom",
-				"navigationBarBackgroundColor": "#202020",
-				"navigationBarTextStyle": "white",
-				"backgroundColor": "#202020"
-			}
-		},
-		{
-			"path": "pages/discover/confirm",
-			"style": {
-				"navigationBarTitleText": "交易",
-				"navigationStyle": "custom"
-			}
-		}
-	],
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/market/index",
+      "style": {
+        "navigationBarTitleText": "市场",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/trade/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/trade/search",
+      "style": {
+        "navigationBarTitleText": "搜索",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/trade/edit",
+      "style": {
+        "navigationBarTitleText": "编辑自选",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/trade/add",
+      "style": {
+        "navigationBarTitleText": "添加自选",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/discover/index",
+      "style": {
+        "navigationBarTitleText": "发现",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/assets/index",
+      "style": {
+        "navigationBarTitleText": "资产",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/auth/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/auth/register",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/auth/forgot",
+      "style": {
+        "navigationBarTitleText": "找回密码",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/auth/security",
+      "style": {
+        "navigationBarTitleText": "安全设置",
+        "navigationBarBackgroundColor": "#667eea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/announcement/list",
+      "style": {
+        "navigationBarTitleText": "公告列表"
+      }
+    },
+    {
+      "path": "pages/announcement/detail",
+      "style": {
+        "navigationBarTitleText": "公告详情"
+      }
+    },
+    {
+      "path": "pages/auth/startup",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": false,
+        "app-plus": { "bounce": "none" }
+      }
+    },
+    {
+      "path": "pages/auth/status",
+      "style": {
+        "navigationBarTitleText": "认证中心",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/intro",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/createkyc",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/authentication",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/cameraPage",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/agreement",
+      "style": {
+        "navigationBarTitleText": "确认协议",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/createkyc/result",
+      "style": {
+        "navigationBarTitleText": "实名认证",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/detiltrade/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/chartsettings/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/cretedreminder/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/notification/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/linkedaccounts/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mydevice/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/share/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/customerservice/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/accountsecurity/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/follow/index",
+      "style": {
+        "navigationBarTitleText": "跟单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/changeemail/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/changepassword/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/setpincode/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/phoneverify/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/assetsoverview/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/transfer/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/withdraw/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/recharge/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wealth/index",
+      "style": {
+        "navigationBarTitleText": "理财",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wealth/detail",
+      "style": {
+        "navigationBarTitleText": "理财产品详情",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/wealth/newlisting-detail",
+      "style": {
+        "navigationBarTitleText": "打新详情",
+        "navigationBarBackgroundColor": "#202020",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/wealth/newlisting",
+      "style": {
+        "navigationBarTitleText": "打新",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/airdrop/index",
+      "style": {
+        "navigationBarTitleText": "空投",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/airdrop/detail",
+      "style": {
+        "navigationBarTitleText": "空投活动",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/airdrop/result",
+      "style": {
+        "navigationBarTitleText": "空投活动",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/activity/index",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/discover/success",
+      "style": {
+        "navigationBarTitleText": "交易",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/profitlossreport/index",
+      "style": {
+        "navigationBarTitleText": "盈亏报表",
+        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#202020",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#202020"
+      }
+    }
+  ],
 
+  
 
-
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "X交易所",
-		"navigationBarBackgroundColor": "#ffffff",
-		"backgroundColor": "#f5f5f5",
-		"app-plus": {
-			"titleNView": false
-		},
-		"h5": {
-			"titleNView": false
-		}
-	},
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "X交易所",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f5f5f5",
+    "app-plus": {
+      "titleNView": false
+    },
+    "h5": {
+      "titleNView": false
+    }
+  },
 
 
-	"condition": {
-		"current": 0,
-		"list": [{
-				"name": "登录",
-				"path": "pages/auth/login",
-				"query": ""
-			},
-			{
-				"name": "注册",
-				"path": "pages/auth/register",
-				"query": ""
-			},
-			{
-				"name": "公告列表",
-				"path": "pages/announcement/list",
-				"query": ""
-			}
-		]
-	},
+  "condition": {
+    "current": 0,
+    "list": [
+      { "name": "登录", "path": "pages/auth/login", "query": "" },
+      { "name": "注册", "path": "pages/auth/register", "query": "" },
+      { "name": "公告列表", "path": "pages/announcement/list", "query": "" }
+    ]
+  },
 
-	"uniIdRouter": {}
+  "uniIdRouter": {}
 }

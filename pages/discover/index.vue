@@ -449,14 +449,9 @@ onLoad(async (option) => {
 		const resultAuth = await tradingStore.fetchTraderPerforma();
 
 		//Populate traderList with API data
-		if (resultAuth?.data?.data) {
-			traderList.value = resultAuth.data.data;
-		} else if (Array.isArray(resultAuth?.data)) {
+		if (resultAuth?.data) {
 			traderList.value = resultAuth.data;
-		} else {
-			traderList.value = [];
 		}
-		
 
 		console.log('Trading loaded:', traderList.value);
 
@@ -641,7 +636,7 @@ const handleShowDetail = (traderId: number) => {
 	try {
 		console.log("准备跳转到交易员详情页面...", traderId);
 		uni.navigateTo({
-			url: `/pages/discover/confirm?traderId=${traderId}&type=detail`,
+			url: `/pages/market/index?traderId=${traderId}&type=detail`,
 			success: (res) => {
 				console.log("跳转到交易员详情页面成功:", res);
 			},
@@ -659,7 +654,7 @@ const handleFollow = (traderId: number) => {
 	try {
 		console.log("准备跳转到跟单页面...", traderId);
 		uni.navigateTo({
-			url: `/pages/discover/confirm?traderId=${traderId}&type=follow`,
+			url: `/pages/market/index?traderId=${traderId}&type=follow`,
 			success: (res) => {
 				console.log("跳转到跟单页面成功:", res);
 			},
