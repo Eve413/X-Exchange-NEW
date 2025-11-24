@@ -318,9 +318,9 @@
     "buy": "BUY",
     "confirmFollow": "Confirm Follow",
     "confirmFollowAmount": "Confirm to follow with {amount} USDT?{autoFollow}",
-	"confirmStopFollow": "Confirm Stop Copy Trade",
+    "confirmStopFollow": "Confirm Stop Copy Trade",
     "confirm": "Confirm",
-	"stop": "Stop",
+    "stop": "Stop",
     "cancel": "Cancel",
     "followSuccess": "Followed successfully",
     "operationFailed": "Operation failed, please retry",
@@ -1116,8 +1116,8 @@
       "copy-title": "Copy Trade",
       "copy-success": "Copy Trade Successful",
       "copy-success-desc": "You have started following trader",
-	  "stop" : "Stop Copy Trade",
-	  "modify" : "Modify Settings",
+      "stop": "Stop Copy Trade",
+      "modify": "Modify Settings",
       "setting": {
         "title": "Copy Trading Settings",
         "amount": "Copy Trading Amount",
@@ -1143,6 +1143,14 @@
         "go-long": "Go Long",
         "to-short": "To Short"
       }
+    },
+    "trader-card": {
+      "detail": "Details",
+      "copy-trading": "Copy Trading",
+      "day-profit-lost": "30-day Profit & Loss",
+      "day-return-rate": "30-day Return Rate",
+      "aum": "AUM",
+      "sharpe-ratio": "Sharpe Ratio"
     }
   },
   "notification": {
@@ -1331,5 +1339,68 @@
     "trade_details": "Trade Details",
     "count": "Times",
     "profit_loss_report": "Profit and Loss Report"
+  },
+  "trade-page": {
+    "title": "Copy Trade",
+    "apply": {
+      "title": "Apply to become a lead trader",
+      "view": "View now"
+    },
+    "tab-one": {
+      "one": "All Projects",
+      "two": "Favorites"
+    },
+    "tab-history-one": {
+      "one": "All",
+      "two": "Hong Kong Stocks",
+      "three": "Spot",
+      "four": "Contract",
+      "five": "Wealth Management"
+    },
+    "tab-history-two": {
+      "one": "Current Positions",
+      "two": "Current Orders",
+      "three": "Trade History",
+      "four": "Fund Flow"
+    },
+    "tab-history-container-one": {
+      "one": "Last Update: 2025-10-03 08:03:48",
+      "two": "*Due to the complexity of the data, there may be some delays. Please scroll down to refresh and update the data."
+    },
+    "day-profit-lost": "day Profit & Loss",
+    "day-return-rate": "day Return Rate",
+    "button-bellow": "Redeem Now",
+    "position-card": {
+      "order-no": "Order No",
+      "one": "Perpetual",
+      "two": "Duration",
+      "three": "Limit Order",
+      "four": "PnL",
+      "five": "ROI",
+      "six": "Position Quantity",
+      "seven": "Entry Price",
+      "eight": "Margin",
+      "nine": "Liquidation Price",
+      "ten": "Mark Price",
+      "eleven": "Margin Ratio",
+      "twelve": "Margin Rate",
+      "thirteen": "Add/Reduce Position",
+      "fourteen": "Take Profit / Stop Loss",
+      "fifteen": "Close Position"
+    },
+    "current-order-card": {
+      "one": "Order No",
+      "two": "Price",
+      "three": "Quantity",
+      "four": "Amount",
+      "five": "Cancel"
+    },
+    "trade-history-card": {
+      "one": "Order No",
+      "two": "Price",
+      "three": "Quantity",
+      "four": "Amount",
+      "five": "Funding Fee"
+    }
   }
 }

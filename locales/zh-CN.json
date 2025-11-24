@@ -349,9 +349,9 @@
     "buy": "买入",
     "confirmFollow": "确认跟单",
     "confirmFollowAmount": "确定要跟单 {amount} USDT 吗？{autoFollow}",
-	"confirmStopFollow": "Confirm Stop Copy Trade",
+    "confirmStopFollow": "Confirm Stop Copy Trade",
     "confirm": "确认",
-	"stop": "Stop",
+    "stop": "Stop",
     "create_reminder": "创建提醒",
     "tesla": "特斯拉",
     "night_session": "夜间时段",
@@ -1421,8 +1421,8 @@
       "copy-title": "跟单详情",
       "copy-success": "跟单成功",
       "copy-success-desc": "已开始跟随交易员 ",
-	  "stop" : "停止跟单",
-	  "modify" : "修改配置",
+      "stop": "停止跟单",
+      "modify": "修改配置",
       "setting": {
         "title": "跟单配置",
         "amount": "跟单金额",
@@ -1448,6 +1448,14 @@
         "go-long": "做多",
         "to-short": "做空"
       }
+    },
+    "trader-card": {
+      "detail": "查看详情",
+      "copy-trading": "跟单",
+      "day-profit-lost": "30天盈亏",
+      "day-return-rate": "30天收益率",
+      "aum": "资产管理规模",
+      "sharpe-ratio": "夏普比率"
     }
   },
   "profitleLose": {
@@ -1459,11 +1467,65 @@
     "unrealized_profit_loss": "未实现盈亏",
     "profit_loss_calendar": "盈亏日历r",
 
-	"profit": "盈利",
+    "profit": "盈利",
     "loss": "亏损",
     "breakeven": "持平",
     "trade_details": "交易明细",
     "count": "笔",
     "profit_loss_report": "盈亏报表"
+  },
+  "trade-page": {
+    "title": "跟单",
+    "apply": {
+      "title": "申请成为带单员",
+      "view": "立即查看"
+    },
+    "tab-one": {
+      "one": "全部项目",
+      "two": "收藏"
+    },
+    "tab-history-one": {
+      "one": "全部",
+      "two": "港股",
+      "three": "现货",
+      "four": "合约",
+      "five": "理财"
+    },
+    "tab-history-two": {
+      "one": "当前持仓",
+      "two": "当前委托",
+      "three": "交易历史",
+      "four": "资金流水"
+    },
+    "tab-history-container-one": {
+      "one": "最新更新: 2025-10-0308:03:48",
+      "two": "*由于数据的复杂性，可能会有一些延迟。请向下滚动以刷新和更新数据"
+    },
+    "position-card": {
+      "order-no": "订单号",
+      "one": "永续",
+      "two": "持仓周期",
+      "three": "限价单",
+      "four": "未实现盈亏",
+      "five": "投资回报率",
+      "six": "持仓数量",
+      "seven": "开仓均价",
+      "eight": "保证金",
+      "nine": "强平价格",
+      "ten": "标记价格",
+      "eleven": "保证金率",
+      "twelve": "保证金比率",
+      "thirteen": "加仓/减仓",
+      "fourteen": "止盈/止损",
+      "fifteen": "平仓"
+    },
+    "button-bellow": "赎回",
+    "current-order-card": {
+      "one": "订单号",
+      "two": "委托价格",
+      "three": "委托数量",
+      "four": "委托金额",
+      "five": "撤单"
+    }
   }
 }
