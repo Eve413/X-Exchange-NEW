@@ -149,53 +149,6 @@ export const useTradingStore = defineStore('trading', () => {
       }
     }
   }
-  
-  const cancelOrder = async (orderId: number) => {
-     // Ensure userId is a number at runtime (type assertions don't convert values)
-     const rawId = userInfo?.data?.data?.id
-     const userId: number = typeof rawId === 'number' ? rawId : Number(rawId) || 0
-    try {
-      const response = await tradingApi.cancelOrder(orderId, {
-        passkey: pasKeyAuth,
-        device: deviceAuth,
-        appversion: appversionAuth,
-        token: userInfo.data.token || "",
-        lang: "en"
-      })
-      return response.data
-    } catch (error: any) {
-      console.error('订阅交易员失败:', error)
-      return {
-        success: false,
-        message: error.message || '获取失败，请重试'
-      }
-    }
-  }
-
-  const updateOrder = async (orderId: number, newPrice: number, newQuantity: number, newLeverage: number) => {
-     // Ensure userId is a number at runtime (type assertions don't convert values)
-     const rawId = userInfo?.data?.data?.id
-     const userId: number = typeof rawId === 'number' ? rawId : Number(rawId) || 0
-    try {
-      const response = await tradingApi.updateOrder(orderId, {
-        passkey: pasKeyAuth,
-        device: deviceAuth,
-        appversion: appversionAuth,
-        token: userInfo.data.token || "",
-        lang: "en",
-        price: newPrice,
-        quantity: newQuantity, 
-		 leverage: newLeverage
-      })
-      return response.data
-    } catch (error: any) {
-      console.error('订阅交易员失败:', error)
-      return {
-        success: false,
-        message: error.message || '获取失败，请重试'
-      }
-    }
-  }
 
 
   const getBanner = async () => {
@@ -287,9 +240,7 @@ export const useTradingStore = defineStore('trading', () => {
     getRecentOrders,
     fetchTraderHistoryPerformance,
     fetchTradingHistory,
-	unSubscribeCopyTrader,
-	cancelOrder,
-	updateOrder
+	unSubscribeCopyTrader
   }
 })
 
