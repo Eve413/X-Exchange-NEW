@@ -262,7 +262,8 @@ async function loadData() {
     const tickersParams: TickersParams = {
       passkey: userStore.pasKeyAuth,
       type: '',
-      limit: 100
+      limit: 100,
+      lang: userStore.language
     }
 
     const resultAuth = await userStore.getTickers(tickersParams)

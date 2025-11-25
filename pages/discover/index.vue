@@ -421,6 +421,7 @@ onLoad(async (option) => {
 			passkey: userStore.pasKeyAuth,
 			limit: 10,
 			type: "",
+      		lang: userStore.language
 		};
 		const resultAuth = await userStore.getTickers(tickersParams);
 

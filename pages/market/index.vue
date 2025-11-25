@@ -597,7 +597,7 @@ const selectedAmount = ref(1000);
 const amountOptions = ref([500, 1000, 2000, 5000]);
 const toggleDropdown = ref(false);
 const customAmountInput = ref(null);
-const autoFollowEnabled = ref(false);
+const autoFollowEnabled = ref(true);
 const expandDesc = ref(false);
 
 // 闪兑功能相关
@@ -835,6 +835,7 @@ async function loadData(options?: any) {
 			passkey: userStore.pasKeyAuth,
 			type,
 			limit: 100,
+      		lang: userStore.language
 		};
 		const resultAuth = await userStore.getTickers(tickersParams);
 		marketData.value = resultAuth.data || [];

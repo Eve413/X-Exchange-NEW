@@ -281,6 +281,7 @@ async function loadData(type: string) {
       passkey: userStore.pasKeyAuth,
       type: type || "",
       limit: 100, // 使用与trade页面相同的limit值
+      lang: userStore.language
     };
     const resultAuth = await userStore.getTickers(tickersParams);
     tradeList.value = resultAuth.data;

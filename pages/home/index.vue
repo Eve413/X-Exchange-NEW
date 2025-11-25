@@ -66,7 +66,10 @@
         </view>
       </view>
 
-      <view class="contractTrading">
+      <view class="contractTrading" @click="goDetilNews({
+  title: `${dashboardData?.Mission?.bonus} ${dashboardData?.Mission?.baseAsset}`,
+  desc: dashboardData?.Mission?.description
+})">
         <view class="contractTrading-left">
           <view class="contractTrading-title" v-html="dashboardData?.Mission?.description"></view>
           <view class="contractTrading-sub">
@@ -90,7 +93,7 @@
 
       <view class="newsContainer">
         <scroll-view scroll-y class="newsScroll" show-scrollbar="false">
-          <view v-for="(item, index) in newsList" :key="index" class="newsCard">
+          <view v-for="(item, index) in newsList" :key="index" class="newsCard" @click="goDetilNews(item)">
             <view class="newsContent">
               <view class="newsText">
                 <text class="newsTitle">{{ item.title }}</text>
@@ -264,6 +267,7 @@ onLoad(async (options) => {
       passkey: userStore.pasKeyAuth,
       type: "",
       limit: 100,
+      lang: userStore.language
     };
 
     const dashboardParams: DashboardParams = {
@@ -286,6 +290,7 @@ onLoad(async (options) => {
       "source": string;
       "time": string;
       "image": string;
+      "desc": string;
     }
     let dataBlogs: dataBlog[] = []
 
@@ -299,7 +304,8 @@ onLoad(async (options) => {
         "title": item?.title,
         "source": item?.source_name,
         "time": item?.date,
-        "image": item?.banner
+        "image": item?.banner,
+        "desc": item?.desc
       })
     })
 
@@ -371,6 +377,12 @@ const goToMarket = () => {
 const goToTrade = () => {
   goTrade();
 };
+
+const goDetilNews = (item) => {
+uni.navigateTo({ url: `/pages/detilnews/index?title=${item?.title}&desc=${item?.desc}` });
+};
+
+
 
 // 跳转到通知页面
 const goToNotification = () => {

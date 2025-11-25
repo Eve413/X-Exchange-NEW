@@ -381,6 +381,7 @@ async function loadData(type: string) {
       passkey: userStore.pasKeyAuth,
       type,
       limit: 100,
+      lang: userStore.language
     };
     const resultAuth = await userStore.getTickers(tickersParams);
     tradeList.value = resultAuth.data || [];
@@ -441,8 +442,8 @@ function goToAdd() {
 }
 
 const menus = ref([
-  { id: 0, name: t('trade.favorites'), type: "" },
   { id: 1, name: t('market.hkStock'), type: "stock" },
+  { id: 0, name: t('trade.favorites'), type: "" },
   { id: 2, name: t('trade.cryptoCurrency'), type: "crypto" },
 ]);
 const activeMenu = ref(menus.value[0]);

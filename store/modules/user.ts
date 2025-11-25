@@ -119,6 +119,7 @@ export interface TickersParams {
   passkey: string;
   type: string
   limit: number;
+  lang: string;
 }
 
 export interface MarketParams {
