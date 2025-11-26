@@ -4,48 +4,29 @@
     <SafeTop :extraPadding="0" />
     <!-- Header Profil -->
     <view class="profile-header">
-      <image
-        class="avatar"
-        src="/static/icons/ic_avatar.png"
-        mode="aspectFill"
-        @click="openDialog"
-      />
+      <image class="avatar" src="/static/icons/ic_avatar.png" mode="aspectFill" @click="openDialog" />
       <view class="info-section">
         <view class="name-row">
           <text class="name">{{ dataProfile?.User?.full_name || "-" }}</text>
           <view class="vip-badge">{{
             dataProfile?.MemberGroup?.name || "-"
           }}</view>
-          <image
-            src="/static/icons/ic_headphone.png"
-            class="icon-small"
-            @click="goToChat"
-          />
-          <image
-            src="/static/icons/ic_setting.png"
-            class="icon-small"
-            @click="openSettingDialog"
-          />
-          <image
-            src="/static/icons/ic_bell.png"
-            class="icon-small"
-            @click="goToNotification"
-          />
+          <image src="/static/icons/ic_headphone.png" class="icon-small" @click="goToChat" />
+          <image src="/static/icons/ic_setting.png" class="icon-small" @click="openSettingDialog" />
+          <image src="/static/icons/ic_bell.png" class="icon-small" @click="goToNotification" />
         </view>
         <view class="id-row">
-          <view class="id-text"
-            >ID：{{ dataProfile?.User?.id ?? "-" }}
+          <view class="id-text">ID：{{ dataProfile?.User?.id ?? "-" }}
             <image src="/static/icons/Export.png" class="icon-Export" />
           </view>
           <!-- <view class="divider">
            
           </view> -->
-          <view class="xcoin-text"
-            >{{ $t("profile.xcoins_points") }}
+          <view class="xcoin-text">{{ $t("profile.xcoins_points") }}
             <text class="points">{{
               dataProfile?.User?.point ?? "-"
-            }}</text></view
-          >
+            }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -68,9 +49,7 @@
     <view class="asset-row" @click="goToAsset">
       <image src="/static/icons/ic_eye.png" class="icon-left" />
       <text class="asset-text">{{ $t("profile.total_asset_value") }}</text>
-      <text class="asset-unit"
-        >{{ dataProfile?.User?.Currency?.alias ?? "-" }} ▾</text
-      >
+      <text class="asset-unit">{{ dataProfile?.User?.Currency?.alias ?? "-" }} ▾</text>
     </view>
 
     <view class="wallet-section">
@@ -86,7 +65,7 @@
             <text class="profit-percent">{{
               dataProfile?.OrderHistory?.pnl_percentage != null
                 ? (dataProfile?.OrderHistory?.pnl_percentage * 100).toFixed(2) +
-                  "%"
+                "%"
                 : "0"
             }}</text>
           </view>
@@ -101,12 +80,7 @@
 
       <!-- Grid Menu -->
       <view class="menu-grid">
-        <view
-          v-for="(item, index) in menus"
-          :key="index"
-          class="menu-item"
-          @click="onMenuClick(item)"
-        >
+        <view v-for="(item, index) in menus" :key="index" class="menu-item" @click="onMenuClick(item)">
           <image :src="item.icon" class="menu-icon" mode="aspectFit" />
           <text class="menu-text">{{ item.name }}</text>
         </view>
@@ -116,11 +90,7 @@
     <view class="task-section">
       <!-- Banner Scroll Horizontal -->
       <scroll-view scroll-x class="banner-scroll" show-scrollbar="false">
-        <view
-          v-for="(banner, index) in banners"
-          :key="index"
-          class="banner-item"
-        >
+        <view v-for="(banner, index) in banners" :key="index" class="banner-item">
           <view class="banner-gradient">
             <image :src="banner.banner_url" class="banner-image" mode="aspectFill" />
             <text class="banner-text">{{ banner.title }}</text>
@@ -134,18 +104,12 @@
           <text class="title">{{ $t("profile.task_center") }}</text>
           <text class="desc">
             {{ $t("profile.max_reward_for_tasks") }}
-            <text class="highlight"
-              >{{ dataProfile?.OrderHistory?.bonus ?? "-" }}
-              {{ dataProfile?.OrderHistory?.baseAsset ?? "-" }}</text
-            >，
+            <text class="highlight">{{ dataProfile?.OrderHistory?.bonus ?? "-" }}
+              {{ dataProfile?.OrderHistory?.baseAsset ?? "-" }}</text>，
             {{ $t("profile.start_your_exploration_journey") }}
           </text>
         </view>
-        <image
-          src="/static/icons/ic_crown.png"
-          class="task-icon"
-          mode="aspectFit"
-        />
+        <image src="/static/icons/ic_crown.png" class="task-icon" mode="aspectFit" />
       </view>
     </view>
 
@@ -157,17 +121,11 @@
             <text class="title">{{ dataProfile?.Staking?.title ?? "-" }} </text>
             <!-- <text class="subtitle">{{ dataProfile?.Staking?.baseAsset ?? '-' }}</text> -->
 
-            <view
-              class="desc"
-              v-html="dataProfile?.Staking?.description || ''"
-            ></view>
+            <view class="desc" v-html="dataProfile?.Staking?.description || ''"></view>
           </view>
           <view class="card-right">
-            <image
-              :src="dataProfile?.Staking?.icon || '/static/icons/ic_gift1.png'"
-              class="gift-icon"
-              mode="aspectFit"
-            />
+            <image :src="dataProfile?.Staking?.icon || '/static/icons/ic_gift1.png'" class="gift-icon"
+              mode="aspectFit" />
           </view>
         </view>
 
@@ -175,9 +133,9 @@
         <view class="promo-card" @click="goToTeamDashboard">
           <view class="team-logo">{{ dataProfile?.Hot?.name ?? "-" }}</view>
           <view class="team-title">{{ $t('profile.my_team_title') }}</view>
-          <view class="team-desc"  v-html="dataProfile?.Hot?.description || $t('profile.team_description')"></view>
-          <view class="link">{{ $t('profile.team_dashboard') }}</view>
-          <view class="link link1">&gt;</view>
+          <view class="team-desc" v-html="dataProfile?.Hot?.description || $t('profile.team_description')"></view>
+          <view class="link">{{ $t('profile.team_dashboard') }}&gt;</view>
+          <!-- <view class="link link1"></view> -->
         </view>
       </scroll-view>
     </view>
@@ -198,10 +156,7 @@
 
 <!-- 页面主体内容结束 -->
 
-    <BottomTabBar
-      currentPath="/pages/profile/index"
-      @change="handleTabChange"
-    />
+    <BottomTabBar currentPath="/pages/profile/index" @change="handleTabChange" />
   </view>
 
   <view>
@@ -209,15 +164,8 @@
     <view v-if="showDialog" class="mask" @click="closeDialog"></view>
 
     <!-- Bottom Sheet -->
-    <view
-      v-if="showDialog"
-      class="sheet"
-      :style="{ transform: `translateY(${translateY}px)` }"
-      @touchstart="onTouchStart"
-      @touchmove="onTouchMove"
-      @touchend="onTouchEnd"
-      @click.stop
-    >
+    <view v-if="showDialog" class="sheet" :style="{ transform: `translateY(${translateY}px)` }"
+      @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" @click.stop>
       <!-- Handle bar -->
       <view class="handle"></view>
 
@@ -232,9 +180,7 @@
                 <text class="name">{{ dataProfile?.User?.full_name || 'Demo User' }}</text>
                 <view class="vip">{{ dataProfile?.MemberGroup?.name || 'VIP2' }}</view>
               </view>
-              <text class="points"
-                >Xcoins 积分 <text class="points-content">8943</text></text
-              >
+              <text class="points">Xcoins 积分 <text class="points-content">8943</text></text>
             </view>
           </view>
 
@@ -253,10 +199,7 @@
               <text class="register-label-dialog">{{ $t('profile.registration_info') }}</text>
               <view class="email-row-dialog">
                 <text class="email-dialog">weo4134@gmail.com</text>
-                <image
-                  src="/static/tubiao/xianshi.png"
-                  class="eye-icon-dialog"
-                />
+                <image src="/static/tubiao/xianshi.png" class="eye-icon-dialog" />
               </view>
             </view>
           </view>
@@ -265,18 +208,12 @@
             <text class="upgrade-text">{{ $t('profile.upgrade_vip') }} 1</text>
             <view class="upgrade-link-box">
               <text class="upgrade-link">{{ $t('profile.advantages') }}</text>
-              <image
-                src="/static/icons/ic_arrow_right.png"
-                class="arrow"
-                mode="aspectFit"
-              />
+              <image src="/static/icons/ic_arrow_right.png" class="arrow" mode="aspectFit" />
             </view>
           </view>
 
           <view class="upgrade-dialog">
-            <text class="upgrade-text-dialog"
-              >交易更多资产，以升至下一等级</text
-            >
+            <text class="upgrade-text-dialog">交易更多资产，以升至下一等级</text>
             <view class="progress-bar-dialog">
               <view class="progress-fill-dialog"></view>
             </view>
@@ -287,28 +224,19 @@
           <view class="menu-item-dialog" @click="goToVerification">
             <image src="/static/icons/user.png" class="menu-icon-dialog" />
             <text class="menu-text-dialog">{{ $t('profile.identity_verification') }}</text>
-            <image
-              src="/static/icons/ic_arrow_right.png"
-              class="arrow-icon-dialog"
-            />
+            <image src="/static/icons/ic_arrow_right.png" class="arrow-icon-dialog" />
           </view>
 
           <view class="menu-item-dialog" @click="goToAccountSetting">
             <image src="/static/icons/lock.png" class="menu-icon-dialog" />
             <text class="menu-text-dialog">{{ $t('profile.account_security') }}</text>
-            <image
-              src="/static/icons/ic_arrow_right.png"
-              class="arrow-icon-dialog"
-            />
+            <image src="/static/icons/ic_arrow_right.png" class="arrow-icon-dialog" />
           </view>
 
           <view class="menu-item-dialog" @click="goToLink">
             <image src="/static/icons/link.png" class="menu-icon-dialog" />
             <text class="menu-text-dialog">{{ $t('profile.binding_management') }}</text>
-            <image
-              src="/static/icons/ic_arrow_right.png"
-              class="arrow-icon-dialog"
-            />
+            <image src="/static/icons/ic_arrow_right.png" class="arrow-icon-dialog" />
           </view>
         </view>
       </scroll-view>
@@ -316,69 +244,42 @@
   </view>
 
   <!-- 左侧设置弹窗 -->
-  <view
-    v-if="showSettingDialog"
-    class="setting-dialog-overlay"
-    @click="closeSettingDialog"
-  >
+  <view v-if="showSettingDialog" class="setting-dialog-overlay" @click="closeSettingDialog">
     <view class="setting-dialog" @click.stop>
       <view class="setting-menu">
         <view class="setting-item" @click="goToGeneralSettings">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popedit.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popedit.png"></image>
             <text class="setting-item-text">{{ $t('profile.general_settings') }}</text>
           </view>
-          <image
-            class="setting-arrow-icon"
-            src="/static/icons/ic_arrow_right.png"
-          ></image>
+          <image class="setting-arrow-icon" src="/static/icons/ic_arrow_right.png"></image>
         </view>
 
         <view class="setting-item1">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popthem.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popthem.png"></image>
             <text class="setting-item-text">{{ $t('profile.theme') }}</text>
           </view>
           <view class="setting-switch">
-            <switch
-              :checked="isDarkTheme"
-              color="#325DF4"
-              @change="toggleTheme"
-            ></switch>
+            <switch :checked="isDarkTheme" color="#325DF4" @change="toggleTheme"></switch>
           </view>
         </view>
 
         <view class="setting-item1">
           <view class="setting-item-left" @click="goToLanguageSettings">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popLange.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popLange.png"></image>
             <text class="setting-item-text">{{ $t('profile.language') }}</text>
           </view>
           <view class="setting-arrow" @click="goToLanguageSettings">
             <text class="setting-arrow-text">{{ currentLanguageName }}</text>
-            <image
-              class="setting-arrow-icon"
-              :src="isLanguageListOpen ? '/static/icons/ic_arrow_up.png' : '/static/icons/ic_arrow_right.png'"
-            ></image>
+            <image class="setting-arrow-icon"
+              :src="isLanguageListOpen ? '/static/icons/ic_arrow_up.png' : '/static/icons/ic_arrow_right.png'"></image>
           </view>
         </view>
-        
+
         <!-- 语言选择列表（手风琴式） -->
         <view v-if="isLanguageListOpen" class="language-list">
-          <view 
-            v-for="lang in languageList" 
-            :key="lang.code"
-            class="language-item"
-            @click="selectLanguage(lang.code)"
-          >
+          <view v-for="lang in languageList" :key="lang.code" class="language-item" @click="selectLanguage(lang.code)">
             <text class="language-name">{{ lang.name }}</text>
             <view v-if="currentLanguage === lang.code" class="check-icon">✓</view>
           </view>
@@ -388,55 +289,33 @@
 
         <view class="setting-item1">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popnoice.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popnoice.png"></image>
             <text class="setting-item-text">{{ $t('profile.notification') }}</text>
           </view>
           <view class="setting-switch">
-            <switch
-              :checked="isNotificationEnabled"
-              color="#325DF4"
-              @change="toggleNotification"
-            ></switch>
+            <switch :checked="isNotificationEnabled" color="#325DF4" @change="toggleNotification"></switch>
           </view>
         </view>
 
         <view class="setting-item" @click="goToHelpCenter">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/pophelp.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/pophelp.png"></image>
             <text class="setting-item-text">{{ $t('profile.help_center') }}</text>
           </view>
-          <image
-            class="setting-arrow-icon"
-            src="/static/icons/ic_arrow_right.png"
-          ></image>
+          <image class="setting-arrow-icon" src="/static/icons/ic_arrow_right.png"></image>
         </view>
 
         <view class="setting-item" @click="goToPrivacyCenter">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popsafe.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popsafe.png"></image>
             <text class="setting-item-text">{{ $t('profile.privacy_center') }}</text>
           </view>
-          <image
-            class="setting-arrow-icon"
-            src="/static/icons/ic_arrow_right.png"
-          ></image>
+          <image class="setting-arrow-icon" src="/static/icons/ic_arrow_right.png"></image>
         </view>
 
         <view class="setting-item" @click="goToVersionInfo">
           <view class="setting-item-left">
-            <image
-              class="setting-item-icon"
-              src="/static/icons/popversion.png"
-            ></image>
+            <image class="setting-item-icon" src="/static/icons/popversion.png"></image>
             <text class="setting-item-text">{{ $t('profile.version_info') }}</text>
           </view>
           <text class="setting-version">v1.0.0</text>
@@ -519,9 +398,9 @@ function selectLanguage(code: string) {
   // 显示提示
   const selectedLang = languageList.find(lang => lang.code === code);
   if (selectedLang) {
-    uni.showToast({ 
-      title: `已切换至${selectedLang.name}`, 
-      icon: 'none' 
+    uni.showToast({
+      title: `已切换至${selectedLang.name}`,
+      icon: 'none'
     });
   }
   // 关闭列表
@@ -634,7 +513,7 @@ onLoad(async (options) => {
         uni.removeStorageSync('isLoggedIn')
         uni.removeStorageSync('login_cache')
         uni.removeStorageSync('token')
-      } catch (_) {}
+      } catch (_) { }
       setTimeout(() => {
         uni.reLaunch({ url: '/pages/auth/login' })
       }, 300)
@@ -717,6 +596,8 @@ const onMenuClick = (item) => {
     uni.navigateTo({
       url: '/pages/locked/index'
     });
+  } else if (item.id == 6) {
+    goToWithdraw()
   }
   // uni.showToast({
   //   title: `点击了 ${item.name}`,
@@ -736,12 +617,24 @@ watch(showDialog, (val) => {
 const handleTabChange = (tab: any) => {
   console.log("切换到:", tab.label);
 };
+const goToWithdraw = () => {
+  // Arahkan ke halaman verifikasi
+
+  setTimeout(() => {
+    uni.navigateTo({
+      url: '/pages/withdraw/index',
+      success: () => console.log('✅ Navigated'),
+      fail: (err) => console.error('❌ Navigation failed:', err)
+    })
+  }, 500)
+
+}
 
 // 退出登录
 const handleLogout = () => {
   uni.showModal({
-      title: t('profile.confirm_logout'),
-      content: t('profile.confirm_logout_message'),
+    title: t('profile.confirm_logout'),
+    content: t('profile.confirm_logout_message'),
     success: (res) => {
       if (res.confirm) {
         try {
@@ -752,18 +645,18 @@ const handleLogout = () => {
           uni.removeStorageSync("login_cache");
           uni.removeStorageSync("token"); // 额外清除token以提高安全性
           uni.removeStorageSync("userData"); // 清除初始化时使用的userData
-          
+
           console.log("✅ 成功清除所有用户数据");
-          
+
           // 显示退出成功提示
           uni.showToast({
             title: t('profile.logged_out'),
             icon: "success",
           });
-          
+
           // 关闭设置弹窗
           showSettingDialog.value = false;
-          
+
           // 跳转到登录页
           setTimeout(() => {
             uni.reLaunch({ url: "/pages/auth/login" });
@@ -906,9 +799,9 @@ const goToRecharge = () => {
   } catch (error) {
     console.error("❌ 跳转到充值页面发生异常:", error);
     uni.showToast({
-          title: $t('profile.navigation_failed'),
-          icon: "none",
-        });
+      title: $t('profile.navigation_failed'),
+      icon: "none",
+    });
   }
 };
 
@@ -1497,7 +1390,8 @@ $brand: #6f4bfd;
   color: #9aa4ae;
   margin-top: 14rpx;
   display: -webkit-box;
-  -webkit-line-clamp: 1;        /* 显示2行 */
+  -webkit-line-clamp: 1;
+  /* 显示2行 */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1960,6 +1854,7 @@ $brand: #6f4bfd;
   from {
     transform: translateX(-100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -1969,6 +1864,7 @@ $brand: #6f4bfd;
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-100%);
   }

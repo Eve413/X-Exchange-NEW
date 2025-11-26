@@ -211,7 +211,7 @@
 
       <view class="cryptoList">
         <scroll-view class="cryptoList-scroll" scroll-x>
-          <view v-for="(item, index) in cryptoData" :key="index" class="cryptoList-card">
+          <view v-for="(item, index) in cryptoData" :key="index" class="cryptoList-card" @click="handleItemClick(item)">
             <view class="cryptoList-header">
               <image :src="item.icon" class="cryptoList-icon" mode="widthFix" />
               <text class="cryptoList-name">{{ item.name }}</text>
@@ -461,6 +461,18 @@ const currentRoute = ref("/pages/home/index");
 // 处理底部栏切换事件（实际导航由 BottomTabBar 内部处理）
 const handleTabChange = (tab: any, index: number) => {
   console.log("首页底部Tab切换:", tab?.label, index);
+};
+
+// 列表项点击处理函数，与trade页面保持一致的跳转逻辑
+const handleItemClick = (item: any) => {
+  // 跳转到详情页面 - 与trade页面保持一致的参数传递方式
+  uni.navigateTo({
+    url:
+      "/pages/detiltrade/index?data=" +
+      encodeURIComponent(JSON.stringify(item)),
+    success: () => console.log("✅ Navigated to detail page"),
+    fail: (err) => console.error("❌ Navigation failed:", err),
+  });
 };
 
 const cryptoDatas = [
