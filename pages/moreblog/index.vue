@@ -64,7 +64,12 @@ function goBack() {
 }
 
 const goDetilNews = (item) => {
-uni.navigateTo({ url: `/pages/detilnews/index?title=${item?.title}&desc=${item?.desc}` });
+uni.navigateTo({
+  url:
+    `/pages/detilnews/index?` +
+    `title=${encodeURIComponent(item?.title)}` +
+    `&desc=${encodeURIComponent(item?.desc)}`
+});
 };
 
 </script>

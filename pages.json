@@ -36,6 +36,14 @@
       }
     },
     {
+      "path": "pages/upgradeguide/index",
+      "style": {
+        "navigationBarTitleText": "团队看板",
+        "navigationStyle": "custom"
+      }
+    },
+    
+    {
       "path": "pages/exchange/index",
       "style": {
         "navigationBarTitleText": "兑换",

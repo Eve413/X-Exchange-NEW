@@ -30,14 +30,14 @@
                     <view class="swap-header">
                         <text class="swap-label">{{ $t('market.from') }}</text>
                         <view class="max-half-buttons">
-                            <view class="max-btn" @click="maxBtnClick">{{ UserAsset?.qty}}</view>
-                            <view class="half-btn" @click="halfBtnClick">{{UserAsset?.baseAsset }}</view>
+                            <view class="max-btn" @click="maxBtnClick">{{ $t('market.max') }}</view>
+                            <view class="half-btn" @click="halfBtnClick">{{ $t('market.half') }}</view>
                         </view>
                     </view>
                     <view class="contentbox">
                     <picker mode="selector" :range="marketData.coins" range-key="baseAsset" @change="onFromChange">
                         <view class="coin-selector">
-                            <image :src="'/static/logo/logos_bitcoin.png'" class="coin-icon" mode="aspectFit" />
+                            <image :src="selectedFromCoin.icon" class="coin-icon" mode="aspectFit" />
                             <view class="right-box">
                                 <view class="coin-code">{{ selectedFromCoin.baseAsset }}
                                     <image class="dropdown-arrow" src="/static/icons/arrow-bottom.png"
@@ -71,7 +71,7 @@
                     <view class="contentbox">
                         <picker mode="selector" :range="marketData.coins" range-key="baseAsset" @change="onToChange">
                             <view class="coin-selector">
-                                <image :src="'/static/logo/logos_bitcoin.png'"
+                                <image :src="selectedToCoin.icon "
                                     class="coin-icon" mode="aspectFit" />
                                 <view class="right-box">
                                     <view class="coin-code">{{ selectedToCoin.baseAsset }}
@@ -165,7 +165,8 @@ const marketData = ref(getMockMarketData())
 const exchangeRateExample1 = ref('')
 const selectedFromCoin = ref(marketData.value.coins[0])
 const selectedToCoin = ref(marketData.value.coins[1])
-const selectedAmountValue = ref('100')
+const selectedAmountValue = ref('')
+const rates = ref(0.0)
 const estimatedValue = ref('0.001')
 const swapFee = ref('0.3')
 const slippage = ref('0.5')
@@ -218,11 +219,11 @@ const updateEstimatedValue = () => {
         const reverseRateKey = `${selectedToCoin.value.baseAsset}_${selectedFromCoin.value.baseAsset}`
 
         // 使用模拟市场数据中的汇率
-        let rate = marketData.value.rates[rateKey]
+        let rate = rates.value
 
         // 如果没有直接汇率，尝试反向汇率
-        if (!rate && marketData.value.rates[reverseRateKey]) {
-            rate = 1 / marketData.value.rates[reverseRateKey]
+        if (!rate && rates.value) {
+            rate = 1 / rates.value
         }
 
         // 如果仍然没有汇率，使用随机值作为后备
@@ -327,7 +328,7 @@ const handleSwap = async () => {
 
 const submit = async (exchangeParams: ExchangeParams ) => {
  const resultExchange = await userStore.exchangeParams(exchangeParams)
-
+ if (resultExchange.data.status === -1) handleLogout()
  if (resultExchange.data.status == "error"){
     uni.showToast({
             title: resultExchange.data.msg,
@@ -373,7 +374,7 @@ const loadData = async () => {
 
         
         const resultAsset = await userStore.getAssetParams(assetParams)
-
+if (resultAsset.data.status === -1) handleLogout()
         selectedFromCoin.value = resultAsset.data.data[0]
         selectedToCoin.value = resultAsset.data.data[1]
         marketData.value = {
@@ -407,8 +408,9 @@ const exchangeCheckParams = async() => {
 
         
         const resultExchange = await userStore.getExchangeCheckParams(exchangeCheckParams)
+        if (resultExchange.data.status === -1) handleLogout()
         exchangeRateExample1.value = resultExchange.data.data.rate
-        selectedAmountValue.value = resultExchange.data.data.price
+        rates.value = parseFloat(resultExchange.data.data.price as any)
         swapFee.value = resultExchange.data.data.swap_fee
         slippage.value = resultExchange.data.data.slippage
         UserAsset.value = resultExchange.data.data.UserAsset
@@ -416,6 +418,32 @@ const exchangeCheckParams = async() => {
 }
 
 
+const handleLogout = () => {
+      uni.showModal({
+        title: '确认退出',
+        content: '您确定要退出登录吗？',
+        success: (res) => {
+          if (res.confirm) {
+            // 清除所有用户相关数据
+            uni.removeStorageSync('userInfo')
+            uni.removeStorageSync('isRegistered')
+            uni.removeStorageSync('isLoggedIn')
+            uni.removeStorageSync('login_cache')
+            
+            // 显示退出成功提示
+            uni.showToast({
+              title: '已退出登录',
+              icon: 'success'
+            })
+            
+            // 跳转到启动页
+            setTimeout(() => {
+              uni.reLaunch({ url: '/pages/auth/startup' })
+            }, 1000)
+          }
+        }
+      })
+    }
 
 const onFromChange = (e) => {
   selectedFromCoin.value = marketData.value.coins[e.detail.value]

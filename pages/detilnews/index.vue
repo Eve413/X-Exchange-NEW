@@ -13,9 +13,11 @@
       
       <scroll-view scroll-y class="message-empty-page-dialog">
 
-        <text class="message-title-dialog" v-html="title"></text>
+        <!-- <text class="message-title-dialog" v-html="title"></text>
 
-         <text class="message-body-dialog" v-html="desc"></text>
+         <text class="message-body-dialog" v-html="desc"></text> -->
+         <rich-text lass="message-title-dialog" :nodes="title"></rich-text>
+<rich-text class="message-body-dialog" :nodes="desc"></rich-text>
 
       </scroll-view>
     </view>
@@ -34,9 +36,9 @@ const title = ref("")
 const desc = ref("")
 
 onLoad(async (options) => {
-  console.log('options:', options)
-title.value = options?.title
-desc.value =  options?.desc
+  console.log('options:', options?.desc)
+title.value = decodeURIComponent(options?.title || "");
+desc.value =  decodeURIComponent(options?.desc || "");
 
 })
 

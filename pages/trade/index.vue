@@ -651,7 +651,7 @@ const handleTabChange = (tab: any, index: number) => {
 .tab-top {
   position: fixed;
   /* 动态计算顶部位置：状态栏高度 + navbar高度 */
-  top: 160rpx;
+  top: 196rpx;
   left: 0;
   right: 0;
   background-color: #202020;
