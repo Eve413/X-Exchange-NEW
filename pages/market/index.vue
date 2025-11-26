@@ -11,9 +11,96 @@
 					{{ item }}
 				</view>
 			</view>
+			<!-- Header -->
+			<view class="table-header" v-if="activeNav != 0 && activeNav != 4">
+				<view class="left-header">
+					<view class="edit-btn" @click="goToEdit">{{ t('common.edit') }}
+						<image src="/static/icons/editIcon.png" class="editIcon" mode="widthFix" />
+					</view>
+					<view class="column-header1" @click="showNameSortMenu = !showNameSortMenu">
+						{{ nameSortOption === 'name' ? t('trade.name') : nameSortOption === 'volume' ? t('trade.volume') : t('trade.addTime') }}
+						<image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+							:class="{ 'rotate': showNameSortMenu }" mode="widthFix" />
+					</view>
+				</view>
+				<view class="column-headers">
+					<view class="column-header" @click="showTrendFilterMenu = !showTrendFilterMenu">
+						<text>{{ trendFilterOption === 'all' ? t('trade.all') : trendFilterOption === 'up' ? t('trade.onlyUp') : trendFilterOption === 'down' ? t('trade.onlyDown') : trendFilterOption === 'highVol' ? t('trade.highVolatilityFirst') : t('trade.lowVolatilityFirst') }}</text>
+						<image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+							:class="{ 'rotate': showTrendFilterMenu }" mode="widthFix" />
+					</view>
+					<view class="column-header2" @click="showChangeSortMenu = !showChangeSortMenu">
+						<text>{{ changeSortOption === 'highToLow' ? t('trade.highToLow') : changeSortOption === 'lowToHigh' ? t('trade.lowToHigh') : t('trade.byVolatility') }}</text>
+						<image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+							:class="{ 'rotate': showChangeSortMenu }" mode="widthFix" />
+					</view>
+				</view>
+			</view>
 		</scroll-view>
 
+		<!-- 下拉菜单移到scroll-view外部 -->
+		<!-- 名称排序下拉菜单 -->
+		<view v-if="showNameSortMenu" class="filter-dropdown name-dropdown">
+			<view class="filter-option" :class="{ 'active': nameSortOption === 'name' }"
+				@click="nameSortOption = 'name'; showNameSortMenu = false">
+				<text>{{ t('trade.name') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': nameSortOption === 'volume' }"
+				@click="nameSortOption = 'volume'; showNameSortMenu = false">
+				<text>{{ t('trade.volume') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': nameSortOption === 'addTime' }"
+				@click="nameSortOption = 'addTime'; showNameSortMenu = false">
+				<text>{{ t('trade.addTime') }}</text>
+			</view>
+		</view>
+
+		<!-- 趋势筛选下拉菜单 -->
+		<view v-if="showTrendFilterMenu" class="filter-dropdown trend-dropdown">
+			<view class="filter-option" :class="{ 'active': trendFilterOption === 'all' }"
+				@click="trendFilterOption = 'all'; showTrendFilterMenu = false">
+				<text>{{ t('trade.all') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': trendFilterOption === 'up' }"
+				@click="trendFilterOption = 'up'; showTrendFilterMenu = false">
+				<text>{{ t('trade.onlyUp') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': trendFilterOption === 'down' }"
+				@click="trendFilterOption = 'down'; showTrendFilterMenu = false">
+				<text>{{ t('trade.onlyDown') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': trendFilterOption === 'highVol' }"
+				@click="trendFilterOption = 'highVol'; showTrendFilterMenu = false">
+				<text>{{ t('trade.highVolatilityFirst') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': trendFilterOption === 'lowVol' }"
+				@click="trendFilterOption = 'lowVol'; showTrendFilterMenu = false">
+				<text>{{ t('trade.lowVolatilityFirst') }}</text>
+			</view>
+		</view>
+
+		<!-- 24h涨跌排序下拉菜单 -->
+		<view v-if="showChangeSortMenu" class="filter-dropdown change-dropdown">
+			<view class="filter-option" :class="{ 'active': changeSortOption === 'highToLow' }"
+				@click="changeSortOption = 'highToLow'; showChangeSortMenu = false">
+				<text>{{ t('trade.highToLow') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': changeSortOption === 'lowToHigh' }"
+				@click="changeSortOption = 'lowToHigh'; showChangeSortMenu = false">
+				<text>{{ t('trade.lowToHigh') }}</text>
+			</view>
+			<view class="filter-option" :class="{ 'active': changeSortOption === 'volatility' }"
+				@click="changeSortOption = 'volatility'; showChangeSortMenu = false">
+				<text>{{ t('trade.byVolatility') }}</text>
+			</view>
+		</view>
+
+		<!-- 点击空白区域关闭下拉菜单 -->
+		<view v-if="showNameSortMenu || showTrendFilterMenu || showChangeSortMenu" class="dropdown-backdrop"
+			@click="closeAllDropdowns"></view>
+
 		<!-- Content based on active navigation tab with proper scroll area -->
+
 		<scroll-view class="content-scroll-view" scroll-y="true">
 			<!-- 跟单 Tab -->
 			<view id="content-start" v-if="activeNav === 0" class="follow-content">
@@ -240,7 +327,7 @@
 				<!-- Personal Views Content -->
 				<view v-else-if="activeContentTab === 'views'" class="personal-views-content">
 					<!-- 使用v-for渲染view-item -->
-					<view class="view-item" v-for="item in viewItems" :key="item.id">
+					<view class="view-item" v-for="(item, idx) in viewItems" :key="item.id">
 						<view class="view-header">
 							<image class="user-avatar" :src="item.avatar" />
 							<view class="user-info">
@@ -248,10 +335,10 @@
 									<view class="name">{{ item.username }}</view>
 									<view class="time">{{ item.time }}</view>
 								</view>
-								<view class="follow-btn-mini" :class="{ 'followed-btn-mini': item.followed }"
+								<!-- <view class="follow-btn-mini" :class="{ 'followed-btn-mini': item.followed }"
 									@click="toggleItemFollow(item.id)">
 									{{ item.followed ? $t('market.followed') : $t('market.addFollow') }}
-								</view>
+								</view> -->
 							</view>
 						</view>
 						<text class="view-content">{{ item.content }}</text>
@@ -262,15 +349,17 @@
 						</view>
 						<view class="actions-box">
 							<view class="view-actions">
-								<view class="action-item">
-									<image src="/static/icons/LikeBtn.png" class="commentIcon" />
+								<view class="action-item" @click="handleLike(idx)">
+									<image
+										:src="item.isLiked ? '/static/icons/LikeBtn_active.png' : '/static/icons/LikeBtn.png'"
+										class="commentIcon" />
 									<text class="action-count">{{ item.likes }}</text>
 								</view>
-								<view class="action-item">
+								<view class="action-item" @click="handlecomment()">
 									<image src="/static/icons/CommentIcon.png" class="commentIcon" />
 									<text class="action-count">{{ item.comments }}</text>
 								</view>
-								<view class="action-item">
+								<view class="action-item" @click="handleShare(idx)">
 									<image src="/static/icons/shareIcon.png" class="commentIcon" />
 									<text class="action-count">{{ item.shares }}</text>
 								</view>
@@ -542,6 +631,42 @@
 		<!-- Bottom Navigation -->
 		<BottomTabBar currentPath="/pages/market/index" @change="handleTabChange" />
 	</view>
+
+	<!-- 分享弹窗 -->
+	<view class="share-popup" v-if="showSharePopup">
+		<!-- 遮罩层 -->
+		<view class="share-popup-overlay" @click="closeSharePopup"></view>
+		<!-- 弹窗内容 -->
+		<view class="share-popup-content">
+			<!-- 关闭按钮 -->
+			<view class="share-popup-close" @click="closeSharePopup">
+				<image src="/static/icons/closeIcon.png" class="close-icon" />
+			</view>
+			<!-- 标题 -->
+			<!-- <text class="share-popup-title">行情分享</text> -->
+			<!-- 行情截图 -->
+			<!-- <view class="share-popup-screenshot">
+				<image :src="shareScreenshot" class="screenshot-img" />
+			</view> -->
+			<!-- 二维码和推荐码区域 -->
+			<view class="share-popup-info">
+				<!-- 二维码 -->
+				<view class="qrcode-container">
+					<image src="/static/icons/qrcodeImgTest.png" class="qrcode-img" />
+				</view>
+				<!-- 宣传文字 -->
+				<view class="promotion-text">
+					<text class="promotion-main">随时随地开启交易！</text>
+					<text class="promotion-sub">下载交易所APP</text>
+				</view>
+				<!-- 推荐码 -->
+				<view class="referral-code-container">
+					<text class="referral-code-label">推荐码</text>
+					<text class="referral-code-value">{{ referralCode }}</text>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script setup lang="ts">
@@ -657,6 +782,16 @@ const marketData = ref<any[]>([]);
 const isRefreshing = ref(false);
 const scrollHeight = ref(0);
 const scrollToView = ref("content-start");
+
+// 筛选状态变量
+const nameSortOption = ref('name'); // name: 名称, volume: 成交量, addTime: 添加时间
+const trendFilterOption = ref('all'); // all: 全部, up: 只看上涨, down: 只看下跌, highVol: 高波动优先, lowVol: 低波动优先
+const changeSortOption = ref('highToLow'); // highToLow: 涨幅从高到低, lowToHigh: 涨幅从低到高, volatility: 按波动排序
+
+// 筛选菜单显示状态
+const showNameSortMenu = ref(false);
+const showTrendFilterMenu = ref(false);
+const showChangeSortMenu = ref(false);
 const userStore = useUserStore();
 
 // 获取模拟市场数据
@@ -835,7 +970,7 @@ async function loadData(options?: any) {
 			passkey: userStore.pasKeyAuth,
 			type,
 			limit: 100,
-      		lang: userStore.language
+			lang: userStore.language
 		};
 		const resultAuth = await userStore.getTickers(tickersParams);
 		marketData.value = resultAuth.data || [];
@@ -895,10 +1030,17 @@ async function onRefresh() {
 	}, 800);
 }
 
+// 关闭所有下拉菜单
+function closeAllDropdowns() {
+	showNameSortMenu.value = false;
+	showTrendFilterMenu.value = false;
+	showChangeSortMenu.value = false;
+}
+
 // 根据类型获取市场数据
 function getMarketData(type: string) {
 	// 获取基础数据 - 确保数据已加载
-	const baseData =
+	let baseData =
 		marketData.value.length > 0
 			? marketData.value.map((item, index) => ({
 				...item,
@@ -907,8 +1049,42 @@ function getMarketData(type: string) {
 					item.icon ||
 					`/static/logo/logos_${item.code?.toLowerCase() || "bitcoin"}.png`,
 				sparkline: item.sparkline || "/static/icons/line_chart.png",
+				// 计算波动率（这里使用24h涨跌幅的绝对值作为波动率指标）
+				volatility: Math.abs(item.percentChange24h || 0),
+				// 模拟添加时间（实际项目中应该从API获取）
+				addTime: Date.now() - Math.random() * 1000000000 // 随机生成过去一段时间的时间戳
 			}))
 			: getMockMarketData();
+
+	// 应用趋势筛选
+	if (trendFilterOption.value === 'up') {
+		baseData = baseData.filter(item => (item.percentChange24h || 0) > 0);
+	} else if (trendFilterOption.value === 'down') {
+		baseData = baseData.filter(item => (item.percentChange24h || 0) < 0);
+	} else if (trendFilterOption.value === 'highVol') {
+		baseData.sort((a, b) => (b.volatility || 0) - (a.volatility || 0));
+	} else if (trendFilterOption.value === 'lowVol') {
+		baseData.sort((a, b) => (a.volatility || 0) - (b.volatility || 0));
+	}
+
+	// 应用名称/成交量/添加时间排序
+	if (nameSortOption.value === 'volume') {
+		baseData.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+	} else if (nameSortOption.value === 'addTime') {
+		baseData.sort((a, b) => (b.addTime || 0) - (a.addTime || 0));
+	} else {
+		// 默认按名称排序
+		baseData.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+	}
+
+	// 应用24h涨跌排序
+	if (changeSortOption.value === 'highToLow') {
+		baseData.sort((a, b) => (b.percentChange24h || 0) - (a.percentChange24h || 0));
+	} else if (changeSortOption.value === 'lowToHigh') {
+		baseData.sort((a, b) => (a.percentChange24h || 0) - (b.percentChange24h || 0));
+	} else if (changeSortOption.value === 'volatility') {
+		baseData.sort((a, b) => (b.volatility || 0) - (a.volatility || 0));
+	}
 	console.log(baseData, '??????????')
 	// 根据类型过滤数据
 	switch (type) {
@@ -1011,6 +1187,16 @@ function toggleItemFollow(itemId) {
 		// });
 	}
 }
+// 跳转到编辑页面
+function goToEdit() {
+	setTimeout(() => {
+		uni.navigateTo({
+			url: "/pages/trade/edit",
+			success: () => console.log("✅ Navigated to edit page"),
+			fail: (err) => console.error("❌ Navigation failed:", err),
+		});
+	}, 200);
+}
 
 const viewItems = ref([
 	{
@@ -1026,6 +1212,7 @@ const viewItems = ref([
 		shares: 12,
 		footer: "1.2万浏览",
 		followed: false,
+		isLiked: false,
 		commentsList: [
 			{
 				id: 1,
@@ -1048,6 +1235,7 @@ const viewItems = ref([
 		shares: 8,
 		footer: "8.5千浏览",
 		followed: false,
+		isLiked: false,
 		commentsList: [
 			{
 				id: 1,
@@ -1070,6 +1258,7 @@ const viewItems = ref([
 		shares: 23,
 		footer: "2.3万浏览",
 		followed: true,
+		isLiked: false,
 		commentsList: [],
 	},
 	{
@@ -1085,6 +1274,7 @@ const viewItems = ref([
 		shares: 45,
 		footer: "11.6万浏览",
 		followed: false,
+		isLiked: false,
 		commentsList: [
 			{
 				id: 1,
@@ -1095,6 +1285,38 @@ const viewItems = ref([
 		],
 	},
 ]);
+
+// 处理点赞功能
+function handleLike(index) {
+	const item = viewItems.value[index];
+	if (item.isLiked) {
+		// 如果已经点赞，取消点赞
+		item.likes--;
+	} else {
+		// 如果未点赞，添加点赞
+		item.likes++;
+	}
+	// 切换点赞状态
+	item.isLiked = !item.isLiked;
+}
+
+
+// 分享功能相关
+const showSharePopup = ref(false);
+const referralCode = ref('124125124'); // 假的推荐码
+
+// 处理分享按钮点击
+function handleShare(index) {
+	// 显示分享弹窗
+	showSharePopup.value = true;
+	// 增加分享次数
+	viewItems.value[index].shares++;
+}
+
+// 关闭分享弹窗
+function closeSharePopup() {
+	showSharePopup.value = false;
+}
 
 // 处理自动跟单开关切换
 function handleAutoFollowToggle() {
@@ -1249,6 +1471,11 @@ const handleNavChange = (index) => {
 	});
 };
 
+const handlecomment = () => {
+	uni.navigateTo({
+		url: '/pages/locked/index'
+	});
+}
 const handleTabChange = (path) => {
 	// Handle bottom tab bar change
 	console.log("Tab changed to:", path);
@@ -1361,7 +1588,7 @@ onUnmounted(() => {
 .page-stock {
 	background-color: #202020;
 	color: #fff;
-	min-height: 100vh;
+	// min-height: 100vh;
 	padding: 20rpx 30rpx;
 	padding-bottom: 0rpx;
 }
@@ -1383,7 +1610,7 @@ onUnmounted(() => {
 	border-radius: 20rpx;
 	padding: 20rpx;
 	/* 兜底：当gap不生效（部分小程序端）时，以margin-bottom制造间距 */
-	margin-top: 30rpx;
+	margin-bottom: 30rpx;
 	// border-bottom: 1rpx solid #333;
 }
 
@@ -2269,6 +2496,12 @@ onUnmounted(() => {
 	display: flex;
 	align-items: center;
 	gap: 8rpx;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+
+.action-item:active {
+	opacity: 0.7;
 }
 
 .commentIcon {
@@ -2635,5 +2868,349 @@ onUnmounted(() => {
 	.amount-option:last-child {
 		margin-right: 0;
 	}
+}
+
+/* Header */
+.table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0rpx 0;
+	color: #a5a7aa;
+	font-size: 26rpx;
+	margin-bottom: 20rpx;
+	margin-top: 20rpx;
+}
+
+/* 左侧编辑按钮 */
+.left-header {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.edit-btn {
+	color: #9aa4ae;
+	font-size: 24rpx;
+	display: flex;
+	align-items: center;
+}
+
+.editIcon {
+	width: 28rpx;
+	height: 28rpx;
+	margin-left: 10rpx;
+}
+
+/* 列头 */
+.column-headers {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	// gap: 80rpx;
+	flex: 1;
+	flex-shrink: 0;
+}
+
+.column-header {
+	display: flex;
+	align-items: center;
+	// gap: 8rpx;
+}
+
+.column-header1 {
+	display: flex;
+	align-items: center;
+	margin-left: 30rpx;
+	font-size: 24rpx;
+	position: relative;
+}
+
+.column-header {
+	display: flex;
+	align-items: center;
+	font-size: 24rpx;
+	position: relative;
+}
+
+.column-header2 {
+	display: flex;
+	align-items: center;
+	margin-left: 30rpx;
+	font-size: 24rpx;
+	position: relative;
+	// z-index: 10000;
+}
+
+.arrow-icon {
+	width: 24rpx;
+	height: 24rpx;
+	transition: none !important;
+	/* 明确移除任何过渡效果 */
+	transform-origin: center center;
+	/* 确保旋转中心正确 */
+	transform: rotate(0deg) !important;
+	/* 默认不旋转 */
+}
+
+.arrow-icon.rotate {
+	transform: rotate(180deg) !important;
+	transition: none !important;
+	/* 明确移除任何过渡效果 */
+	transform-origin: center center;
+	/* 确保旋转中心正确 */
+}
+
+/* 筛选下拉菜单样式 */
+.filter-dropdown {
+	position: absolute;
+	background-color: #2a2a2a;
+	border-radius: 12rpx;
+	box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	min-width: 200rpx;
+	overflow: hidden;
+	/* 确保下拉菜单在最上层显示 */
+	z-index: 1000;
+	// top: calc(100% + 10rpx);
+}
+
+.filter-option {
+	padding: 20rpx 30rpx;
+	font-size: 24rpx;
+	color: #fff;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	white-space: nowrap;
+}
+
+.filter-option:hover {
+	background-color: #3c3c3c;
+}
+
+.filter-option.active {
+	background-color: #3c3c3c;
+	color: #165dff;
+}
+
+/* 不同位置的下拉菜单调整 */
+.name-dropdown {
+	top: 210rpx;
+	left: 130rpx;
+}
+
+.trend-dropdown {
+	top: 210rpx;
+	right: 200rpx;
+}
+
+.change-dropdown {
+	top: 220rpx;
+	right: 20rpx;
+}
+
+/* 下拉菜单背景遮罩 */
+.dropdown-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 999;
+}
+
+/* 确保箭头图标有正确的间距 */
+.arrow-icon {
+	margin-left: 10rpx;
+}
+
+// 	margin-top: 4rpx;
+// 	// opacity: 0.7;
+// }
+
+/* 原来的表头样式（保留兼容性） */
+.header-row-stock {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12rpx 0 20rpx 0;
+	color: #a5a7aa;
+	font-size: 26rpx;
+}
+
+.left-header-stock {
+	display: flex;
+	align-items: center;
+	gap: 12rpx;
+}
+
+.add-box-stock {
+	width: 36rpx;
+	height: 36rpx;
+	border: 2rpx solid #a5a7aa;
+	border-radius: 4rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.plus-stock {
+	font-size: 24rpx;
+	line-height: 1;
+}
+
+.center-header-stock {
+	display: flex;
+	align-items: center;
+	gap: 70rpx;
+}
+
+.header-item-stock {
+	display: flex;
+	align-items: center;
+	gap: 8rpx;
+}
+
+.arrow-stock {
+	width: 18rpx;
+	height: 18rpx;
+	opacity: 0.7;
+}
+
+/* 分享弹窗样式 */
+.share-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.share-popup-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.share-popup-content {
+	position: relative;
+	background-color: #202020;
+	border-radius: 20rpx 20rpx 0 0;
+	padding: 30rpx 30rpx 60rpx;
+	width: 100%;
+	max-width: 750rpx;
+	box-sizing: border-box;
+}
+
+.share-popup-close {
+	position: absolute;
+	top: -80rpx;
+	right: 10rpx;
+	width: 60rpx;
+	height: 60rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #202020;
+	border-radius: 50%;
+}
+
+.close-icon {
+	width: 30rpx;
+	height: 30rpx;
+}
+
+.share-popup-title {
+	font-size: 36rpx;
+	font-weight: bold;
+	color: #ffffff;
+	text-align: center;
+	display: block;
+	margin-bottom: 30rpx;
+}
+
+// .share-popup-screenshot {
+// 	background-color: #333333;
+// 	border-radius: 10rpx;
+// 	padding: 20rpx;
+// 	margin-bottom: 30rpx;
+// 	overflow: hidden;
+// }
+
+.screenshot-img {
+	width: 100%;
+	height: auto;
+	border-radius: 8rpx;
+}
+
+.share-popup-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20rpx;
+	// background-color: #1a1a1a;
+	border-radius: 10rpx;
+}
+
+.qrcode-container {
+	width: 120rpx;
+	height: 120rpx;
+	// background-color: #ffffff;
+	border-radius: 8rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8rpx;
+}
+
+.qrcode-img {
+	width: 120rpx;
+	height: 120rpx;
+}
+
+.promotion-text {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+}
+
+.promotion-main {
+	font-size: 28rpx;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.promotion-sub {
+	font-size: 24rpx;
+	color: #cccccc;
+}
+
+.referral-code-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 8rpx;
+}
+
+.referral-code-value {
+	font-size: 32rpx;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.referral-code-label {
+	font-size: 22rpx;
+	color: #aaaaaa;
 }
 </style>

@@ -37,22 +37,86 @@
           <view class="edit-btn" @click="goToEdit">{{ t('common.edit') }}
             <image src="/static/icons/editIcon.png" class="editIcon" mode="widthFix" />
           </view>
-          <view class="column-header1">
-            {{ t('trade.name') }}
-            <image src="/static/icons/donwArrow.png" class="arrow-icon" mode="widthFix" />
+          <view class="column-header1" @click="showNameSortMenu = !showNameSortMenu">
+            {{ nameSortOption === 'name' ? t('trade.name') : nameSortOption === 'volume' ? t('trade.volume') : t('trade.addTime') }}
+            <image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+              :class="{ 'rotate': showNameSortMenu }" mode="widthFix" />
           </view>
         </view>
         <view class="column-headers">
-          <view class="column-header">
-            <text>{{ t('trade.chart') }}</text>
-            <image src="/static/icons/donwArrow.png" class="arrow-icon" mode="widthFix" />
+          <view class="column-header" @click="showTrendFilterMenu = !showTrendFilterMenu">
+            <text>{{ trendFilterOption === 'all' ? t('trade.all') : trendFilterOption === 'up' ? t('trade.onlyUp') : trendFilterOption === 'down' ? t('trade.onlyDown') : trendFilterOption === 'highVol' ? t('trade.highVolatilityFirst') : t('trade.lowVolatilityFirst') }}</text>
+            <image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+              :class="{ 'rotate': showTrendFilterMenu }" mode="widthFix" />
           </view>
-          <view class="column-header2">
-            <text>{{ t('trade.change24h') }}</text>
-            <image src="/static/icons/donwArrow.png" class="arrow-icon" mode="widthFix" />
+          <view class="column-header2" @click="showChangeSortMenu = !showChangeSortMenu">
+            <text>{{ changeSortOption === 'highToLow' ? t('trade.highToLow') : changeSortOption === 'lowToHigh' ? t('trade.lowToHigh') : t('trade.byVolatility') }}</text>
+            <image src="/static/icons/arrow-bottom.png" class="arrow-icon"
+              :class="{ 'rotate': showChangeSortMenu }" mode="widthFix" />
           </view>
         </view>
       </view>
+
+      <!-- 下拉菜单移到scroll-view外部 -->
+      <!-- 名称排序下拉菜单 -->
+      <view v-if="showNameSortMenu" class="filter-dropdown name-dropdown">
+        <view class="filter-option" :class="{ 'active': nameSortOption === 'name' }"
+          @click="nameSortOption = 'name'; showNameSortMenu = false">
+          <text>{{ t('trade.name') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': nameSortOption === 'volume' }"
+          @click="nameSortOption = 'volume'; showNameSortMenu = false">
+          <text>{{ t('trade.volume') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': nameSortOption === 'addTime' }"
+          @click="nameSortOption = 'addTime'; showNameSortMenu = false">
+          <text>{{ t('trade.addTime') }}</text>
+        </view>
+      </view>
+
+      <!-- 趋势筛选下拉菜单 -->
+      <view v-if="showTrendFilterMenu" class="filter-dropdown trend-dropdown">
+        <view class="filter-option" :class="{ 'active': trendFilterOption === 'all' }"
+          @click="trendFilterOption = 'all'; showTrendFilterMenu = false">
+          <text>{{ t('trade.all') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': trendFilterOption === 'up' }"
+          @click="trendFilterOption = 'up'; showTrendFilterMenu = false">
+          <text>{{ t('trade.onlyUp') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': trendFilterOption === 'down' }"
+          @click="trendFilterOption = 'down'; showTrendFilterMenu = false">
+          <text>{{ t('trade.onlyDown') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': trendFilterOption === 'highVol' }"
+          @click="trendFilterOption = 'highVol'; showTrendFilterMenu = false">
+          <text>{{ t('trade.highVolatilityFirst') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': trendFilterOption === 'lowVol' }"
+          @click="trendFilterOption = 'lowVol'; showTrendFilterMenu = false">
+          <text>{{ t('trade.lowVolatilityFirst') }}</text>
+        </view>
+      </view>
+
+      <!-- 24h涨跌排序下拉菜单 -->
+      <view v-if="showChangeSortMenu" class="filter-dropdown change-dropdown">
+        <view class="filter-option" :class="{ 'active': changeSortOption === 'highToLow' }"
+          @click="changeSortOption = 'highToLow'; showChangeSortMenu = false">
+          <text>{{ t('trade.highToLow') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': changeSortOption === 'lowToHigh' }"
+          @click="changeSortOption = 'lowToHigh'; showChangeSortMenu = false">
+          <text>{{ t('trade.lowToHigh') }}</text>
+        </view>
+        <view class="filter-option" :class="{ 'active': changeSortOption === 'volatility' }"
+          @click="changeSortOption = 'volatility'; showChangeSortMenu = false">
+          <text>{{ t('trade.byVolatility') }}</text>
+        </view>
+      </view>
+
+      <!-- 点击空白区域关闭下拉菜单 -->
+      <view v-if="showNameSortMenu || showTrendFilterMenu || showChangeSortMenu" class="dropdown-backdrop"
+        @click="closeAllDropdowns"></view>
     </view>
 
     <!-- ✅ Konten scrollable dengan pull refresh -->
@@ -111,7 +175,7 @@
                 <text class="item-name">{{ item.name }}</text>
                 <text class="item-code">{{
                   item.quoteAsset || item.code
-                  }}</text>
+                }}</text>
               </view>
               <image :src="item.sparkline || '/static/icons/line_chart.png'" class="graph-img-stock" mode="aspectFit" />
             </view>
@@ -138,7 +202,7 @@
                 <text class="item-name">{{ item.name }}</text>
                 <text class="item-code">{{
                   item.quoteAsset || item.code
-                  }}</text>
+                }}</text>
               </view>
               <image :src="item.sparkline" class="graph-img-stock" mode="aspectFit" />
             </view>
@@ -173,10 +237,27 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const tradeFavorite = ref(true);
-const tradeStock = ref(false);
+const tradeFavorite = ref(false);
+const tradeStock = ref(true);
 const addFavorit = ref(false);
 const { getTopStyle } = useSafeArea();
+
+// 筛选状态变量 - 与market页面完全一致
+const nameSortOption = ref('name'); // name: 名称, volume: 成交量, addTime: 添加时间
+const trendFilterOption = ref('all'); // all: 全部, up: 只看上涨, down: 只看下跌, highVol: 高波动优先, lowVol: 低波动优先
+const changeSortOption = ref('highToLow'); // highToLow: 涨幅从高到低, lowToHigh: 涨幅从低到高, volatility: 按波动排序
+
+// 筛选菜单显示状态
+const showNameSortMenu = ref(false);
+const showTrendFilterMenu = ref(false);
+const showChangeSortMenu = ref(false);
+
+// 关闭所有下拉菜单
+function closeAllDropdowns() {
+	showNameSortMenu.value = false;
+	showTrendFilterMenu.value = false;
+	showChangeSortMenu.value = false;
+}
 
 // 获取热门交易数据 - 返回全量数据
 function getHotTradingData() {
@@ -270,7 +351,7 @@ function getMockData() {
       code: "ETH",
       pair: "ETH/USDT",
       quoteAsset: "USDT",
-  icon: "/static/logo/logos_eth.png",
+      icon: "/static/logo/logos_eth.png",
       lastPrice: 2509.75,
       percentChange24h: -21.0,
       sparkline: "/static/icons/line_chart.png",
@@ -358,7 +439,7 @@ function getMockData() {
       code: "UNI",
       pair: "UNI/USDT",
       quoteAsset: "USDT",
-  icon: "/static/logo/logos_eth.png",
+      icon: "/static/logo/logos_eth.png",
       lastPrice: 6.78,
       percentChange24h: 1.92,
       sparkline: "/static/icons/line_chart.png",
@@ -447,6 +528,7 @@ const menus = ref([
   { id: 2, name: t('trade.cryptoCurrency'), type: "crypto" },
 ]);
 const activeMenu = ref(menus.value[0]);
+console.log(activeMenu, '>>>>>>>>>>>>>>')
 
 function setActive(item: any) {
   activeMenu.value = item;
@@ -569,7 +651,7 @@ const handleTabChange = (tab: any, index: number) => {
 .tab-top {
   position: fixed;
   /* 动态计算顶部位置：状态栏高度 + navbar高度 */
-  top: 220rpx;
+  top: 160rpx;
   left: 0;
   right: 0;
   background-color: #202020;
@@ -794,9 +876,96 @@ const handleTabChange = (tab: any, index: number) => {
 }
 
 .tab {
-  // flex: 1;
-  min-width: 110rpx;
-  height: 64rpx;
+		// flex: 1;
+		min-width: 110rpx;
+		height: 64rpx;
+}
+
+/* 筛选下拉菜单样式 - 与market页面完全一致 */
+.filter-dropdown {
+	position: absolute;
+	background-color: #2a2a2a;
+	border-radius: 12rpx;
+	box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	min-width: 200rpx;
+	overflow: hidden;
+}
+
+.filter-option {
+	padding: 20rpx 30rpx;
+	font-size: 24rpx;
+	color: #fff;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	white-space: nowrap;
+}
+
+.filter-option:hover {
+	background-color: #3c3c3c;
+}
+
+.filter-option.active {
+	background-color: #3c3c3c;
+	color: #165dff;
+}
+
+/* 不同位置的下拉菜单调整 */
+.name-dropdown {
+	top: 160rpx;
+	left: 130rpx;
+}
+
+.trend-dropdown {
+	top: 160rpx;
+	right: 200rpx;
+}
+
+.change-dropdown {
+	top: 160rpx;
+	right: 20rpx;
+}
+
+/* 下拉菜单背景遮罩 */
+.dropdown-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	z-index: 999;
+}
+
+/* 箭头图标样式 */
+.arrow-icon {
+	width: 24rpx;
+	height: 24rpx;
+	transition: none !important;
+	transform: rotate(0deg) !important;
+	transform-origin: center center;
+}
+
+.arrow-icon.rotate {
+	transform: rotate(180deg) !important;
+	transition: none !important;
+	transform-origin: center center;
+}
+
+/* 确保表头元素有相对定位，以便下拉菜单能正确定位 */
+.column-header1,
+.column-header,
+.column-header2 {
+	position: relative;
+	// 确保有足够的高度容纳下拉菜单的触发区域
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// gap: 8rpx;
+	cursor: pointer;
+}
+.tab{
   text-align: center;
   padding: 0rpx 16rpx;
   border-radius: 16rpx;
@@ -872,12 +1041,14 @@ const handleTabChange = (tab: any, index: number) => {
   justify-content: flex-end;
   // gap: 80rpx;
   flex: 1;
+  flex-shrink: 0;
 }
 
 .column-header {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  flex-shrink: 0;
+  // gap: 8rpx;
 }
 
 .column-header1 {
@@ -885,6 +1056,7 @@ const handleTabChange = (tab: any, index: number) => {
   align-items: center;
   margin-left: 30rpx;
   font-size: 24rpx;
+  flex-shrink: 0;
 }
 
 .column-header2 {
@@ -892,6 +1064,7 @@ const handleTabChange = (tab: any, index: number) => {
   align-items: center;
   margin-left: 30rpx;
   font-size: 24rpx;
+  flex-shrink: 0;
 }
 
 .arrow-icon {

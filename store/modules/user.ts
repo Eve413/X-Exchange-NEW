@@ -334,6 +334,34 @@ export interface LoginGoogleParams {
   lang: string;
 }
 
+export interface AssetParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string
+}
+
+export interface ExchangeCheckParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+  from_asset:string;
+  to_asset:string;
+}
+export interface ExchangeParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+  from_asset:string;
+  to_asset:string;
+  amount:number;
+}
+
 export interface ProfitLossParams {
   passkey: string;
   device: string;
@@ -1948,7 +1976,133 @@ export const useUserStore = defineStore('user', () => {
   
   
   
+ const getAssetParams = async (assetParams: AssetParams) => {
+    try {
+      registerLoading.value = true
+       const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
 
+      
+        const response = await authApi.authenticated(params);
+
+         if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+          const responseNotifPrarams= await authApi.getAssetParams(assetParams)
+
+          return responseNotifPrarams
+        } else {
+          
+        return response;
+        }
+      
+      
+
+      return response
+    } catch (error: any) {
+      console.error('注册失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '注册失败，请重试' 
+      }
+    } finally {
+      registerLoading.value = false
+    }
+  }
+
+  const getExchangeCheckParams = async (exchangeCheckParams: ExchangeCheckParams) => {
+    try {
+      registerLoading.value = true
+       const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
+
+      
+        const response = await authApi.authenticated(params);
+
+         if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+          const responseNotifPrarams= await authApi.getExchangeCheckParams(exchangeCheckParams)
+
+          return responseNotifPrarams
+        } else {
+          
+        return response;
+        }
+      
+      
+
+      return response
+    } catch (error: any) {
+      console.error('注册失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '注册失败，请重试' 
+      }
+    } finally {
+      registerLoading.value = false
+    }
+  }
+
+
+const exchangeParams = async (exchangeParams: ExchangeParams) => {
+    try {
+      registerLoading.value = true
+       const params: AuthParams = {
+          username: usernameAuth,
+          password: passwordAuth,
+          passkey: pasKeyAuth,
+          device: deviceAuth,
+          appversion: appversionAuth,
+        };
+        // 使用统一API调用（类型安全）
+
+      
+        const response = await authApi.authenticated(params);
+
+         if (response.data.status !== 'error') {
+          // const { token: response.data.data.token} = response.data.data
+          setToken(response.data.token)
+
+          const responseNotifPrarams= await authApi.exchangeParams(exchangeParams)
+
+          return responseNotifPrarams
+        } else {
+          
+        return response;
+        }
+      
+      
+
+      return response
+    } catch (error: any) {
+      console.error('注册失败:', error)
+      return { 
+        success: false, 
+        message: error.message || '注册失败，请重试' 
+      }
+    } finally {
+      registerLoading.value = false
+    }
+  }
+  
+  
+
+  
 
   
   
@@ -2104,7 +2258,9 @@ export const useUserStore = defineStore('user', () => {
     getDashboard,
     init,
     getBannerTrading,
-
+    getAssetParams,
+    getExchangeCheckParams,
+    exchangeParams,
     pasKeyAuth,
     deviceAuth,
     appversionAuth,

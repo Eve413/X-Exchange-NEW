@@ -29,6 +29,13 @@
       }
     },
     {
+      "path": "pages/team/index",
+      "style": {
+        "navigationBarTitleText": "团队看板",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/exchange/index",
       "style": {
         "navigationBarTitleText": "兑换",
@@ -387,6 +394,16 @@
     },
     {
       "path": "pages/detilnews/index",
+      "style": {
+        "navigationBarTitleText": "功能未解锁",
+        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#000000",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "path": "pages/moreblog/index",
       "style": {
         "navigationBarTitleText": "功能未解锁",
         "navigationStyle": "custom",

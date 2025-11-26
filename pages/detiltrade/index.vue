@@ -8,8 +8,8 @@
         <image src="/static/icons/ic_arrow_left.png" class="icon" @click="goBack" />
         <text class="title">{{ detail.name }}</text>
         <view class="actions">
-          <image src="/static/icons/star.png" @click="toggleFavorite()" class="icon" />
-          <image src="/static/icons/share.png" class="icon" />
+          <image :src="isFavorite ? '/static/icons/star_active.png' : '/static/icons/star.png'" @click="toggleFavorite()" class="icon" />
+          <image src="/static/icons/share.png" class="icon" @click="handleShare()" />
         </view>
       </view>
 
@@ -342,6 +342,36 @@
       </view>
     </view>
   </view>
+
+	<!-- 分享弹窗 -->
+	<view class="share-popup" v-if="showSharePopup">
+		<!-- 遮罩层 -->
+		<view class="share-popup-overlay" @click="closeSharePopup"></view>
+		<!-- 弹窗内容 -->
+		<view class="share-popup-content">
+			<!-- 关闭按钮 -->
+			<view class="share-popup-close" @click="closeSharePopup">
+				<image src="/static/icons/closeIcon.png" class="close-icon" />
+			</view>
+			<!-- 二维码和推荐码区域 -->
+			<view class="share-popup-info">
+				<!-- 二维码 -->
+				<view class="qrcode-container">
+					<image src="/static/icons/qrcodeImgTest.png" class="qrcode-img" />
+				</view>
+				<!-- 宣传文字 -->
+				<view class="promotion-text">
+					<text class="promotion-main">随时随地开启交易！</text>
+					<text class="promotion-sub">下载交易所APP</text>
+				</view>
+				<!-- 推荐码 -->
+				<view class="referral-code-container">
+					<text class="referral-code-value">{{ referralCode }}</text>
+					<text class="referral-code-label">推荐码</text>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script setup lang="ts">
@@ -369,6 +399,7 @@ const chartContainer = ref(null);
 const marketQuotes = ref(true);
 const marketData = ref(false);
 const squareData = ref(false);
+const isFavorite = ref(false); // 收藏状态
 const squareNewsData = ref(false);
 const tabsSquare = ["trade.news", "trade.opinion"];
 const activeTabSquare = ref(0);
@@ -378,9 +409,27 @@ const volumeChartSeriesLineMA5 = ref([]);
 const volumeChartSeriesLineMA10 = ref([]);
 const userInfo = uni.getStorageSync("userData");
 
+// 分享功能相关
+const showSharePopup = ref(false);
+const shareScreenshot = ref('/static/icons/screenshot_example.png'); // 使用示例截图
+const qrCodeUrl = ref('/static/icons/qrcodeImgTest.png'); // 使用指定的二维码图片
+const referralCode = ref('124125124'); // 假的推荐码
+
+// 处理分享按钮点击
+function handleShare() {
+	// 模拟生成截图（这里使用示例图片）
+	// 显示分享弹窗
+	showSharePopup.value = true;
+}
+
+// 关闭分享弹窗
+function closeSharePopup() {
+	showSharePopup.value = false;
+}
+
 // 模拟个人观点数据，与market/index页面保持一致
 const viewItems = ref([
-  {
+    {
     id: 1,
     avatar: "/static/icons/testAvatar.png",
     username: "SOOIN1126",
@@ -1258,6 +1307,9 @@ const handleMenuClick = (item, index) => {
 };
 
 async function toggleFavorite() {
+  // 切换收藏状态
+  isFavorite.value = !isFavorite.value;
+  
   console.log(userInfo);
   const favoriteParams: FavoriteParams = {
     passkey: userStore.pasKeyAuth,
@@ -1266,7 +1318,7 @@ async function toggleFavorite() {
     token: userInfo.data.token,
     lang: userStore.language,
     symbol: detail.value.symbol,
-    favorite: true,
+    favorite: isFavorite.value, // 使用当前收藏状态
   };
 
   const resultCandle = await userStore.favorite(favoriteParams);
@@ -1292,7 +1344,7 @@ async function toggleFavorite() {
   padding-right: 30rpx;
   padding-bottom: 170rpx;
   // box-sizing: border-box;
-  padding-top: 180rpx !important;
+  padding-top: 220rpx !important;
 }
 
 .price-section {
@@ -2447,5 +2499,118 @@ async function toggleFavorite() {
 .time {
   color: #9aa4ae;
   font-size: 24rpx;
+}
+
+/* 分享弹窗样式 */
+.share-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+
+.share-popup-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.share-popup-content {
+	position: relative;
+	background-color: #202020;
+	border-radius: 20rpx 20rpx 0 0;
+	padding: 30rpx 30rpx 60rpx;
+	width: 100%;
+	max-width: 750rpx;
+	box-sizing: border-box;
+}
+
+.share-popup-close {
+	position: absolute;
+	top: -80rpx;
+	right: 10rpx;
+	width: 60rpx;
+	height: 60rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #202020;
+	border-radius: 50%;
+}
+
+.close-icon {
+	width: 30rpx;
+	height: 30rpx;
+}
+
+.share-popup-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20rpx;
+	// background-color: #1a1a1a;
+	border-radius: 10rpx;
+}
+
+.qrcode-container {
+	width: 120rpx;
+	height: 120rpx;
+	// background-color: #ffffff;
+	border-radius: 8rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8rpx;
+}
+
+.qrcode-img {
+	width: 120rpx;
+	height: 120rpx;
+}
+
+.promotion-text {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+}
+
+.promotion-main {
+	font-size: 28rpx;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.promotion-sub {
+	font-size: 24rpx;
+	color: #cccccc;
+}
+
+.referral-code-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 8rpx;
+}
+
+.referral-code-value {
+	font-size: 32rpx;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.referral-code-label {
+	font-size: 22rpx;
+	color: #aaaaaa;
 }
 </style>

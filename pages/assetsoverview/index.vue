@@ -28,7 +28,8 @@
           </view>
           <view class="right">
             <image class="chart-icon" src="/static/icons/ic_chart.png" mode="aspectFit" />
-            <image class="record-icon" src="/static/icons/ic_record.png" mode="aspectFit" @click="goToProfitLossReport" />
+            <image class="record-icon" src="/static/icons/ic_record.png" mode="aspectFit"
+              @click="goToProfitLossReport" />
           </view>
         </view>
 
@@ -45,13 +46,18 @@
           ballance.pnl_percent }})</text>
 
         <!-- 按钮组 -->
-        <view class="action-row">
+        <view class="action-row" v-if="activeTab == 5">
           <view class="btn add-fund" @click="goToDeposit">{{ $t('transaction.add_funds') }}</view>
           <view class="btn normal" @click="goToWithdraw">{{ $t('transaction.transfer_out') }}</view>
           <view class="btn normal" @click="goToTransfer">{{ $t('transaction.transfer') }}</view>
         </view>
+        <!-- 按钮组 -->
+        <view class="action-row" v-else>
+          <view class="btn add-fund" @click="goToDeposit">{{ $t('transaction.add_funds') }}</view>
+          <view class="btn normal" @click="goToExchange">{{ $t('exchange') }}</view>
+          <view class="btn normal" @click="goToTransfer">{{ $t('transaction.transfer') }}</view>
+        </view>
       </view>
-
       <!-- 底部筛选 -->
       <view class="footer" v-if="activeTab < 3">
         <!-- <view class="footer-left">
@@ -68,7 +74,7 @@
         </view>
         <view class="footer-right">
           <image class="search-icon " src="/static/icons/ic_search.png" mode="aspectFit" />
-          <image class="icon" src="/static/icons/ic_record.png" mode="aspectFit" @click="goToProfitLossReport"/>
+          <image class="icon" src="/static/icons/ic_record.png" mode="aspectFit" @click="goToProfitLossReport" />
         </view>
       </view>
 
@@ -105,7 +111,8 @@
       </view>
 
       <view class="asset-list-dialog">
-        <view v-for="(item, index) in assets" :key="index" class="asset-item-dialog" v-if="activeTab <= 2 || activeTab == 4">
+        <view v-for="(item, index) in assets" :key="index" class="asset-item-dialog"
+          v-if="activeTab <= 2 || activeTab == 4">
           <!-- Kiri: icon dan nama -->
           <view class="asset-left-dialog">
             <image :src="item.icon" class="asset-icon-dialog" mode="aspectFit" />
@@ -439,9 +446,9 @@ function setActiveTab(index) {
   } else if (index == 2) {
     tabs2.value = [t('transaction.assets')]
     assets.value = masterAssets.value.filter(item => item.type === 'spot')
-  }else if (index == 4) {
+  } else if (index == 4) {
     assets.value = masterAssets.value.filter(item => item.type === 'funding')
-  } 
+  }
 }
 
 function goBack() {
@@ -461,12 +468,25 @@ const goToTransfer = () => {
 
 }
 
-const goToDeposit = () => {
+const goToExchange = () => {
+  // Arahkan ke halaman verifikasi
+
+  setTimeout(() => {
     uni.navigateTo({
-        url: '/pages/recharge/index',
-        success: () => console.log('✅ 跳转到充值页面成功'),
-        fail: (err) => console.error('❌ 跳转到充值页面失败:', err)
-    });
+      url: '/pages/exchange/index',
+      success: () => console.log('✅ Navigated'),
+      fail: (err) => console.error('❌ Navigation failed:', err)
+    })
+  }, 500)
+
+}
+
+const goToDeposit = () => {
+  uni.navigateTo({
+    url: '/pages/recharge/index',
+    success: () => console.log('✅ 跳转到充值页面成功'),
+    fail: (err) => console.error('❌ 跳转到充值页面失败:', err)
+  });
 };
 
 const goToWithdraw = () => {
@@ -1201,6 +1221,7 @@ const goToProfitLossReport = () => {
   position: relative;
   overflow: hidden;
 }
+
 /* 
 .earn-icon-box::after {
   content: '';

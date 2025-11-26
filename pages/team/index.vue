@@ -50,140 +50,141 @@
     </view>
 
     <view class="btn-box">
-      <view class="btn-item active-btn">
+      <view class="btn-item" :class="{ 'active-btn': listactive === 1 }" @click="switchList(1)">
         {{ $t('team.withdrawBenefit') }}
       </view>
-      <view class="btn-item">
-          {{ $t('team.dataAnalysis') }}
-        </view>
-    </view>
-    <!-- 等级升级进度卡片 -->
-    <view class="level-card">
-      <view class="card-header">
-        <text class="card-title">{{ $t('team.levelUpProgress') }}</text>
-        <text class="card-subtitle">{{ $t('team.levelIndicator') }}</text>
-      </view>
-
-      <!-- 整体进度 -->
-      <view class="progress-container">
-        <view class="progress-header">
-          <text class="progress-text">{{ $t('team.totalProgress') }}</text>
-          <text class="progress-percentage">{{ $t('team.percentageLabel') }}</text>
-        </view>
-        <view class="progress-bar">
-          <view class="progress-fill" :style="{ width: '84%' }"></view>
-        </view>
-      </view>
-
-      <!-- 团队人数 -->
-      <view class="progress-container">
-        <view class="progress-header">
-          <text class="progress-text">{{ $t('team.teamMembers') }}</text>
-          <text class="progress-percentage">85/200 {{ $t('team.totalMembersUnit') }}</text>
-        </view>
-        <view class="progress-bar">
-          <view class="progress-fill" :style="{ width: '42.5%' }"></view>
-        </view>
-      </view>
-
-      <!-- 直推有效用户 -->
-      <view class="progress-container">
-        <view class="progress-header">
-          <text class="progress-text">{{ $t('team.directActiveUsers') }}</text>
-          <text class="progress-percentage">28/30 {{ $t('team.totalMembersUnit') }}</text>
-        </view>
-        <view class="progress-bar">
-          <view class="progress-fill" :style="{ width: '93.3%' }"></view>
-        </view>
-      </view>
-
-      <!-- 月业绩 -->
-      <view class="progress-container">
-        <view class="progress-header">
-          <text class="progress-text">{{ $t('team.monthlyPerformance') }}</text>
-          <text class="progress-percentage">120000/3000000 {{ $t('team.usdt') }}</text>
-        </view>
-        <view class="progress-bar">
-          <view class="progress-fill" :style="{ width: '4%' }"></view>
-        </view>
-      </view>
-      <!-- 升级奖励按钮 -->
-      <view class="upgrade-btn" @click="handleUpgrade">
-        <text class="upgrade-btn-text">{{ $t('team.viewUpgradeGuide') }}</text>
+      <view class="btn-item" :class="{ 'active-btn': listactive === 2 }" @click="switchList(2)">
+        {{ $t('team.dataAnalysis') }}
       </view>
     </view>
+    <view class="list1" v-if="listactive == 1">
+      <!-- 等级升级进度卡片 -->
+      <view class="level-card">
+        <view class="card-header">
+          <text class="card-title">{{ $t('team.levelUpProgress') }}</text>
+          <text class="card-subtitle">{{ $t('team.levelIndicator') }}</text>
+        </view>
 
-    <!-- 数据概览卡片 -->
-    <view class="overview-card">
-      <view class="card-tabs">
-        <text :class="activeTab === 'benefit' ? 'tab-active' : 'tab'" @click="activeTab = 'benefit'">{{
-          $t('team.tabBenefit') }}</text>
-        <text :class="activeTab === 'member' ? 'tab-active' : 'tab'" @click="activeTab = 'member'">{{
-          $t('team.tabMember') }}</text>
-        <text :class="activeTab === 'task' ? 'tab-active' : 'tab'" @click="activeTab = 'task'">{{ $t('team.tabTask')
-        }}</text>
-        <text :class="activeTab === 'rank' ? 'tab-active' : 'tab'" @click="activeTab = 'rank'">{{ $t('team.tabRank')
-        }}</text>
-      </view>
-
-      <!-- 收益tab内容 -->
-      <template v-if="activeTab === 'benefit'">
-        <view class="overview-stats">
-          <view class="overview-item">
-            <image src="/static/icons/teamIcon1.png" class="teamIcon" />
-            <view class="overview-number">17.52</view>
-            <view class="overview-label">{{ $t('team.benefitSource') }}</view>
+        <!-- 整体进度 -->
+        <view class="progress-container1">
+          <view class="progress-header">
+            <text class="progress-text">{{ $t('team.totalProgress') }}</text>
+            <text class="progress-percentage">{{ $t('team.percentageLabel') }}</text>
           </view>
-          <view class="overview-item">
-            <image src="/static/icons/teamIcon2.png" class="teamIcon" />
-            <view class="overview-number">5,000</view>
-            <view class="overview-label">{{ $t('team.completed') }}</view>
-          </view>
-          <view class="overview-item">
-            <image src="/static/icons/teamIcon3.png" class="teamIcon" />
-            <view class="overview-number">4,21</view>
-            <view class="overview-label">{{ $t('team.pending') }}</view>
+          <view class="progress-bar">
+            <view class="progress-fill" :style="{ width: '84%' }"></view>
           </view>
         </view>
-        <view class="listTitle">收益来源</view>
-        <!-- 等级升级进度卡片 -->
-        <view class="level-card level-card1">
 
-          <!-- 整体进度 -->
-          <view class="progress-container">
-            <view class="progress-header">
-              <text class="progress-text">{{ $t('team.teamTradeRebate') }}</text>
-              <text class="progress-percentage">84%</text>
+        <!-- 团队人数 -->
+        <view class="progress-container1">
+          <view class="progress-header">
+            <text class="progress-text">{{ $t('team.teamMembers') }}</text>
+            <text class="progress-percentage">85/200 {{ $t('team.totalMembersUnit') }}</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" :style="{ width: '42.5%' }"></view>
+          </view>
+        </view>
+
+        <!-- 直推有效用户 -->
+        <view class="progress-container1">
+          <view class="progress-header">
+            <text class="progress-text">{{ $t('team.directActiveUsers') }}</text>
+            <text class="progress-percentage">28/30 {{ $t('team.totalMembersUnit') }}</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" :style="{ width: '93.3%' }"></view>
+          </view>
+        </view>
+
+        <!-- 月业绩 -->
+        <view class="progress-container1">
+          <view class="progress-header">
+            <text class="progress-text">{{ $t('team.monthlyPerformance') }}</text>
+            <text class="progress-percentage">120000/3000000 {{ $t('team.usdt') }}</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" :style="{ width: '4%' }"></view>
+          </view>
+        </view>
+        <!-- 升级奖励按钮 -->
+        <view class="upgrade-btn" @click="handleUpgrade">
+          <text class="upgrade-btn-text">{{ $t('team.viewUpgradeGuide') }}</text>
+        </view>
+      </view>
+
+      <!-- 数据概览卡片 -->
+      <view class="overview-card">
+        <view class="card-tabs">
+          <text :class="activeTab === 'benefit' ? 'tab-active' : 'tab'" @click="activeTab = 'benefit'">{{
+            $t('team.tabBenefit') }}</text>
+          <text :class="activeTab === 'member' ? 'tab-active' : 'tab'" @click="activeTab = 'member'">{{
+            $t('team.tabMember') }}</text>
+          <text :class="activeTab === 'task' ? 'tab-active' : 'tab'" @click="activeTab = 'task'">{{ $t('team.tabTask')
+          }}</text>
+          <text :class="activeTab === 'rank' ? 'tab-active' : 'tab'" @click="activeTab = 'rank'">{{ $t('team.tabRank')
+          }}</text>
+        </view>
+
+        <!-- 收益tab内容 -->
+        <template v-if="activeTab === 'benefit'">
+          <view class="overview-stats">
+            <view class="overview-item">
+              <image src="/static/icons/teamIcon1.png" class="teamIcon" />
+              <view class="overview-number">17.52</view>
+              <view class="overview-label">{{ $t('team.benefitSource') }}</view>
             </view>
-            <view class="progress-bar">
-              <view class="progress-fill" :style="{ width: '84%' }"></view>
+            <view class="overview-item">
+              <image src="/static/icons/teamIcon2.png" class="teamIcon" />
+              <view class="overview-number">5,000</view>
+              <view class="overview-label">{{ $t('team.completed') }}</view>
+            </view>
+            <view class="overview-item">
+              <image src="/static/icons/teamIcon3.png" class="teamIcon" />
+              <view class="overview-number">4,21</view>
+              <view class="overview-label">{{ $t('team.pending') }}</view>
             </view>
           </view>
+          <view class="listTitle">收益来源</view>
+          <!-- 等级升级进度卡片 -->
+          <view class="level-card level-card1">
 
-          <!-- 团队人数 -->
-          <view class="progress-container">
-            <view class="progress-header">
+            <!-- 整体进度 -->
+            <view class="progress-container1">
+              <view class="progress-header">
+                <text class="progress-text">{{ $t('team.teamTradeRebate') }}</text>
+                <text class="progress-percentage">84%</text>
+              </view>
+              <view class="progress-bar">
+                <view class="progress-fill" :style="{ width: '84%' }"></view>
+              </view>
+            </view>
+
+            <!-- 团队人数 -->
+            <view class="progress-container1">
+              <view class="progress-header">
                 <text class="progress-text">{{ $t('team.promotionReward') }}</text>
-              <text class="progress-percentage">85/200 {{ $t('team.totalMembersUnit') }}</text>
+                <text class="progress-percentage">85/200 {{ $t('team.totalMembersUnit') }}</text>
+              </view>
+              <view class="progress-bar">
+                <view class="progress-fill" :style="{ width: '42.5%' }"></view>
+              </view>
             </view>
-            <view class="progress-bar">
-              <view class="progress-fill" :style="{ width: '42.5%' }"></view>
-            </view>
-          </view>
 
-          <!-- 直推有效用户 -->
-          <view class="progress-container">
-            <view class="progress-header">
+            <!-- 直推有效用户 -->
+            <view class="progress-container1">
+              <view class="progress-header">
                 <text class="progress-text">{{ $t('team.taskBonus') }}</text>
-              <text class="progress-percentage">28/30 {{ $t('team.totalMembersUnit') }}</text>
-            </view>
-            <view class="progress-bar">
-              <view class="progress-fill" :style="{ width: '93.3%' }"></view>
+                <text class="progress-percentage">28/30 {{ $t('team.totalMembersUnit') }}</text>
+              </view>
+              <view class="progress-bar">
+                <view class="progress-fill" :style="{ width: '93.3%' }"></view>
+              </view>
             </view>
           </view>
-        </view>
-        <!-- 团队交易量卡片 -->
-        <!-- <view class="volume-card">
+          <!-- 团队交易量卡片 -->
+          <!-- <view class="volume-card">
           <view class="card-header">
             <text class="card-title">{{ $t('team.teamVolume') }}</text>
             <text class="card-percentage">86%</text>
@@ -200,112 +201,185 @@
           </view>
         </view> -->
 
-        <!-- 效益趋势图表 -->
-        <view class="trend-card">
-          <view class="card-header">
-            <text class="card-title">{{ $t('team.benefitTrend') }}</text>
-            <text class="card-more">{{ $t('team.viewAll') }} &gt;</text>
-          </view>
-          <view class="chart-container">
-            <!-- 模拟图表柱状图 -->
-            <view class="chart-bars">
-              <view class="chart-column" v-for="(item, index) in chartData" :key="index">
-                <view class="chart-bar" :style="{ height: item.height, minHeight: '20rpx' }"></view>
-                <text class="chart-date">{{ item.date }}</text>
+          <!-- 效益趋势图表 -->
+          <view class="trend-card">
+            <view class="card-header">
+              <text class="card-title">{{ $t('team.benefitTrend') }}</text>
+              <text class="card-more">{{ $t('team.viewAll') }} &gt;</text>
+            </view>
+            <view class="chart-container">
+              <!-- 模拟图表柱状图 -->
+              <view class="chart-bars">
+                <view class="chart-column" v-for="(item, index) in chartData" :key="index">
+                  <view class="chart-bar1" :style="{ height: item.height, minHeight: '20rpx' }"></view>
+                  <text class="chart-date">{{ item.date }}</text>
+                </view>
               </view>
             </view>
           </view>
-        </view>
 
-        <!-- 明细列表 -->
-        <view class="detail-section">
-          <view class="section-title">{{ $t('team.benefitDetail') }}</view>
+          <!-- 明细列表 -->
+          <view class="detail-section">
+            <view class="section-title">{{ $t('team.benefitDetail') }}</view>
 
-          <!-- 明细项 -->
-          <view class="detail-item" v-for="(item, index) in detailData" :key="index">
-            <view class="detail-left">
-              <text class="detail-title">{{ $t(`team.${item.textKey}`) }}</text>
-              <text class="detail-date">{{ $t('team.contentSimulatedData') }}</text>
-              <text class="detail-date">{{ item.date }}</text>
+            <!-- 明细项 -->
+            <view class="detail-item" v-for="(item, index) in detailData" :key="index">
+              <view class="detail-left">
+                <text class="detail-title">{{ $t(`team.${item.textKey}`) }}</text>
+                <text class="detail-date">{{ $t('team.contentSimulatedData') }}</text>
+                <text class="detail-date">{{ item.date }}</text>
+              </view>
+              <text class="detail-amount" :class="item.amountType">+300 {{ $t('team.usdt') }}</text>
             </view>
-            <text class="detail-amount" :class="item.amountType">+300 {{ $t('team.usdt') }}</text>
           </view>
-        </view>
-      </template>
+        </template>
 
-      <!-- 成员tab内容 -->
-      <template v-else-if="activeTab === 'member'">
-        <view class="tab-header">
-          <text class="tab-title">{{ $t('team.teamMemberLevel') }}</text>
-          <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+        <!-- 成员tab内容 -->
+        <template v-else-if="activeTab === 'member'">
+          <view class="tab-header">
+            <text class="tab-title">{{ $t('team.teamMemberLevel') }}</text>
+            <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+          </view>
+          <view class="member-list">
+            <view class="member-item" v-for="(member, index) in memberData" :key="index">
+              <view class="member-left">
+                <image class="member-avatar" :src="member.avatar" mode="aspectFill" />
+                <view class="member-info">
+                  <text class="member-name">{{ member.name }}</text>
+                  <text class="member-detail">{{ $t('team.performance') }}{{ member.performance }} USD {{
+                    $t('team.subordinate') }}{{ member.subCount }}{{ $t('team.totalMembersUnit') }}</text>
+                </view>
+              </view>
+              <text class="member-arrow">&gt;</text>
+            </view>
+          </view>
+        </template>
+
+        <!-- 任务tab内容 -->
+        <template v-else-if="activeTab === 'task'">
+          <view class="tab-header">
+            <text class="tab-title">{{ $t('team.teamTasks') }}</text>
+            <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+          </view>
+          <view class="task-list">
+            <view class="task-item" v-for="(task, index) in taskData" :key="index">
+              <view class="task-content">
+                <text class="task-title">{{ task.status === 'completed' ? (index === 0 ? $t('team.inviteRealUsers') :
+                  index === 1 ? $t('team.teamMonthlyPerformance') : $t('team.trainGoldCaptains')) :
+                  $t('team.trainGoldCaptains') }}</text>
+                <text class="task-reward">{{ $t('team.taskReward') }} {{ task.reward }} {{ $t('team.usdt') }}</text>
+              </view>
+              <text :class="['task-status', task.status]">{{ task.status === 'completed' ? $t('team.statusCompleted') :
+                $t('team.statusInProgress') }}</text>
+            </view>
+            <view class="task-progress">
+              <text class="progress-label">{{ $t('team.completionRate') }}</text>
+              <view class="progress-bar-small">
+                <view class="progress-fill-small" :style="{ width: '65%' }"></view>
+              </view>
+              <text class="progress-value">{{ $t('team.progressValue') }}</text>
+            </view>
+          </view>
+        </template>
+
+        <!-- 排行tab内容 -->
+        <template v-else-if="activeTab === 'rank'">
+          <view class="tab-header">
+            <text class="tab-title">{{ $t('team.teamRanking') }}</text>
+            <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+          </view>
+          <view class="rank-list">
+            <view class="rank-item" v-for="(rank, index) in rankData" :key="index">
+              <view class="rank-left">
+                <view class="rank-badge" :class="`rank-${index + 1}`">
+                  {{ index + 1 }}
+                </view>
+                <view class="rank-info">
+                  <text class="rank-team">{{ $t('team.teamName') }}</text>
+                  <text class="rank-captain">{{ $t('team.teamCaptain') }} {{ rank.captain }}</text>
+                  <text class="rank-stats">{{ $t('team.totalMembers') }}:{{ rank.totalMembers }}{{
+                    $t('team.totalMembersUnit') }} ~{{ rank.totalAmount }} {{ $t('team.usdt') }}</text>
+                </view>
+              </view>
+              <image class="rank-trophy" src="/static/icons/rankIcon.png" mode="aspectFit" />
+            </view>
+          </view>
+        </template>
+      </view>
+    </view>
+    <view class="list1" v-if="listactive == 2">
+      <!-- 团队增长趋势 -->
+      <view class="data-analysis-card">
+        <view class="card-header">
+          <text class="card-title">团队增长趋势</text>
         </view>
-        <view class="member-list">
-          <view class="member-item" v-for="(member, index) in memberData" :key="index">
-            <view class="member-left">
-              <image class="member-avatar" :src="member.avatar" mode="aspectFill" />
-              <view class="member-info">
-                <text class="member-name">{{ member.name }}</text>
-                <text class="member-detail">{{ $t('team.performance') }}{{ member.performance }} USD {{
-                  $t('team.subordinate') }}{{ member.subCount }}{{ $t('team.totalMembersUnit') }}</text>
+        <view class="growth-chart">
+          <view class="chart-bar" v-for="(item, index) in growthData" :key="index">
+            <view class="bar-container">
+              <view class="bar" :style="{ height: item.value + '%' }">
+                <text class="bar-value">{{ item.label }}</text>
               </view>
             </view>
-            <text class="member-arrow">&gt;</text>
+            <text class="bar-label">{{ item.month }}</text>
           </view>
         </view>
-      </template>
+      </view>
 
-      <!-- 任务tab内容 -->
-      <template v-else-if="activeTab === 'task'">
-        <view class="tab-header">
-          <text class="tab-title">{{ $t('team.teamTasks') }}</text>
-          <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+      <!-- 层级业绩分布 -->
+      <view class="data-analysis-card">
+        <view class="card-header">
+          <text class="card-title">层级业绩分布</text>
         </view>
-        <view class="task-list">
-          <view class="task-item" v-for="(task, index) in taskData" :key="index">
-            <view class="task-content">
-              <text class="task-title">{{ task.status === 'completed' ? (index === 0 ? $t('team.inviteRealUsers') :
-                index === 1 ? $t('team.teamMonthlyPerformance') : $t('team.trainGoldCaptains')) :
-                $t('team.trainGoldCaptains') }}</text>
-              <text class="task-reward">{{ $t('team.taskReward') }} {{ task.reward }} {{ $t('team.usdt') }}</text>
+        <view class="level-performance">
+          <view class="level-item" v-for="(level, index) in levelData" :key="index">
+            <view class="level-info">
+              <text class="level-name">{{ level.name }}</text>
+              <text class="level-count">{{ level.count }}人</text>
             </view>
-            <text :class="['task-status', task.status]">{{ task.status === 'completed' ? $t('team.statusCompleted') :
-              $t('team.statusInProgress') }}</text>
-          </view>
-          <view class="task-progress">
-            <text class="progress-label">{{ $t('team.completionRate') }}</text>
-            <view class="progress-bar-small">
-              <view class="progress-fill-small" :style="{ width: '65%' }"></view>
+            <view class="progress-container">
+              <view class="progress-bar">
+                <view class="progress-fill" :style="{ width: level.percentage + '%' }"></view>
+              </view>
+              <text class="progress-value">{{ level.amount }}</text>
             </view>
-            <text class="progress-value">{{ $t('team.progressValue') }}</text>
           </view>
         </view>
-      </template>
+      </view>
 
-      <!-- 排行tab内容 -->
-      <template v-else-if="activeTab === 'rank'">
-        <view class="tab-header">
-          <text class="tab-title">{{ $t('team.teamRanking') }}</text>
-          <text class="tab-count">2 {{ $t('team.totalMembersUnit') }}</text>
+      <!-- 关键指标 -->
+      <view class="data-analysis-card">
+        <view class="card-header">
+          <text class="card-title">关键指标</text>
         </view>
-        <view class="rank-list">
-          <view class="rank-item" v-for="(rank, index) in rankData" :key="index">
-            <view class="rank-left">
-              <view class="rank-badge" :class="`rank-${index + 1}`">
-                {{ index + 1 }}
-              </view>
-              <view class="rank-info">
-                <text class="rank-team">{{ $t('team.teamName') }}</text>
-                <text class="rank-captain">{{ $t('team.teamCaptain') }} {{ rank.captain }}</text>
-                <text class="rank-stats">{{ $t('team.totalMembers') }}:{{ rank.totalMembers }}{{
-                  $t('team.totalMembersUnit') }} ~{{ rank.totalAmount }} {{ $t('team.usdt') }}</text>
-              </view>
-            </view>
-            <image class="rank-trophy" src="/static/icons/rankIcon.png" mode="aspectFit" />
+        <view class="key-metrics">
+          <view class="metric-item" v-for="(metric, index) in metricsData" :key="index">
+            <text class="metric-value" :class="'value' + index">{{ metric.value }}</text>
+            <text class="metric-label">{{ metric.label }}</text>
           </view>
         </view>
-      </template>
+      </view>
+
+      <!-- TOP贡献成员 -->
+      <view class="data-analysis-card">
+        <view class="card-header">
+          <text class="card-title">TOP贡献成员</text>
+        </view>
+        <view class="top-members">
+          <view class="member-item" v-for="(member, index) in membersData" :key="index">
+            <view class="member-rank" :class="index < 3 ? 'rank-top' : ''">
+              {{ index + 1 }}
+            </view>
+            <view class="member-info">
+              <text class="member-name">{{ member.name }}</text>
+              <text class="member-count">直推 {{ member.count }}人</text>
+            </view>
+            <text class="member-amount">{{ member.amount }}</text>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
+  <view class=""></view>
 </template>
 
 <script setup lang="ts">
@@ -317,6 +391,34 @@ const router = useRouter();
 
 // 当前激活的tab
 const activeTab = ref('benefit');
+const listactive = ref(1);
+
+// 团队增长趋势数据
+const growthData = ref([
+  { month: '8月', label: '12', value: 30 },
+  { month: '9月', label: '42', value: 70 },
+  { month: '10月', label: '32', value: 60 }
+]);
+
+// 层级业绩分布数据
+const levelData = ref([
+  { name: 'L1', count: 25, percentage: 50, amount: '50K' },
+  { name: 'L2', count: 25, percentage: 50, amount: '50K' }
+]);
+
+// 关键指标数据
+const metricsData = ref([
+  { value: '78%', label: '活跃率' },
+  { value: '850', label: '人均交易' },
+  { value: '92%', label: '留存率' }
+]);
+
+// TOP贡献成员数据
+const membersData = ref([
+  { name: 'SuperTeam', count: 5, amount: '12.0K' },
+  { name: 'perfTeam', count: 5, amount: '12.0K' },
+  { name: 'perfTeam', count: 5, amount: '12.0K' }
+]);
 
 // 计算进度百分比的辅助函数
 const calculateProgress = (current: number, total: number) => {
@@ -368,6 +470,11 @@ const goBack = () => {
   router.back();
 };
 
+// 切换列表显示状态
+const switchList = (index: number) => {
+  listactive.value = index;
+};
+
 // 跳转到客服页面
 const goToCustomerService = () => {
   router.push('/pages/customerservice/index');
@@ -390,6 +497,7 @@ const handleUpgrade = () => {
   min-height: 100vh;
   padding: 0 30rpx;
   color: #fff;
+  padding-bottom: 40rpx;
 }
 
 .navbar {
@@ -414,6 +522,7 @@ const handleUpgrade = () => {
   font-weight: bold;
   flex: 1;
   text-align: center;
+  padding-right: 40rpx;
 }
 
 .right-icons {
@@ -504,8 +613,8 @@ const handleUpgrade = () => {
 }
 
 .stat-number {
-  font-size: 36rpx;
-  font-weight: bold;
+  font-size: 32rpx;
+  font-weight: 500;
   color: #fff;
 }
 
@@ -545,7 +654,7 @@ const handleUpgrade = () => {
 }
 
 .progress-container {
-  margin-bottom: 24rpx;
+  // margin-bottom: 24rpx;
 }
 
 .progress-header {
@@ -744,6 +853,254 @@ const handleUpgrade = () => {
 .teamIcon {
   width: 36rpx;
   height: 36rpx;
+}
+
+/* 数据分析卡片样式 */
+.data-analysis-card {
+  background-color: #2a2a2a;
+  /* 一级卡片背景 */
+  border-radius: 12px;
+  padding: 20rpx;
+  margin-bottom: 16px;
+}
+
+.card-header {
+  margin-bottom: 16px;
+}
+
+.card-title {
+  color: #fff;
+  /* 一级文字 */
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 团队增长趋势样式 */
+.growth-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 150px;
+}
+
+.chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+.chart-bar1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  background-color: #6F4BFD;
+}
+// chart-bar1
+
+.bar-container {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.bar {
+  width: 40px;
+  background: #6F4BFD;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+  position: relative;
+}
+
+.bar-value {
+  position: absolute;
+  top: -25px;
+  color: #9AA4AE;
+  /* 一级文字 */
+  font-size: 28rpx;
+  // font-weight: 600;
+  left: 20rpx;
+}
+
+.bar-label {
+  color: #9AA4AE;
+  /* 二级文字 */
+  font-size: 28rpx;
+  margin-top: 8px;
+  white-space: nowrap;
+}
+
+/* 层级业绩分布样式 */
+.level-performance {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.level-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.level-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.level-name {
+  color: #fff;
+  /* 一级文字 */
+  font-size: 14px;
+}
+
+.level-count {
+  color: #fff;
+  /* 二级文字 */
+  font-size: 14px;
+  margin-left: 20rpx;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  // gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 18rpx;
+  background-color: rgba(111, 75, 253, 0.12);
+  /* 二级卡片背景 */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #6F4BFD;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-value {
+  color: #9AA4AE;
+  /* 二级文字 */
+  font-size: 14px;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* 关键指标样式 */
+.key-metrics {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.metric-item {
+  flex: 1;
+  background-color: #3B3B3B;
+  /* 二级卡片背景 */
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.value0 {
+  color: #19AF00 !important;
+}
+
+.value1 {
+  color: #325DF4 !important;
+}
+
+.value2 {
+  color: #6F4BFD !important;
+}
+
+.metric-value {
+  color: #fff;
+  /* 一级文字 */
+  font-size: 30rpx;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.metric-label {
+  color: #9AA4AE;
+  /* 二级文字 */
+  font-size: 28rpx;
+}
+
+/* TOP贡献成员样式 */
+.top-members {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: #3B3B3B;
+  /* 二级卡片背景 */
+  border-radius: 8px;
+}
+
+.member-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #2a2a2a;
+  /* 一级卡片背景 */
+  color: #9AA4AE;
+  /* 二级文字 */
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.member-rank.rank-top {
+  background-color: #f59e0b;
+  color: #fff;
+  /* 一级文字 */
+}
+
+.member-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-name {
+  color: #fff;
+  /* 一级文字 */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.member-count {
+  color: #9AA4AE;
+  /* 二级文字 */
+  font-size: 12px;
+}
+
+.member-amount {
+  color: #6F4BFD;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .rank-item {
@@ -964,7 +1321,7 @@ const handleUpgrade = () => {
 
 .chart-bar {
   width: 40rpx;
-  background: #6F4BFDF4;
+  // background: #6F4BFDF4;
   // border-radius: 10rpx 10rpx 0 0;
   margin-bottom: 10rpx;
   min-height: 20rpx;

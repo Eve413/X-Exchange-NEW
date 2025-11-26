@@ -385,6 +385,33 @@ export interface LoginGoogleParams {
   appversion: string;
   lang: string;
 }
+
+export interface AssetParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+}
+export interface ExchangeCheckParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+  from_asset:string;
+  to_asset:string;
+}
+export interface ExchangeParams {
+  passkey: string;
+  device: string;
+  appversion: string;
+  token: string;
+  lang: string;
+  from_asset:string;
+  to_asset:string;
+  amount:string;
+}
 export interface ProfitLossParams {
   passkey: string;
   device: string;
@@ -476,6 +503,20 @@ export class AuthAPI {
     return request.post<LoginResponse>('/login/gmail.json', params)
   }
 
+    static getAssetParams(params: AssetParams) {
+    return request.post<LoginResponse>('/assets.json', params)
+  }
+
+  static getExchangeCheckParams(params: ExchangeCheckParams) {
+    return request.post<LoginResponse>('/exchange_check.json', params)
+  }
+
+   static exchangeParams(params: ExchangeParams) {
+    return request.post<LoginResponse>('/exchange.json', params)
+  }
+
+  
+  
   
 
     static verifyPhone(params: VerifyPhoneParams) {

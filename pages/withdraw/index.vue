@@ -6,7 +6,7 @@
       <view class="back-area" @click="goBack">
         <image src="/static/icons/ic_arrow_left.png" class="back-icon" mode="aspectFit" />
       </view>
-      <text class="header-title">{{ $t('transaction.withdraw') }}</text>
+      <text class="header-title">转出</text>
     </view>
 
     <!-- ✅ Konten bisa discroll -->

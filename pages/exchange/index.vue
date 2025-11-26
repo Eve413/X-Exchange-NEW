@@ -30,21 +30,23 @@
                     <view class="swap-header">
                         <text class="swap-label">{{ $t('market.from') }}</text>
                         <view class="max-half-buttons">
-                            <view class="max-btn" @click="maxBtnClick">{{ $t('market.max') }}</view>
-                            <view class="half-btn" @click="halfBtnClick">{{ $t('market.half') }}</view>
+                            <view class="max-btn" @click="maxBtnClick">{{ UserAsset?.qty}}</view>
+                            <view class="half-btn" @click="halfBtnClick">{{UserAsset?.baseAsset }}</view>
                         </view>
                     </view>
                     <view class="contentbox">
+                    <picker mode="selector" :range="marketData.coins" range-key="baseAsset" @change="onFromChange">
                         <view class="coin-selector">
                             <image :src="'/static/logo/logos_bitcoin.png'" class="coin-icon" mode="aspectFit" />
                             <view class="right-box">
-                                <view class="coin-code">{{ selectedFromCoin.code }}
+                                <view class="coin-code">{{ selectedFromCoin.baseAsset }}
                                     <image class="dropdown-arrow" src="/static/icons/arrow-bottom.png"
                                         mode="aspectFit" />
                                 </view>
-                                <text class="coin-name">{{ selectedFromCoin.name }}</text>
+                                <text class="coin-name">{{ selectedFromCoin.name  || "-"}}</text>
                             </view>
                         </view>
+                    </picker>
                         <view class="content-right">
                             <view class="amount-display">
                                 <input class="amount-value" type="digit" v-model="selectedAmountValue"
@@ -67,17 +69,19 @@
                         <text class="swap-label">{{ $t('market.to') }}</text>
                     </view>
                     <view class="contentbox">
-                        <view class="coin-selector">
-                            <image :src="'/static/logo/logos_bitcoin.png'"
-                                class="coin-icon" mode="aspectFit" />
-                            <view class="right-box">
-                                <view class="coin-code">{{ selectedToCoin.code }}
-                                    <image class="dropdown-arrow" src="/static/icons/arrow-bottom.png"
-                                        mode="aspectFit" />
+                        <picker mode="selector" :range="marketData.coins" range-key="baseAsset" @change="onToChange">
+                            <view class="coin-selector">
+                                <image :src="'/static/logo/logos_bitcoin.png'"
+                                    class="coin-icon" mode="aspectFit" />
+                                <view class="right-box">
+                                    <view class="coin-code">{{ selectedToCoin.baseAsset }}
+                                        <image class="dropdown-arrow" src="/static/icons/arrow-bottom.png"
+                                            mode="aspectFit" />
+                                    </view>
+                                    <text class="coin-name">{{ selectedToCoin.name || "-"}}</text>
                                 </view>
-                                <text class="coin-name">{{ selectedToCoin.name }}</text>
                             </view>
-                        </view>
+                        </picker>
                         <view class="content-right">
                             <!-- <view class="amount-display"> -->
                             <!-- <text class="amount-value">{{ swapAmountValue }}</text> -->
@@ -92,7 +96,7 @@
                     <view class="rate-item">
                         <text class="rate-label">{{ $t('market.rate') }}</text>
                         <view class="item-right">
-                            <text class="rate-value">{{ $t('market.exchangeRateExample1') }}</text>
+                            <text class="rate-value">{{exchangeRateExample1 }}</text>
                             <text class="rate-value-secondary">{{ $t('market.exchangeRateExample2') }}</text>
                         </view>
                     </view>
@@ -125,6 +129,10 @@ import { ref, computed, onMounted, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storage } from '@/utils/storage'
+import {useUserStore, AssetParams, ExchangeCheckParams, ExchangeParams} from '@/store/modules/user'
+const userInfo = uni.getStorageSync('userData')
+const userStore = useUserStore()
+
 
 const { t, locale } = useI18n()
 
@@ -135,10 +143,10 @@ const router = useRouter()
 const getMockMarketData = () => {
     return {
         coins: [
-            { code: 'USDT', name: '泰达币', icon: '/static/icons/usdt.png', balance: '1000.00', price: 1.0 },
-            { code: 'BTC', name: '比特币', icon: '/static/icons/btc.png', balance: '0.001', price: 40000 },
-            { code: 'ETH', name: '以太坊', icon: '/static/icons/eth.png', balance: '0.05', price: 2500 },
-            { code: 'BNB', name: '币安币', icon: '/static/icons/bnb.png', balance: '0.1', price: 300 }
+            { baseAsset: 'USDT', name: '', icon: '/static/icons/usdt.png', balance: '1000.00', price: 1.0 },
+            { baseAsset: 'BTC', name: '', icon: '/static/icons/btc.png', balance: '0.001', price: 40000 },
+            { baseAsset: 'ETH', name: '', icon: '/static/icons/eth.png', balance: '0.05', price: 2500 },
+            { baseAsset: 'BNB', name: '', icon: '/static/icons/bnb.png', balance: '0.1', price: 300 }
         ],
         rates: {
             'USDT_BTC': 0.000025,
@@ -153,12 +161,18 @@ const getMockMarketData = () => {
 
 // 然后定义所有响应式变量
 const marketData = ref(getMockMarketData())
+
+const exchangeRateExample1 = ref('')
 const selectedFromCoin = ref(marketData.value.coins[0])
 const selectedToCoin = ref(marketData.value.coins[1])
 const selectedAmountValue = ref('100')
 const estimatedValue = ref('0.001')
 const swapFee = ref('0.3')
 const slippage = ref('0.5')
+const UserAsset = ref({
+                "qty": "0.00000000",
+                "baseAsset": "BTC"
+            })
 
 // 返回上一页
 const goBack = () => {
@@ -192,6 +206,7 @@ const swapCoins = () => {
     selectedToCoin.value = tempCoin
     // 更新估值
     updateEstimatedValue()
+    exchangeCheckParams()
     console.log('✅ 币种切换成功')
 }
 
@@ -199,8 +214,8 @@ const swapCoins = () => {
 const updateEstimatedValue = () => {
     const amount = parseFloat(selectedAmountValue.value) || 0
     if (amount > 0) {
-        const rateKey = `${selectedFromCoin.value.code}_${selectedToCoin.value.code}`
-        const reverseRateKey = `${selectedToCoin.value.code}_${selectedFromCoin.value.code}`
+        const rateKey = `${selectedFromCoin.value.baseAsset}_${selectedToCoin.value.baseAsset}`
+        const reverseRateKey = `${selectedToCoin.value.baseAsset}_${selectedFromCoin.value.baseAsset}`
 
         // 使用模拟市场数据中的汇率
         let rate = marketData.value.rates[rateKey]
@@ -235,7 +250,7 @@ const halfBtnClick = () => {
 }
 
 // 处理兑换
-const handleSwap = () => {
+const handleSwap = async () => {
     const amount = parseFloat(selectedAmountValue.value)
     const balance = parseFloat(selectedFromCoin.value.balance)
 
@@ -247,55 +262,83 @@ const handleSwap = () => {
         return
     }
 
-    if (amount > balance) {
-        uni.showToast({
-            title: '余额不足',
-            icon: 'none'
-        })
-        return
-    }
+    // if (amount > balance) {
+    //     uni.showToast({
+    //         title: '余额不足',
+    //         icon: 'none'
+    //     })
+    //     return
+    // }
 
     // 显示确认对话框
+   
+   
     uni.showModal({
         title: '确认兑换',
-        content: `确定要兑换 ${selectedAmountValue.value} ${selectedFromCoin.value.code} 为 ${estimatedValue.value} ${selectedToCoin.value.code} 吗？`,
+        content: `确定要兑换 ${selectedAmountValue.value} ${selectedFromCoin.value.baseAsset} 为 ${estimatedValue.value} ${selectedToCoin.value.baseAsset} 吗？`,
         success: (res) => {
             if (res.confirm) {
                 // 这里应该调用实际的兑换API
                 console.log('✅ 确认兑换', {
-                    fromCoin: selectedFromCoin.value.code,
-                    toCoin: selectedToCoin.value.code,
+                    fromCoin: selectedFromCoin.value.baseAsset,
+                    toCoin: selectedToCoin.value.baseAsset,
                     amount: selectedAmountValue.value,
                     estimatedValue: estimatedValue.value
                 })
 
-                uni.showLoading({
-                    title: '兑换中...'
-                })
+
+                const exchangeParams: ExchangeParams = {
+                        passkey: userStore.pasKeyAuth,
+                        device:userStore.deviceAuth,
+                        appversion:userStore.appversionAuth,
+                        token: userInfo.data.token,
+                        lang: userStore.language,
+                        from_asset:selectedFromCoin.value.baseAsset,
+                        to_asset:selectedToCoin.value.baseAsset,
+                        amount: amount
+                        }
+
+                        submit(exchangeParams);
+                       
+                // uni.showLoading({
+                //     title: '兑换中...'
+                // })
 
                 // 模拟兑换请求
-                setTimeout(() => {
-                    uni.hideLoading()
-                    uni.showToast({
-                        title: '兑换成功',
-                        icon: 'success'
-                    })
+                // setTimeout(() => {
+                //     uni.hideLoading()
+                //     uni.showToast({
+                //         title: '兑换成功',
+                //         icon: 'success'
+                //     })
 
-                    // 模拟更新余额
-                    selectedFromCoin.value.balance = (balance - amount).toFixed(2)
-                    selectedToCoin.value.balance = (parseFloat(selectedToCoin.value.balance) + parseFloat(estimatedValue.value)).toFixed(6)
+                //     // 模拟更新余额
+                //     selectedFromCoin.value.balance = (balance - amount).toFixed(2)
+                //     selectedToCoin.value.balance = (parseFloat(selectedToCoin.value.balance) + parseFloat(estimatedValue.value)).toFixed(6)
 
-                    // 清空输入
-                    selectedAmountValue.value = ''
-                    estimatedValue.value = '0.000000'
-                }, 1500)
+                //     // 清空输入
+                //     selectedAmountValue.value = ''
+                //     estimatedValue.value = '0.000000'
+                // }, 1500)
             }
         }
     })
 }
 
+const submit = async (exchangeParams: ExchangeParams ) => {
+ const resultExchange = await userStore.exchangeParams(exchangeParams)
+
+ if (resultExchange.data.status == "error"){
+    uni.showToast({
+            title: resultExchange.data.msg,
+            icon: 'none'
+        })
+ }
+ 
+}
+
 // 加载数据 - 与market页面保持一致的加载逻辑
-const loadData = () => {
+const loadData = async () => {
     // 模拟API请求延迟
     setTimeout(() => {
         // 在实际项目中，这里应该调用API获取真实数据
@@ -304,8 +347,8 @@ const loadData = () => {
         console.log('✅ 市场数据加载完成')
 
         // 更新选中的币种信息
-        const fromCoinData = marketData.value.coins.find(coin => coin.code === selectedFromCoin.value.code)
-        const toCoinData = marketData.value.coins.find(coin => coin.code === selectedToCoin.value.code)
+        const fromCoinData = marketData.value.coins.find(coin => coin.baseAsset === selectedFromCoin.value.baseAsset)
+        const toCoinData = marketData.value.coins.find(coin => coin.baseAsset === selectedToCoin.value.baseAsset)
 
         if (fromCoinData) {
             selectedFromCoin.value = { ...fromCoinData }
@@ -316,6 +359,74 @@ const loadData = () => {
 
         updateEstimatedValue()
     }, 500)
+
+
+    const assetParams: AssetParams = {
+          passkey: userStore.pasKeyAuth,
+          device:userStore.deviceAuth,
+          appversion:userStore.appversionAuth,
+          token: userInfo.data.token,
+          lang: userStore.language,
+
+          
+        }
+
+        
+        const resultAsset = await userStore.getAssetParams(assetParams)
+
+        selectedFromCoin.value = resultAsset.data.data[0]
+        selectedToCoin.value = resultAsset.data.data[1]
+        marketData.value = {
+        coins: resultAsset.data.data,
+        rates: {
+            'USDT_BTC': 0.000025,
+            'BTC_USDT': 40000,
+            'USDT_ETH': 0.0004,
+            'ETH_USDT': 2500,
+            'BTC_ETH': 16,
+            'ETH_BTC': 0.0625
+        }
+
+        
+    }
+    
+    exchangeCheckParams()
+}
+
+const exchangeCheckParams = async() => {
+
+    const exchangeCheckParams: ExchangeCheckParams = {
+          passkey: userStore.pasKeyAuth,
+          device:userStore.deviceAuth,
+          appversion:userStore.appversionAuth,
+          token: userInfo.data.token,
+          lang: userStore.language,
+          from_asset:selectedFromCoin.value.baseAsset,
+          to_asset:selectedToCoin.value.baseAsset
+        }
+
+        
+        const resultExchange = await userStore.getExchangeCheckParams(exchangeCheckParams)
+        exchangeRateExample1.value = resultExchange.data.data.rate
+        selectedAmountValue.value = resultExchange.data.data.price
+        swapFee.value = resultExchange.data.data.swap_fee
+        slippage.value = resultExchange.data.data.slippage
+        UserAsset.value = resultExchange.data.data.UserAsset
+    
+}
+
+
+
+const onFromChange = (e) => {
+  selectedFromCoin.value = marketData.value.coins[e.detail.value]
+  exchangeCheckParams()
+//   coins.value = masterCoins.value.filter(item => item.type === fromAccount.value.id)
+}
+
+const onToChange = (e) => {
+  selectedToCoin.value = marketData.value.coins[e.detail.value]
+  exchangeCheckParams()
+//   coins.value = masterCoins.value.filter(item => item.type === fromAccount.value.id)
 }
 
 onMounted(() => {
