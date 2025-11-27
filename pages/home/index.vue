@@ -8,7 +8,7 @@
         <image class="avatar" src="/static/icons/ic_avatar.png" mode="aspectFill" />
 
         <!-- Search Bar -->
-        <view class="search-bar">
+        <view class="search-bar" @click="goToSearch">
           <image class="search-icon" src="/static/icons/searchImg.png" mode="aspectFit" />
           <text class="search-text">{{ $t('home.search_select') }}</text>
         </view>
@@ -317,6 +317,16 @@ onLoad(async (options) => {
   }
 });
 
+function goToSearch() {
+  setTimeout(() => {
+    uni.navigateTo({
+      url: "/pages/trade/search",
+      success: () => console.log("✅ Navigated to search page"),
+      fail: (err) => console.error("❌ Navigation failed:", err),
+    });
+  }, 200);
+}
+
 onMounted(() => {
   // 获取当前路由用于底部栏高亮
   const pages = getCurrentPages();
@@ -617,14 +627,23 @@ const goToRecharge = () => {
 }
 
 .search-bar {
-  flex: 1;
+  width: 100%;
   height: 72rpx;
-  margin-right: 90rpx;
+  margin-right: 30rpx; /* kurangi agar tidak pecah di layar kecil */
   background-color: rgba(255, 255, 255, 0.08);
-  border-radius: 999rpx;
+  border-radius: 9999rpx;
   display: flex;
   align-items: center;
   padding: 0 20rpx;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+    height: 60rpx;
+    margin-right: 20rpx;
+    padding: 0 16rpx;
+  }
 }
 
 .search-icon {

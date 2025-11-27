@@ -467,7 +467,7 @@ const detailData = ref([
 
 // 返回上一页
 const goBack = () => {
-  router.back();
+     uni.navigateBack();
 };
 
 // 切换列表显示状态
@@ -487,7 +487,11 @@ const goToNotification = () => {
 
 // 处理升级攻略点击
 const handleUpgrade = () => {
-  router.push('/pages/upgradeguide/index');
+  uni.navigateTo({
+      url: "/pages/upgradeguide/index",
+      success: () => console.log("✅ 跳转到功能未解锁页面"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
+    });
 };
 </script>
 

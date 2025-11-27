@@ -147,7 +147,7 @@ const router = useRouter();
 
 // 返回上一页
 const goBack = () => {
-  router.back();
+  uni.navigateBack();
 };
 </script>
 

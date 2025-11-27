@@ -145,7 +145,7 @@
 							<text class="stat-number">{{ traderPerformanceDetail?.likes ?? 0 }}</text>
 							<text class="stat-label">{{ $t('market.likes') }}</text>
 						</view>
-						<view class="contact-box">
+						<view class="contact-box" @click="goToChatRoom()">
 							<view class="stat-item contact-item">
 								<image class="contact-icon" src="/static/icons/chatImg.png" />
 								<text class="stat-label1">{{ $t('market.chatRoom') }}</text>
@@ -1030,6 +1030,8 @@ async function onRefresh() {
 	}, 800);
 }
 
+
+
 // 关闭所有下拉菜单
 function closeAllDropdowns() {
 	showNameSortMenu.value = false;
@@ -1196,6 +1198,14 @@ function goToEdit() {
 			fail: (err) => console.error("❌ Navigation failed:", err),
 		});
 	}, 200);
+}
+
+function goToChatRoom(){
+	uni.navigateTo({
+      url: "/pages/locked/index",
+      success: () => console.log("✅ 跳转到功能未解锁页面"),
+      fail: (err) => console.error("❌ 跳转失败:", err),
+    });
 }
 
 const viewItems = ref([
