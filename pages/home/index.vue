@@ -34,15 +34,18 @@
           <text class="label">{{ $t("home.total_asset_valuation") }}</text>
 
           <!-- Unit + Arrow -->
-          <view class="unit-wrapper">
-            <text class="unit">{{ dashboardData?.User?.Currency?.alias }}</text>
+          <view class="unit-wrapper" @click.stop="openCurrencyPicker">
+            <text class="unit">{{ selectedCurrency || dashboardData?.User?.Currency?.alias }}</text>
             <image class="arrow-down" src="/static/icons/ic_arrow_down.png" mode="widthFix" />
+            <view v-if="showCurrencyDropdown" class="currency-dropdown">
+              <view v-for="code in currencyOptions" :key="code" class="currency-option" :class="{ active: (selectedCurrency || dashboardData?.User?.Currency?.alias) === code }" @click.stop="selectCurrency(code)">{{ code }}</view>
+            </view>
           </view>
         </view>
 
         <!-- Baris 3 -->
         <view class="row amount-row">
-          <text class="amount">{{ dashboardData?.User?.balance }}</text>
+          <text class="amount">{{ displayBalance }}</text>
           <view class="recharge-btn" @click="goToRecharge">{{
             $t("home.go_to_top_up")
           }}</view>
@@ -66,21 +69,15 @@
         </view>
       </view>
 
-      <view class="contractTrading" @click="goDetilNews({
-  title: `${dashboardData?.Mission?.bonus} ${dashboardData?.Mission?.baseAsset}`,
-  desc: dashboardData?.Mission?.description
-})">
-        <view class="contractTrading-left">
-          <view class="contractTrading-title" v-html="dashboardData?.Mission?.description"></view>
-          <view class="contractTrading-sub">
-            <text class="contractTrading-amount">{{ dashboardData?.Mission?.bonus }}
-              {{ dashboardData?.Mission?.baseAsset }}</text>
-            <text class="contractTrading-desc">{{ $t('home.waiting_for_you') }}</text>
-            <text class="contractTrading-arrow">›</text>
-          </view>
+      
+      <view class="announcement" @click="goToNotification">
+        <view class="announcement-content">
+          <image src="/static/icons/ic_notif.png" class="announcement-icon" mode="widthFix" />
+          <text class="announcement-text">
+            {{ $t("home.announcement_text") }}
+          </text>
         </view>
-
-        <image src="/static/icons/ic_contract_trading.png" class="contractTrading-img" mode="widthFix" />
+        <text class="announcement-arrow">›</text>
       </view>
       <view class="myFavorites">
         <text class="myFavorites-title">{{ $t("home.hot_news") }}</text>
@@ -105,101 +102,11 @@
           </view>
         </scroll-view>
       </view>
-      <view class="userCard">
-        <view class="token-info">
-          <view class="token-header">
-            <view class="info-left">
-              <view class="token-avatar">
-                <image src="/static/icons/testAvatar.png" class="avatar-img" mode="aspectFit"></image>
-              </view>
-              <view class="token-details">
-                <view class="token-name">{{ dashboardData?.Mission?.baseAsset }}</view>
-                <view class="token-description">{{ $t('home.bitget_token') }}</view>
-              </view>
-            </view>
-            <view class="info-right">
-              <view class="token-price">
-                <view class="price-num">{{ dashboardData?.Mission?.bonus }} </view>
-                <view class="price-title"> {{ $t('home.latest_price') }} </view>
-              </view>
-              <view class="token-price1">
-                <view class="price-change"> +7.40% </view>
-                <view class="price-title"> {{ $t('home.price_change') }} </view>
-              </view>
-            </view>
-          </view>
-        </view>
+      
 
-        <view class="platform-badge">{{ $t('home.platform_coin') }}</view>
-        <view class="activity-info">
-          <image src="/static/icons/ic_eye.png" class="activity-icon" mode="aspectFit"></image>
-          <span class="activity-text">{{ $t('home.btc_bgb_airdrop') }}</span>
-        </view>
-      </view>
-      <view class="Activity">
-        <view class="Activity-left">
-          <view class="Activity-title">
-            <view class="left-line"></view>{{ $t('home.task_center') }}
-          </view>
-          <view class="Activity-desc">
-            {{ $t('home.max_reward_tasks') }}
-            <text class="Activity-amount">{{ $t('home.doge_reward') }}</text>
-            {{ $t('home.start_exploration') }}
-          </view>
-        </view>
-        <image src="/static/icons/activeIcon.png" class="contractTrading-img" mode="widthFix" />
-      </view>
-      <view class="promoCards">
-        <!-- Kartu kiri -->
-        <view class="promoCards-item">
-          <view class="promoCards-left">
-            <text class="promoCards-title">
-              {{ $t('home.contract_earn_bgb') }}<br />
-              {{ $t('home.bgb_fan_airdrop') }}
-            </text>
-            <text class="promoCards-sub">{{ $t('home.claim_2025_airdrop') }}</text>
-          </view>
-
-          <image src="/static/icons/ic_gift1.png" class="promoCards-img" mode="widthFix" />
-
-          <text class="promoCards-index">{{ $t('home.promo_index') }}</text>
-        </view>
-
-        <!-- Kartu kanan -->
-        <view class="promoCards-item">
-          <view class="promoCards-content">
-            <text class="promoCards-header">{{ $t('home.wealth_treasure') }}</text>
-            <image src="/static/icons/ic_uber.png" class="promoCards-logo" mode="widthFix" />
-            <text class="promoCards-coin">{{ $t('home.btc') }}</text>
-            <text class="promoCards-apr"><text>10.00%</text> {{ $t('home.apr') }}</text>
-            <text class="promoCards-status">{{
-              $t("home.flexible_deposit")
-            }}</text>
-          </view>
-
-          <text class="promoCards-index">2/9</text>
-        </view>
-      </view>
-      <view class="hot-box">
-        <image src="/static/icons/ic_uber.png" class="hot-Icon" mode="widthFix" />
-        <view class="hot-right">
-          <view class="hot-title">
-            <image src="/static/icons/fire-icon.png" class="fire-Icon" mode="widthFix" />{{ $t("home.hot_search") }}
-          </view>
-          <view class="hot-content">{{ $t("home.bgb_trading") }}</view>
-        </view>
-      </view>
-
-      <view class="announcement" @click="goToNotification">
-        <view class="announcement-content">
-          <image src="/static/icons/ic_notif.png" class="announcement-icon" mode="widthFix" />
-          <text class="announcement-text">
-            {{ $t("home.announcement_text") }}
-          </text>
-        </view>
-        <text class="announcement-arrow">›</text>
-      </view>
-
+      
+      
+      
       <view class="myFavorites">
         <text class="myFavorites-title">{{ $t("home.my_favorites") }}</text>
 
@@ -250,6 +157,7 @@ import { useI18n } from "vue-i18n";
 import { useUserStore, TickersParams, DashboardParams } from "@/store/modules/user";
 import { onLoad } from "@dcloudio/uni-app";
 import { goMarket, goTrade } from "@/utils/navigation";
+import { NumberFormat } from "@/utils";
 const userInfo = uni.getStorageSync('userData')
 const { t } = useI18n();
 
@@ -258,6 +166,28 @@ const userStore = useUserStore();
 let cryptoData = ref([]);
 let showSettingDialog = ref(false);
 let dashboardData = ref(null);
+const selectedCurrency = ref<string>('');
+const currencyOptions = ['USDT','USD','CNY','HKD'];
+const currencyRates: Record<string, number> = { USDT: 1, USD: 1, CNY: 7.2, HKD: 7.8 };
+const displayBalance = computed(() => {
+  const base = (dashboardData.value?.User?.Currency?.alias as string) || 'USDT'
+  const target = selectedCurrency.value || base
+  const amount = Number(dashboardData.value?.User?.balance) || 0
+  if (base === 'USDT') {
+    const rate = currencyRates[target] ?? 1
+    const value = amount * rate
+    return NumberFormat.formatNumber(value, 2)
+  }
+  return NumberFormat.formatNumber(amount, 2)
+})
+const showCurrencyDropdown = ref(false)
+function openCurrencyPicker() {
+  showCurrencyDropdown.value = !showCurrencyDropdown.value
+}
+function selectCurrency(code: string) {
+  selectedCurrency.value = code
+  showCurrencyDropdown.value = false
+}
 // ✅ Lifecycle: onLoad
 onLoad(async (options) => {
   console.log("options:", options);
@@ -570,12 +500,12 @@ const goToRecharge = () => {
 .home-page {
   min-height: 100vh;
   background: #202020;
-  padding-bottom: 240upx; // 为底部导航栏留出空间 (176upx高度 + 60upx底部间距)
+  padding-bottom: 160upx; // 收紧底部留白，仍为底部导航预留空间
 }
 
 .page-content {
-  padding: 20upx 32upx 40upx;
-  padding-top: 80rpx;
+  padding: 16upx 24upx 24upx;
+  padding-top: 24rpx;
 }
 
 .welcome-section {
@@ -699,6 +629,7 @@ const goToRecharge = () => {
   .unit-wrapper {
     display: flex;
     align-items: center;
+    position: relative;
   }
 
   .label {
@@ -722,6 +653,29 @@ const goToRecharge = () => {
     width: 32rpx;
     height: 32rpx;
     margin-left: 4rpx;
+  }
+
+  .currency-dropdown {
+    position: absolute;
+    top: 36rpx;
+    right: 0;
+    background: #2A2A2A;
+    border: 1rpx solid rgba(255,255,255,0.1);
+    border-radius: 12rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.3);
+    min-width: 180rpx;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .currency-option {
+    padding: 14rpx 18rpx;
+    color: #ffffff;
+    font-size: 26rpx;
+  }
+
+  .currency-option.active {
+    color: #8ab4f8;
   }
 }
 
@@ -1015,7 +969,7 @@ const goToRecharge = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20rpx 0rpx;
+  padding: 12rpx 0rpx;
   /* Garis atas dan bawah */
   border-top: 1rpx solid rgba(255, 255, 255, 0.1);
   border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
@@ -1096,7 +1050,7 @@ const goToRecharge = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24rpx 0rpx;
+  padding: 12rpx 0rpx;
 }
 
 .myFavorites-title {
@@ -1123,7 +1077,7 @@ const goToRecharge = () => {
 }
 
 .cryptoList {
-  padding: 20rpx 0;
+  padding: 8rpx 0;
 }
 
 .cryptoList-scroll {
@@ -1213,8 +1167,8 @@ const goToRecharge = () => {
 }
 
 .newsContainer {
-  padding: 20rpx 0;
-  min-height: 60vh;
+  padding: 8rpx 0;
+  min-height: auto;
   overflow-y: auto;
 }
 
@@ -1241,11 +1195,11 @@ const goToRecharge = () => {
 
 .newsTitle {
   color: #ffffff;
-  font-size: 30rpx;
-  font-weight: 600;
+  font-size: 26rpx;
+  font-weight: 400;
   line-height: 1.4;
   display: block;
-  margin-bottom: 10rpx;
+  margin-bottom: 6rpx;
 }
 
 .newsSource {

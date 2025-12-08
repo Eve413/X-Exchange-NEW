@@ -15,12 +15,14 @@
         <image src="/static/icons/ic_avatar.png" class="avatar" />
         <view class="info-right">
           <view class="user-info">
-            <view class="welcome-text">{{ t('auth.status.welcome') }}</view>
-            <view class="uid-text">UID : {{dataProfile?.User?.id  }}</view>
-          </view>
-          <view class="verify-badge">
-            <!-- <image src="/static/icons/ic_check_circle.png" class="badge-icon" /> -->
-            <text class="badge-text">{{dataProfile?.User?.MemberGroup?.name  }}</text>
+            <view class="welcome-row">
+              <view class="welcome-text">{{ t('auth.status.welcome') }}</view>
+              <view class="verify-badge" :class="{ unverified: !isVerified }">
+                <image src="/static/icons/status/ic_success.png" class="badge-icon" mode="widthFix" />
+                <text class="badge-text">标准身份已认证</text>
+              </view>
+            </view>
+            <view class="uid-text">UID : {{ dataProfile?.User?.id }}</view>
           </view>
         </view>
       </view>
@@ -29,8 +31,7 @@
     <!-- 升级认证卡片 -->
     <view class="upgrade-card">
       <text class="upgrade-title">{{ t('auth.status.upgrade_title') }}</text>
-      <text class="upgrade-required">{{ t('auth.status.required') }}</text>
-      <text class="upgrade-item">{{ t('auth.status.address_proof') }}</text>
+      <text class="upgrade-required-line">{{ t('auth.status.required') }} · {{ t('auth.status.address_proof') }}</text>
       <button class="upgrade-btn" @click="goToAdvancedVerification">{{ t('auth.status.advanced_verification') }}</button>
     </view>
 
@@ -101,6 +102,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { computed } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { useI18n } from 'vue-i18n';
 import {
@@ -113,6 +115,11 @@ const { t } = useI18n();
 const userInfo = uni.getStorageSync("userData");
 const userStore = useUserStore();
 const dataProfile = ref({});
+const isVerified = computed(() => {
+  const name = (dataProfile.value as any)?.User?.MemberGroup?.name || '';
+  const byName = /verified|认证|已认证/i.test(String(name));
+  return Boolean(userStore.isKycApproved || byName);
+});
 // 返回上一页
 const goBack = () => {
   uni.navigateBack();
@@ -215,8 +222,8 @@ onLoad(async (option) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
-  padding: 0 16px;
+  height: 100rpx;
+  padding: 0 32rpx;
   background-color: #202020;
   position: sticky;
   top: 0;
@@ -226,8 +233,8 @@ onLoad(async (option) => {
 }
 
 .back-btn {
-  width: 40px;
-  height: 32px;
+  width: 80rpx;
+  height: 64rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,108 +246,132 @@ onLoad(async (option) => {
 }
 
 .nav-title {
-  font-size: 18px;
+  font-size: 30rpx;
   font-weight: 600;
 }
 
 .nav-right {
-  width: 40px;
+  width: 80rpx;
 }
 
 /* 用户信息卡片 */
 .user-card {
-  margin: 16px;
-  padding: 20px 30rpx;
+  margin: 32rpx;
+  padding: 30rpx 30rpx;
   background-color: #2d2d2d;
-  border-radius: 12px;
+  border-radius: 24rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .info-right{
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8rpx;
 }
 .user-header {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   // flex-direction: column;
-  gap: 12px;
+  gap: 8rpx;
 }
 .user-info{
   display: flex;
   flex-direction: column;
 }
+.welcome-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
 .avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  margin-bottom: 8px;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
+  margin-bottom: 12rpx;
 }
 
 .welcome-text {
-  font-size: 18px;
+  font-size: 30rpx;
   font-weight: 600;
 }
 
 .uid-text {
-  font-size: 14px;
+  font-size: 26rpx;
   color: #999999;
-  margin-top: 4px;
+  margin-top: 8rpx;
 }
 
 .verify-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 6rpx;
   background-color: #325DF4;
-  padding: 3px 12px;
-  border-radius: 16px;
-  align-self: flex-start;
-  margin-top: 8px;
-  margin-left: 5rpx;
-  width: 250rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 999rpx;
+  margin-left: 8rpx;
+  width: fit-content;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.verify-badge.unverified {
+  background-color: #4A4A4A;
 }
 
 .badge-icon {
-  width: 14px;
-  height: 14px;
+  width: 18rpx;
+  height: 18rpx;
 }
 
 .badge-text {
-  font-size: 12px;
+  font-size: 18rpx;
   color: #ffffff;
   text-align: center;
+  white-space: nowrap;
+}
+.verify-badge.unverified .badge-text {
+  color: #cccccc;
 }
 
 /* 升级认证卡片 */
 .upgrade-card {
-  margin: 16px;
-  padding: 20px;
+  margin: 32rpx;
+  padding: 30rpx;
   background-color: #2d2d2d;
-  border-radius: 12px;
+  border-radius: 24rpx;
 }
 
 .upgrade-title {
-  font-size: 16px;
-  margin-bottom: 12px;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
   line-height: 1.4;
 }
 
 .upgrade-required {
-  font-size: 14px;
+  font-size: 26rpx;
   color: #ff9800;
-  margin-bottom: 8px;
+  margin-bottom: 12rpx;
   font-weight: 500;
 }
 
 .upgrade-item {
-  font-size: 14px;
+  font-size: 26rpx;
   color: #cccccc;
-  margin-bottom: 16px;
+  margin-bottom: 24rpx;
   line-height: 1.6;
+}
+
+.upgrade-required-line {
+  display: block;
+  font-size: 26rpx;
+  color: #ff9800;
+  margin-bottom: 12rpx;
+  font-weight: 500;
 }
 
 .upgrade-btn {
@@ -358,14 +389,14 @@ onLoad(async (option) => {
 
 /* 限额卡片 */
 .limit-card {
-  margin: 16px;
-  padding: 20px;
+  margin: 32rpx;
+  padding: 30rpx;
   background-color: #2d2d2d;
-  border-radius: 12px;
+  border-radius: 24rpx;
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 28rpx;
   font-weight: 600;
 }
 
@@ -373,8 +404,8 @@ onLoad(async (option) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #3d3d3d;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #3d3d3d;
 }
 
 .limit-item:last-child {
@@ -382,22 +413,22 @@ onLoad(async (option) => {
 }
 
 .limit-label {
-  font-size: 14px;
+  font-size: 26rpx;
   color: #cccccc;
 }
 
 .limit-value {
-  font-size: 14px;
+  font-size: 26rpx;
   font-weight: 500;
 }
 
 /* 个人信息卡片 */
 .info-card {
-  margin: 16px;
-  padding: 20px;
+  margin: 32rpx;
+  padding: 30rpx;
   background-color: #2d2d2d;
-  border-radius: 12px;
-  padding-bottom: 30px;
+  border-radius: 24rpx;
+  padding-bottom: 44rpx;
 }
 
 .info-header {
@@ -407,7 +438,7 @@ onLoad(async (option) => {
 }
 
 .update-text {
-  font-size: 16px;
+  font-size: 28rpx;
   color: #667eea;
 }
 
@@ -415,8 +446,8 @@ onLoad(async (option) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #3d3d3d;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #3d3d3d;
 }
 
 .info-item:last-child {
@@ -424,14 +455,14 @@ onLoad(async (option) => {
 }
 
 .info-label {
-  font-size: 14px;
+  font-size: 26rpx;
   color: #cccccc;
 }
 
 .info-value {
-  font-size: 14px;
+  font-size: 26rpx;
   text-align: right;
   flex: 1;
-  margin-left: 16px;
+  margin-left: 32rpx;
 }
 </style>

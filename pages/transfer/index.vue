@@ -37,7 +37,7 @@
           </view>
         </picker>
       </view>
-      <view class="switch-circle">
+      <view class="switch-circle" @click="swapAccounts">
         <text class="switch-text">⇅</text>
       </view>
     </view>
@@ -46,8 +46,8 @@
     <view class="section" @click="showPopup = true">
       <text class="section-title">{{ $t('transaction.swap') }}</text>
       <view class="coin-selector">
-        <image :src="selectedCoin?.icon" class="coin-icon" />
-        <text class="coin-name">{{selectedCoin?.symbol}}</text>
+        <image :src="(selectedCoin && selectedCoin.icon) || '/static/icons/Export.png'" class="coin-icon" />
+        <text class="coin-name">{{ selectedCoin ? selectedCoin.symbol : $t('transaction.select_coin') }}</text>
         <image src="/static/icons/ic_arrow_down.png" class="arrow" />
       </view>
     </view>
@@ -57,9 +57,9 @@
       <text class="section-title">{{ $t('transaction.quantity') }}</text>
       <view class="input-row">
         <input class="amount-input" v-model="amount" :placeholder=" $t('transaction.please_enter_amount') " type="number" />
-        <text class="max-btn">{{ $t('transaction.max') }}</text>
+        <text class="max-btn" @click="setMax">{{ $t('transaction.max') }}</text>
       </view>
-     <text class="available">{{ $t('transaction.available') }} {{selectedCoin?.balance }} {{ selectedCoin?.baseAsset }}</text>
+     <text class="available">{{ $t('transaction.available') }} {{ selectedCoin && selectedCoin.balance || 0 }} {{ selectedCoin && selectedCoin.baseAsset || '' }}</text>
     </view>
 
     <!-- Tombol konfirmasi -->
@@ -135,9 +135,14 @@ import { onLoad } from '@dcloudio/uni-app'
 import {useUserStore, WalletsParams, TransferParams} from '@/store/modules/user'
 
 const searchQuery = ref('')
-const accounts = ref([{"id" : 'funding', 'name': t('transaction.fund_account')}, {"id" : 'spot', 'name': t('transaction.stock_account')}])
-const fromAccount = ref({"id" : 'funding', 'name': t('transaction.fund_account')})
-const toAccount = ref({"id" : 'spot', 'name': t('transaction.stock_account')})
+const accounts = ref([
+  { id: 'hk', name: `${t('transaction.hong_kong_stocks')} ${t('transaction.account')}` },
+  { id: 'spot', name: `${t('transaction.spot')} ${t('transaction.account')}` },
+  { id: 'futures', name: `${t('transaction.futures')} ${t('transaction.account')}` },
+  { id: 'earn', name: `${t('transaction.earn')} ${t('transaction.account')}` }
+])
+const fromAccount = ref({ id: 'futures', name: `${t('transaction.futures')} ${t('transaction.account')}` })
+const toAccount = ref({ id: 'spot', name: `${t('transaction.spot')} ${t('transaction.account')}` })
 const userInfo = uni.getStorageSync('userData')
 const userStore = useUserStore()
 
@@ -162,7 +167,7 @@ const mockData = {
         name: 'Tether',
         balance: '1500',
         pnl_percent: '+2.5%',
-        type: 'funding',
+        type: 'futures',
         icon: '/static/icons/Export.png'
       },
       {
@@ -172,7 +177,7 @@ const mockData = {
         name: 'Bitcoin',
         balance: '0.054',
         pnl_percent: '+1.2%',
-        type: 'funding',
+        type: 'hk',
         icon: '/static/icons/Export.png'
       },
       {
@@ -182,7 +187,7 @@ const mockData = {
         name: 'Ethereum',
         balance: '1.2',
         pnl_percent: '-0.5%',
-        type: 'funding',
+        type: 'earn',
         icon: '/static/icons/Export.png'
       },
       {
@@ -228,9 +233,11 @@ onLoad(async (options) => {
           console.log('使用模拟数据进行渲染')
           masterCoins.value = mockData.Asset.Currency
           coins.value = mockData.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+          setDefaultCoin()
         } else {
           masterCoins.value = resultWallets.data.data.Asset.Currency
           coins.value = resultWallets.data.data.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+          setDefaultCoin()
         }
         
       } catch (e) {
@@ -239,6 +246,7 @@ onLoad(async (options) => {
         console.log('API调用失败，使用模拟数据进行渲染')
         masterCoins.value = mockData.Asset.Currency
         coins.value = mockData.Asset.Currency.filter(item => item.type === fromAccount.value.id)
+        setDefaultCoin()
       }
 
 })
@@ -394,6 +402,8 @@ const onFromChange = (e) => {
   fromAccount.value = accounts.value[e.detail.value]
   selectedCoin.value = null;
   coins.value = masterCoins.value.filter(item => item.type === fromAccount.value.id)
+  amount.value = ''
+  setDefaultCoin()
 }
 
 const onToChange = (e) => {
@@ -421,6 +431,16 @@ const goToCustomerService = () => {
         fail: (err) => console.error('❌ Navigation to customer service failed:', err)
       })
     }, 500)
+}
+
+const swapAccounts = () => {
+  const temp = fromAccount.value
+  fromAccount.value = toAccount.value
+  toAccount.value = temp
+  selectedCoin.value = null
+  coins.value = masterCoins.value.filter(item => item.type === fromAccount.value.id)
+  amount.value = ''
+  setDefaultCoin()
 }
 </script>
 
@@ -759,3 +779,15 @@ const goToCustomerService = () => {
   margin-top: 4rpx;
 }
 </style>
+const setMax = () => {
+  if (!selectedCoin.value) {
+    uni.showToast({ title: t('transaction.select_coin'), icon: 'none' })
+    return
+  }
+  amount.value = String(selectedCoin.value.balance || '0')
+}
+const setDefaultCoin = () => {
+  const list = coins.value || []
+  const usdt = list.find((c: any) => c.baseAsset === 'USDT' || c.symbol === 'USDT')
+  selectedCoin.value = usdt || list[0] || null
+}

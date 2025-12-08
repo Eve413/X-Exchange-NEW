@@ -113,7 +113,7 @@
       </view>
     </view>
 
-    <view class="promo-section">
+    <view class="promo-section" v-if="false">
       <scroll-view scroll-x="true" class="promo-scroll" show-scrollbar="false">
         <!-- Card 1 -->
         <view class="promo-card">
@@ -367,7 +367,7 @@ const menus = computed(() => [
   { id: 1, name: t('profile.copy_trading'), icon: "/static/icons/ic_copy.png" },
   { id: 2, name: t('profile.wealth_management'), icon: "/static/icons/ic_finance.png" },
   { id: 3, name: t('profile.airdrop_activity'), icon: "/static/icons/ic_airdrop.png" },
-  { id: 4, name: t('profile.ipo_subscription'), icon: "/static/icons/ic_new.png" },
+  { id: 4, name: '我的团队', icon: "/static/icons/ic_new.png" },
   { id: 5, name: t('profile.swap'), icon: "/static/icons/ic_swap.png" },
   { id: 6, name: t('profile.transfer'), icon: "/static/icons/ic_transfer.png" },
   { id: 7, name: t('profile.rewards'), icon: "/static/icons/ic_reward.png" },
@@ -580,9 +580,9 @@ const onMenuClick = (item) => {
       url: '/pages/locked/index'
     });
   } else if (item.id === 5) {
-    // 点击闪兑，跳转到market页面
+    // 点击闪兑，跳转到闪兑页面
     uni.navigateTo({
-      url: '/pages/market/index'
+      url: '/pages/exchange/index'
     });
   } else if (item.id === 8) {
     // 点击钱包，跳转到assetsoverview页面
@@ -596,8 +596,14 @@ const onMenuClick = (item) => {
     uni.navigateTo({
       url: '/pages/locked/index'
     });
-  } else if (item.id == 6) {
-    goToTransfer()
+  } else if (item.id === 6) {
+    uni.navigateTo({
+      url: '/pages/transfer/index'
+    });
+  } else if (item.id === 4) {
+    uni.navigateTo({
+      url: '/pages/team/index'
+    });
   }
   // uni.showToast({
   //   title: `点击了 ${item.name}`,
@@ -630,18 +636,7 @@ const goToWithdraw = () => {
 
 }
 
-const goToTransfer = () => {
-  // Arahkan ke halaman verifikasi
-
-  setTimeout(() => {
-    uni.navigateTo({
-      url: '/pages/exchange/index',
-      success: () => console.log('✅ Navigated'),
-      fail: (err) => console.error('❌ Navigation failed:', err)
-    })
-  }, 500)
-
-}
+ 
 
 // 退出登录
 const handleLogout = () => {

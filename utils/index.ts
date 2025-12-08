@@ -52,7 +52,7 @@ export { ActionSheet, Modal, Toast, default as toast } from "./toast";
 export { setupGlobalProperties } from "./global";
 
 // 国际化
-export { i18nUtils, messages, supportedLocales } from "./i18n";
+export { i18nUtils, SUPPORTED_LOCALES as supportedLocales } from "./i18n";
 
 // 图标系统
 export {

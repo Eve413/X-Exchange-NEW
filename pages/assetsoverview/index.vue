@@ -23,8 +23,10 @@
       <view class="overview">
         <view class="asset-row">
           <view class="left">
-            <image class="eye-icon" src="/static/icons/ic_eye.png" mode="aspectFit" />
+            <image class="eye-icon" src="/static/icons/ic_eye.png" mode="aspectFit" @click="toggleBalance" />
             <text class="label">资产总估值</text>
+            <text class="unit-inline">{{ ballance.baseAsset }}</text>
+            <image class="arrow-down" src="/static/icons/ic_arrow_down.png" mode="aspectFit" />
           </view>
           <view class="right">
             <image class="chart-icon" src="/static/icons/ic_chart.png" mode="aspectFit" />
@@ -33,14 +35,18 @@
           </view>
         </view>
 
-        <view class="balance-row">
-          <text class="balance">{{ ballance.total }}</text>
-          <text class="unit">{{ ballance.baseAsset }}</text>
-          <image class="arrow-down" src="/static/icons/ic_arrow_down.png" mode="aspectFit" />
+        <!-- 钱包地址（全局展示）：无地址时显示“未绑定”并支持复制 -->
+        <view class="wallet-address-row">
+          <text class="wallet-address-label">钱包地址:</text>
+          <text class="wallet-address-value">{{ walletAddress }}</text>
+          <image class="copy-icon" src="/static/icons/copy.png" mode="aspectFit" @click="copyWalletAddress" />
         </view>
 
-        <text class="sub-balance">{{ ballance.approximately }}</text>
-        <br />
+        <view class="balance-row">
+          <text class="balance">{{ showBalance ? ballance.total : '****' }}</text>
+        </view>
+
+        
 
         <text class="profit">{{ $t('transaction.today_pnl') }} {{ ballance.approximately }} {{ ballance.baseAsset }} ({{
           ballance.pnl_percent }})</text>
@@ -49,7 +55,7 @@
         <view class="action-row" v-if="activeTab == 5">
           <view class="btn add-fund" @click="goToDeposit">{{ $t('transaction.add_funds') }}</view>
           <view class="btn normal" @click="goToWithdraw">{{ $t('transaction.transfer_out') }}</view>
-          <view class="btn normal" @click="goToTransfer">{{ $t('transaction.transfer') }}</view>
+          <view class="btn normal" @click="goToExchange">{{ $t('exchange') }}</view>
         </view>
         <!-- 按钮组 -->
         <view class="action-row" v-else>
@@ -284,6 +290,8 @@ const ballance = ref({
 })
 const contractAsset = ref([])
 const useWallet = ref([])
+const showBalance = ref(true)
+const walletAddress = ref('未绑定')
 
 const rewards = ref({
   TotalReward: { total: '0.00' },
@@ -383,6 +391,12 @@ onLoad(async (options) => {
       assets.value = resultWallets.data.data.Asset?.Currency || mockData.assets
       rewards.value = resultWallets.data.data.Reward || mockData.rewards
       useWallet.value = resultWallets.data.data.UserWallet || mockData.useWallet
+      walletAddress.value = (
+        resultWallets.data.data.UserWallet?.[0]?.address ||
+        resultWallets.data.data.UserWallet?.[0]?.Network?.address ||
+        resultWallets.data.data.UserWallet?.[0]?.Wallet?.address ||
+        '未绑定'
+      )
     } else {
       // 使用模拟数据
       console.log('使用模拟数据')
@@ -392,6 +406,7 @@ onLoad(async (options) => {
       assets.value = mockData.assets
       rewards.value = mockData.rewards
       useWallet.value = mockData.useWallet
+      walletAddress.value = '未绑定'
     }
 
     console.log("✅ API Result or Mock Data Loaded")
@@ -404,6 +419,7 @@ onLoad(async (options) => {
     assets.value = mockData.assets
     rewards.value = mockData.rewards
     useWallet.value = mockData.useWallet
+    walletAddress.value = '未绑定'
   }
 })
 
@@ -456,16 +472,11 @@ function goBack() {
 }
 
 const goToTransfer = () => {
-  // Arahkan ke halaman verifikasi
-
   setTimeout(() => {
     uni.navigateTo({
-      url: '/pages/transfer/index',
-      success: () => console.log('✅ Navigated'),
-      fail: (err) => console.error('❌ Navigation failed:', err)
+      url: '/pages/transfer/index'
     })
   }, 500)
-
 }
 
 const goToExchange = () => {
@@ -604,6 +615,12 @@ const goToProfitLossReport = () => {
 .label {
   color: #aaa;
   font-size: 14px;
+}
+
+.unit-inline {
+  color: #aaa;
+  font-size: 14px;
+  margin-left: 6px;
 }
 
 .right {
@@ -1091,6 +1108,25 @@ const goToProfitLossReport = () => {
   padding: 40rpx;
 }
 
+.wallet-address-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin: 8rpx 0 12rpx 0;
+}
+.wallet-address-label {
+  color: #aaa;
+  font-size: 24rpx;
+}
+.wallet-address-value {
+  color: #fff;
+  font-size: 24rpx;
+}
+.copy-icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+
 .wallet-icon-container {
   /* background-color: #6a5af9; */
   width: 200rpx;
@@ -1272,3 +1308,18 @@ const goToProfitLossReport = () => {
   color: #ffffff;
 }
 </style>
+function toggleBalance() {
+  showBalance.value = !showBalance.value
+}
+
+function copyWalletAddress() {
+  if (!walletAddress.value || walletAddress.value === '未绑定') {
+    uni.showToast({ title: '暂无钱包地址', icon: 'none' })
+    return
+    }
+  uni.setClipboardData({
+    data: walletAddress.value,
+    success: () => uni.showToast({ title: '已复制', icon: 'success' }),
+    fail: () => uni.showToast({ title: '复制失败', icon: 'none' })
+  })
+}

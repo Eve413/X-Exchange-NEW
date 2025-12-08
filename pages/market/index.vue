@@ -6,9 +6,9 @@
 		<!-- Sticky Top Menu -->
 		<scroll-view class="top-menu" scroll-x="true" scroll-with-animation :sticky="true" :sticky-offset-top="0">
 			<view class="menu-scroll">
-				<view v-for="(item, idx) in navTabs" :key="idx" class="menu-item" :class="{ active: idx === activeNav }"
-					@click="handleNavChange(idx)">
-					{{ item }}
+				<view v-for="tab in navTabsVisible" :key="tab.idx" class="menu-item" :class="{ active: tab.idx === activeNav }"
+					@click="handleNavChange(tab.idx)">
+					{{ tab.text }}
 				</view>
 			</view>
 			<!-- Header -->
@@ -145,24 +145,18 @@
 							<text class="stat-number">{{ traderPerformanceDetail?.likes ?? 0 }}</text>
 							<text class="stat-label">{{ $t('market.likes') }}</text>
 						</view>
-						<view class="contact-box" @click="goToChatRoom()">
-							<view class="stat-item contact-item">
-								<image class="contact-icon" src="/static/icons/chatImg.png" />
-								<text class="stat-label1">{{ $t('market.chatRoom') }}</text>
-							</view>
-							<view class="stat-item contact-item">
-								<text class="stat-label">{{ $t('market.viewDetails') }}</text>
-							</view>
-						</view>
+                        <view class="stat-item" @click="goToChatRoom()">
+                            <text class="stat-label">导师</text>
+                            <text class="stat-label">简介</text>
+                        </view>
 					</view>
 
 					<!-- Profit Share Badge -->
 					<view class="badge-row">
-						<view class="badge">
-							<image class="DividendsIcon" src="/static/icons/DividendsIcon.png" />
-							Profit share {{ traderPerformanceDetail?.profitShare
-								?? 0 }}
-						</view>
+                        <view class="badge">
+                            <image class="DividendsIcon" src="/static/icons/DividendsIcon.png" />
+                            Profit share {{ formatPercent(traderPerformanceDetail?.profitShare) }}
+                        </view>
 					</view>
 				</view>
 
@@ -182,18 +176,18 @@
 				<view v-if="activeContentTab === 'auto'" class="auto-follow-content">
 					<!-- Trader Info Card -->
 					<view class="trader-card">
-						<view class="trader-info">
-							<image class="trader-avatar" src="https://picsum.photos/id/64/120/120" />
-							<view class="trader-details">
-								<text class="trader-name">{{ traderPerformanceDetail?.traderName ?? '' }}</text>
-								<text class="trader-rank">
-									<image class="humanIcon" src="/static/icons/humanIcon.png" /><text
-										class="rankTitle">{{ traderPerformanceDetail?.followers ?? 0 }}</text>/
-									{{ traderPerformanceDetail?.maxFollowers ?? 0 }}
-								</text>
-							</view>
-							<view class="recommend-badge">{{ $t('market.recommend') }}</view>
-						</view>
+            <view class="trader-info" v-if="false">
+              <image class="trader-avatar" src="https://picsum.photos/id/64/120/120" />
+              <view class="trader-details">
+                <text class="trader-name">{{ traderPerformanceDetail?.traderName ?? '' }}</text>
+                <text class="trader-rank">
+                  <image class="humanIcon" src="/static/icons/humanIcon.png" /><text
+                    class="rankTitle">{{ traderPerformanceDetail?.followers ?? 0 }}</text>/
+                  {{ traderPerformanceDetail?.maxFollowers ?? 0 }}
+                </text>
+              </view>
+              <view class="recommend-badge">{{ $t('market.recommend') }}</view>
+            </view>
 
 						<!-- Stats Overview -->
 						<view class="trader-stats-overview">
@@ -387,76 +381,6 @@
 				</view>
 			</view>
 
-			<!-- 港股 Tab -->
-			<view v-else-if="activeNav === 1" id="content-start" class="market-data-tab">
-				<view class="page-stock">
-					<!-- List - 港股数据 -->
-					<view class="results-list">
-						<view v-for="(item, index) in getMarketData('hk')" :key="index" class="result-item"
-							@click="handleMarketItemClick(item)">
-							<view class="item-left">
-								<image :src="item.icon ||
-									`/static/logo/logos_${item.code?.toLowerCase() || 'bitcoin'
-									}.png`
-									" class="item-icon" mode="aspectFit" />
-								<view class="item-info">
-									<!-- <text class="item-name">{{ item.name }}</text> -->
-									<text class="item-name">{{ item.name }}</text>
-									<text class="item-code">{{
-										item.quoteAsset || item.code
-									}}</text>
-								</view>
-								<image :src="item.sparkline || '/static/icons/line_chart.png'" class="graph-img-stock"
-									mode="aspectFit" />
-							</view>
-							<view class="item-right">
-								<text class="item-price">{{
-									formatPrice(item.lastPrice)
-								}}</text>
-								<text class="item-percent" :class="item.percentChange24h > 0 ? 'up' : 'down'">
-									{{ item.percentChange24h > 0 ? "+" : ""
-									}}{{ Math.round(item.percentChange24h * 100) / 100 }}%
-								</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-
-			<!-- 现货 Tab -->
-			<view v-else-if="activeNav === 2" id="content-start" class="market-data-tab">
-				<view class="page-stock">
-					<!-- List - 现货数据 -->
-					<view class="results-list">
-						<view v-for="(item, index) in getMarketData('spot')" :key="index" class="result-item"
-							@click="handleMarketItemClick(item)">
-							<view class="item-left">
-								<image :src="item.icon ||
-									`/static/logo/logos_${item.code?.toLowerCase() || 'bitcoin'
-									}.png`
-									" class="item-icon" mode="aspectFit" />
-								<view class="item-info">
-									<text class="item-name">{{ item.name }}</text>
-									<text class="item-code">{{
-										item.quoteAsset || item.code
-									}}</text>
-								</view>
-								<image :src="item.sparkline || '/static/icons/line_chart.png'" class="graph-img-stock"
-									mode="aspectFit" />
-							</view>
-							<view class="item-right">
-								<text class="item-price">{{
-									formatPrice(item.lastPrice)
-								}}</text>
-								<text class="item-percent" :class="item.percentChange24h > 0 ? 'up' : 'down'">
-									{{ item.percentChange24h > 0 ? "+" : ""
-									}}{{ Math.round(item.percentChange24h * 100) / 100 }}%
-								</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
 
 			<!-- 合约 Tab -->
 			<view v-else-if="activeNav === 3" id="content-start" class="market-data-tab">
@@ -493,40 +417,6 @@
 				</view>
 			</view>
 
-			<!-- Xcoin专区 Tab -->
-			<view v-else-if="activeNav === 5" id="content-start" class="market-data-tab">
-				<view class="page-stock">
-					<!-- List - Xcoin专区数据 -->
-					<view class="results-list">
-						<view v-for="(item, index) in getMarketData('xcoin')" :key="index" class="result-item"
-							@click="handleMarketItemClick(item)">
-							<view class="item-left">
-								<image :src="item.icon ||
-									`/static/logo/logos_${item.code?.toLowerCase() || 'bitcoin'
-									}.png`
-									" class="item-icon" mode="aspectFit" />
-								<view class="item-info">
-									<text class="item-name">{{ item.name }}</text>
-									<text class="item-code">{{
-										item.quoteAsset || item.code
-									}}</text>
-								</view>
-								<image :src="item.sparkline || '/static/icons/line_chart.png'" class="graph-img-stock"
-									mode="aspectFit" />
-							</view>
-							<view class="item-right">
-								<text class="item-price">{{
-									formatPrice(item.lastPrice)
-								}}</text>
-								<text class="item-percent" :class="item.percentChange24h > 0 ? 'up' : 'down'">
-									{{ item.percentChange24h > 0 ? "+" : ""
-									}}{{ Math.round(item.percentChange24h * 100) / 100 }}%
-								</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
 
 			<!-- 闪兑 Tab -->
 			<view v-else-if="activeNav === 4" id="content-start" class="swap-tab">
@@ -694,6 +584,11 @@ const navTabs = computed(() => [
 	'market.swap',
 	'market.xcoinZone'
 ].map(key => t(key)));
+// 只展示保留的标签，但维持原始索引以兼容内容区条件渲染
+const navTabsVisible = computed(() => [
+  { idx: 0, text: navTabs.value[0] }, // 跟单
+  { idx: 4, text: navTabs.value[4] }  // 闪兑
+]);
 
 // 监听语言变化，确保页面文本能正确更新
 const currentLanguage = computed(() => locale.value);
@@ -746,9 +641,19 @@ const slippage = ref("<0.001");
 
 // format helpers
 function formatSharpe(val: any): string {
-	const n = Number(val)
-	if (!isFinite(n)) return '0.00'
-	return n.toFixed(2)
+  const n = Number(val)
+  if (!isFinite(n)) return '0.00'
+  return n.toFixed(2)
+}
+
+function formatPercent(val: any): string {
+  const n = Number(val)
+  if (!isFinite(n)) return '0%'
+  // 若返回为 0–1 的比率，转换为百分比；否则视为已是百分值
+  const pct = n <= 1 ? n * 100 : n
+  // 保留最多两位小数，去除多余的零
+  const s = pct.toFixed(2)
+  return (s.endsWith('00') ? Math.round(pct).toString() : s.replace(/\.0+$/, '')) + '%'
 }
 
 // 交换货币
@@ -1371,6 +1276,19 @@ function handleConfirmFollow() {
 			traderId: "current_trader", // 这里应该从当前上下文获取交易员ID
 		});
 
+		// 交易前实名认证校验
+		if (!userStore.isKycApproved) {
+			uni.showToast({
+				title: t('home.please_complete_identity_verification_before_the_transaction'),
+				icon: 'none',
+				duration: 2000
+			});
+			setTimeout(() => {
+				uni.navigateTo({ url: '/pages/createkyc/createkyc' });
+			}, 300);
+			return;
+		}
+
 		// 显示确认对话框
 		uni.showModal({
 			title: t('market.confirmFollow'),
@@ -1763,22 +1681,21 @@ onUnmounted(() => {
 }
 
 .profile-row {
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	justify-content: space-between;
-	margin-bottom: 30rpx;
-	width: 100%;
-	padding-top: 20rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+  width: 100%;
+  padding-top: 20rpx;
 }
 
 .avatar {
-	width: 110rpx;
-	height: 110rpx;
-	border-radius: 50%;
-	margin-right: 12rpx;
-	background-color: #f0f0f0;
-	margin-top: 14rpx;
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+  background-color: #f0f0f0;
 }
 
 .profile-info {
@@ -1810,9 +1727,10 @@ onUnmounted(() => {
 
 /* Stats Row */
 .stats-row {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20rpx;
 }
 
 .stat-item {
@@ -1822,15 +1740,19 @@ onUnmounted(() => {
 }
 
 .stat-number {
-	font-size: 30rpx;
-	/* font-weight: bold; */
-	margin-bottom: 4rpx;
+  font-size: 30rpx;
+  /* font-weight: bold; */
+  margin-bottom: 4rpx;
+  line-height: 30rpx;
+  font-weight: 400;
 }
 
 .stat-label {
-	font-size: 24rpx;
-	/* opacity: 0.6; */
-	color: #9aa4ae;
+  font-size: 24rpx;
+  /* opacity: 0.6; */
+  color: #9aa4ae;
+  line-height: 24rpx;
+  font-weight: 400;
 }
 
 .stat-label1 {
@@ -1839,10 +1761,11 @@ onUnmounted(() => {
 }
 
 .contact-box {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rpx;
 }
 
 .contact-item {
@@ -1852,16 +1775,15 @@ onUnmounted(() => {
 }
 
 .contact-icon {
-	width: 36rpx;
-	height: 36rpx;
+  width: 30rpx;
+  height: 30rpx;
 }
 
 .actions {
-	display: flex;
-	/* flex-direction: column; */
-	align-items: center;
-	gap: 12rpx;
-	margin-top: 20rpx;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  gap: 12rpx;
 }
 
 .more-btn {

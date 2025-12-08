@@ -481,7 +481,7 @@
     "airdrop_activity": "空投活动",
     "ipo_subscription": "IPO认购",
     "swap": "闪兑",
-    "transfer": "转账",
+    "transfer": "划转",
     "rewards": "奖励",
     "wallet": "钱包",
     "staking_rewards": "质押奖励",
@@ -1392,8 +1392,8 @@
   "funding": "资金",
   "navigation": {
     "home": "首页",
-    "market": "行情",
-    "trade": "交易",
+    "market": "交易",
+    "trade": "行情",
     "discover": "发现",
     "profile": "我的"
   },

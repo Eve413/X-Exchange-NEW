@@ -298,7 +298,7 @@
     {
       "path": "pages/transfer/index",
       "style": {
-        "navigationBarTitleText": "交易",
+        "navigationBarTitleText": "划转",
         "navigationStyle": "custom"
       }
     },

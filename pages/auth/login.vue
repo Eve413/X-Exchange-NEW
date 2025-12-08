@@ -67,7 +67,7 @@
       </view>
 
       <button class="btn-submit" :disabled="submitting" @tap="onLogin">
-        {{ t("auth.login") }}
+        {{ $tl("auth.login|登录") }}
       </button>
 
       <view class="login-tip">

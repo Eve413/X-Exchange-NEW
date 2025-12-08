@@ -96,7 +96,7 @@
 
       <!-- 提交 -->
       <button class="btn-submit" @tap="onSubmit" :disabled="submitting">
-        {{ t("auth.register") }}
+        {{ $tl("auth.register|注册") }}
       </button>
 
       <!-- 底部登录引导 -->

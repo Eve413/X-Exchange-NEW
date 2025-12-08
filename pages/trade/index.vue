@@ -143,7 +143,7 @@
             <image class="chart" :src="item.sparkline" mode="aspectFit" />
 
             <view class="card-footer">
-              <text class="price">{{ item.lastPrice }}</text>
+              <text class="price">{{ formatHKD(item.lastPrice) }}</text>
               <text class="percent" :class="{
                 up: item.percentChange24h > 0,
                 down: item.percentChange24h < 0,
@@ -172,15 +172,13 @@
                 }.png`
                 " class="item-icon" mode="aspectFit" />
               <view class="item-info">
-                <text class="item-name">{{ item.name }}</text>
-                <text class="item-code">{{
-                  item.quoteAsset || item.code
-                }}</text>
+                <text class="item-name">{{ shortenName(item.name) }}</text>
+                <text class="item-code">{{ displayCode(item) }}</text>
               </view>
               <image :src="item.sparkline || '/static/icons/line_chart.png'" class="graph-img-stock" mode="aspectFit" />
             </view>
             <view class="item-right">
-              <text class="item-price">{{ formatPrice(item.lastPrice) }}</text>
+              <text class="item-price">{{ formatHKD(item.lastPrice) }}</text>
               <text class="item-percent" :class="item.percentChange24h > 0 ? 'up' : 'down'">
                 {{ item.percentChange24h > 0 ? "+" : ""
                 }}{{ Math.round(item.percentChange24h * 100) / 100 }}%
@@ -199,15 +197,13 @@
               <!-- <text v-if="item.id <= 5" class="item-rank">{{ item.id }}</text> -->
               <image :src="item.icon" class="item-icon" mode="aspectFit" />
               <view class="item-info">
-                <text class="item-name">{{ item.name }}</text>
-                <text class="item-code">{{
-                  item.quoteAsset || item.code
-                }}</text>
+                <text class="item-name">{{ shortenName(item.name) }}</text>
+                <text class="item-code">{{ displayCode(item) }}</text>
               </view>
               <image :src="item.sparkline" class="graph-img-stock" mode="aspectFit" />
             </view>
             <view class="item-right">
-              <text class="item-price">{{ formatPrice(item.lastPrice) }}</text>
+              <text class="item-price">{{ formatHKD(item.lastPrice) }}</text>
               <text class="item-percent" :class="item.percentChange24h > 0 ? 'up' : 'down'">
                 {{ item.percentChange24h > 0 ? "+" : ""
                 }}{{ Math.round(item.percentChange24h * 100) / 100 }}%
@@ -579,7 +575,7 @@ function goToNotification() {
 // 当前选中的二级tab
 const currentTab = ref(0);
 // 二级tab列表
-const tabs = ref([t('common.all'), t('trade.holdings'), t('market.hkStock'), t('market.spot'), t('market.xcoinZone')]);
+const tabs = ref([t('common.all'), t('trade.holdings')]);
 
 // 监听currentTab变化
 watch(
@@ -596,6 +592,37 @@ function formatPrice(price: number) {
     return price.toLocaleString("en-US", { maximumFractionDigits: 2 });
   }
   return price;
+}
+
+function formatHKD(price: any): string {
+  const n = typeof price === 'string' ? parseFloat(String(price).replace(/[^0-9.\-]/g, '')) : Number(price);
+  if (!isFinite(n)) return 'HK$0';
+  const v = n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n;
+  const isCrypto = activeMenu.value?.type === 'crypto';
+  return isCrypto ? String(v) : `HK${v}`;
+}
+
+function shortenName(name: string): string {
+  if (!name) return "";
+  let n = name.replace(/(控股集团|集团控股|集团)?股份有限公司$/, "").replace(/有限公司$/, "");
+  n = n.replace(/^中国(工商|农业|建设)银行/, "$1银行");
+  n = n.replace(/^中国移动$/, "中国移动");
+  return n || name;
+}
+
+function displayCode(item: any): string {
+  const isCrypto = activeMenu.value?.type === 'crypto';
+  if (isCrypto) {
+    const base = item?.code || (item?.pair ? String(item.pair).split('/') [0] : '') || item?.baseAsset || '';
+    return `${String(base)}/USDT`;
+  }
+  const sym = item?.symbol;
+  if (sym && /^\d{3,}$/.test(String(sym))) return `HK${String(sym)}`;
+  const base = item?.baseAsset || item?.code;
+  if (base && /^\d{3,}$/.test(String(base))) return `HK${String(base)}`;
+  const pairBase = item?.pair ? String(item.pair).split('/') [0] : '';
+  if (pairBase && /^\d{3,}$/.test(pairBase)) return `HK${pairBase}`;
+  return pairBase || String(item?.code || '');
 }
 
 // 与search页面一致的列表项点击处理函数
@@ -651,7 +678,7 @@ const handleTabChange = (tab: any, index: number) => {
 .tab-top {
   position: fixed;
   /* 动态计算顶部位置：状态栏高度 + navbar高度 */
-  top: 196rpx;
+  top: 176rpx;
   left: 0;
   right: 0;
   background-color: #202020;
@@ -670,8 +697,8 @@ const handleTabChange = (tab: any, index: number) => {
 
 /* 当tab-top显示时的样式 */
 .scroll-area.has-tab-top {
-  padding-top: 150rpx;
-  height: calc(100vh - 200rpx);
+  padding-top: 240rpx;
+  height: calc(100vh - 260rpx);
 }
 
 /* 已通过动态类绑定实现，这里不再需要额外规则 */
@@ -867,7 +894,7 @@ const handleTabChange = (tab: any, index: number) => {
 /* Tabs */
 .tabs-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   // background: #1a1a1a;
   // border-radius: 20rpx;
   // padding:0 10rpx;
@@ -1128,7 +1155,7 @@ const handleTabChange = (tab: any, index: number) => {
 .results-list {
   display: flex;
   flex-direction: column;
-  // gap: 30rpx;
+  gap: 24rpx;
 }
 
 .result-item {
@@ -1140,7 +1167,7 @@ const handleTabChange = (tab: any, index: number) => {
   border-radius: 20rpx;
   background-color: #2a2a2a;
   position: relative;
-  margin-top: 30rpx;
+  /* 间距统一由容器 gap 控制 */
 }
 
 .result-item .item-left {
