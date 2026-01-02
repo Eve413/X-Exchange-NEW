@@ -76,12 +76,17 @@ export class TradingApi {
         return request.postTrading<TraderPerformaResponse>(`/api/trader/performance/user/${userId}`, params)
     }
 
-    static traderPerformaByUserId(userId: number, params: BaseParam) {
-        return request.postTrading<TraderPerformaResponse>(`/api/trader/performance/${userId}/detail`, params)
+    static traderPerformaByUserId(expertID: number,userId: number, params: BaseParam) {
+        return request.postTrading<TraderPerformaResponse>(`/api/trader/performance/${expertID}/detail/user/${userId}`, params)
     }
 
     static subscribeToTrader(params: SubscribeParam) {
         return request.postTrading<any>('/api/copy-trade/subscribe', params)
+    }
+
+    static unSubscribeToTrader(expertId: number, userId: number, params: BaseParam) {
+      ///unsubscribe/expert/{idExpert}/user/{idUser}
+        return request.postTrading<any>(`/api/copy-trade/unsubscribe/expert/${expertId}/user/${userId}`, params)
     }
 
     static getBanner(params: BaseParamOther) {

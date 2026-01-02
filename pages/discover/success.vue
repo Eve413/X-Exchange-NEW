@@ -124,7 +124,7 @@
     // Navigasi
     const goBack = () => {
     // Ensure we always land on Discover regardless of tabBar usage
-    uni.reLaunch({ url: '/pages/discover/index' })
+    uni.reLaunch({ url: '/pages/follow/index' })
     }
 	const handleTabChange = (tab: any, index: number) => {
 	  console.log('Tab切换:', tab.label, index)

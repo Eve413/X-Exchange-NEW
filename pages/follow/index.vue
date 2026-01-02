@@ -68,7 +68,7 @@
             <view class="trader-info">
               <image class="trader-avatar" :src="trader.avatar" mode="aspectFit" />
               <view class="trader-name-section">
-                <text class="trader-name">TUYJHUI</text>
+                <text class="trader-name">{{ trader.code }}</text>
                 <view class="trader-score">
                   <image class="humanIcon" src="/static/icons/humanIcon.png" mode="aspectFit" />
                   <text class="score1">{{ trader.score }}</text>{{ trader.totalScore }}
@@ -76,8 +76,8 @@
               </view>
             </view>
             <view class="trader-actions">
-              <text class="view-details" @click="viewTraderDetails(trader.id)">{{ t('follow.viewDetails') }}</text>
-                <text class="follow-btn" @click="followTrader(trader.id)">{{ t('follow.followTrader') }}</text>
+              <text class="view-details" @click="viewTraderDetails(trader)">{{ t('follow.viewDetails') }}</text>
+              <text v-if="!trader.isFollow && !trader.is_follow" class="follow-btn" @click="followTrader(trader)">{{ t('follow.followTrader') }}</text>
             </view>
           </view>
 
@@ -147,8 +147,8 @@
               </view>
             </view>
             <view class="trader-actions">
-              <text class="view-details" @click="viewTraderDetails(trader.id)">{{ t('follow.viewDetails') }}</text>
-                  <text class="follow-btn" @click="followTrader(trader.id)">{{ t('follow.followTrader') }}</text>
+              <text class="view-details" @click="viewTraderDetails(trader)">{{ t('follow.viewDetails') }}</text>
+              <text v-if="!trader.isFollow && !trader.is_follow" class="follow-btn" @click="followTrader(trader)">{{ t('follow.followTrader') }}</text>
             </view>
           </view>
 
@@ -211,6 +211,9 @@ import { ref, computed, onMounted, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storage } from '@/utils/storage'
+import { onLoad } from '@dcloudio/uni-app'
+import { useTradingStore } from '@/store/modules/trading';
+const tradingStore = useTradingStore();
 
 const { t, locale } = useI18n()
 
@@ -219,65 +222,70 @@ const router = useRouter()
 // 当前激活的tab
 const activeTab = ref(t('follow.allProjects'))
 
+const allTraders = ref<any[]>([]) 
+
 // 模拟带单员数据
-const allTraders = ref([
-  {
-    id: 1,
-    name: 'TUYJHUI',
-    avatar: '/static/icons/testAvatar.png',
-    score: '8.7',
-    totalScore: '/10',
-    profit30d: '+24.11',
-    rate30d: '101.86%',
-    assetSize: '2,113,255.27',
-    maxDrawdown: '63.74%',
-    sharpeRatio: '3.45',
-    isFavorite: true
-  },
-  {
-    id: 2,
-    name: 'TUYJHUI',
-    avatar: '/static/icons/testAvatar.png',
-    score: '8.7',
-    totalScore: '/10',
-    profit30d: '+24.11',
-    rate30d: '101.86%',
-    assetSize: '2,113,255.27',
-    maxDrawdown: '63.74%',
-    sharpeRatio: '3.45',
-    isFavorite: false
-  },
-  {
-    id: 3,
-    name: 'TUYJHUI',
-    avatar: '/static/icons/testAvatar.png',
-    score: '8.7',
-    totalScore: '/10',
-    profit30d: '+24.11',
-    rate30d: '101.86%',
-    assetSize: '2,113,255.27',
-    maxDrawdown: '63.74%',
-    sharpeRatio: '3.45',
-    isFavorite: true
-  }
-])
+// const allTraders = ref([
+//   {
+//     id: 1,
+//     name: 'TUYJHUI',
+//     avatar: '/static/icons/testAvatar.png',
+//     score: '8.7',
+//     totalScore: '/10',
+//     profit30d: '+24.11',
+//     rate30d: '101.86%',
+//     assetSize: '2,113,255.27',
+//     maxDrawdown: '63.74%',
+//     sharpeRatio: '3.45',
+//     isFavorite: true
+//   },
+//   {
+//     id: 2,
+//     name: 'TUYJHUI',
+//     avatar: '/static/icons/testAvatar.png',
+//     score: '8.7',
+//     totalScore: '/10',
+//     profit30d: '+24.11',
+//     rate30d: '101.86%',
+//     assetSize: '2,113,255.27',
+//     maxDrawdown: '63.74%',
+//     sharpeRatio: '3.45',
+//     isFavorite: false
+//   },
+//   {
+//     id: 3,
+//     name: 'TUYJHUI',
+//     avatar: '/static/icons/testAvatar.png',
+//     score: '8.7',
+//     totalScore: '/10',
+//     profit30d: '+24.11',
+//     rate30d: '101.86%',
+//     assetSize: '2,113,255.27',
+//     maxDrawdown: '63.74%',
+//     sharpeRatio: '3.45',
+//     isFavorite: true
+//   }
+// ])
 
 // 收藏的带单员
 const favoriteTraders = computed(() => {
-  return allTraders.value.filter(trader => trader.isFavorite)
+  return allTraders.value.filter(trader => trader.favorite)
+
 })
 
 // 当前显示的带单员列表
 const traderList = computed(() => {
-  const list = activeTab.value === '全部项目' ? allTraders.value : favoriteTraders.value
-  // 只返回前两个带单员，其余的将在引导卡片之后显示
+  const list = activeTab.value === t('follow.allProjects') ? allTraders.value : favoriteTraders.value
+  // 只返回前两个带单员,其余的将在引导卡片之后显示
+  console.log('traderList:', list.slice(0, 2))
   return list.slice(0, 2)
 })
 
 // 剩余的带单员列表
 const remainingTraders = computed(() => {
-  const list = activeTab.value === '全部项目' ? allTraders.value : favoriteTraders.value
+  const list = activeTab.value === t('follow.allProjects') ? allTraders.value : favoriteTraders.value
   // 返回从第三个开始的带单员
+  console.log('remainingTraders:', list.slice(2))
   return list.slice(2)
 })
 
@@ -298,11 +306,45 @@ const refreshPage = () => {
   // 可以在这里重新获取数据
 }
 
-// 查看带单员详情
-const viewTraderDetails = (traderId: number) => {
+onLoad(async (option) => {
+	try {
+	
+			const resultAuth = await tradingStore.fetchTraderPerforma();
+	
+			//Populate traderList with API data
+			if (resultAuth?.data?.data) {
+				allTraders.value = resultAuth.data.data;
+			} else if (Array.isArray(resultAuth?.data)) {
+				allTraders.value = resultAuth.data;
+			} else {
+				allTraders.value = [];
+			}
+			
+	
+			console.log('Trading loaded:', allTraders.value);
+	
+		} catch (e) {
+			console.error('❌ Failed to load discover:', e)
+		}
+})
 
+
+// 查看带单员详情
+const viewTraderDetails = (trader: any) => {
+  console.log('查看带单员详情函数被调用, trader:', trader)
+  
+  // 尝试多个可能的ID字段
+  const traderId = trader?.id || trader?.traderId || trader?.trader_id || trader?.userId || trader?.code
+  
+  if (!traderId) {
+    console.error('❌ 无法找到trader ID! Trader对象:', trader)
+    console.error('可用的字段:', Object.keys(trader || {}))
+    return
+  }
+
+  console.log('✅ 使用的 traderId:', traderId)
   uni.navigateTo({
-    url: '/pages/market/index',
+    url: '/pages/market/index?traderId=' + traderId + '&type=detail',
     success: (res) => {
       console.log('navigateTo跳转成功:', res)
     },
@@ -313,12 +355,22 @@ const viewTraderDetails = (traderId: number) => {
       console.log('navigateTo跳转完成')
     }
   })
-  console.log('查看带单员详情函数被调用:', traderId)
 }
 
 // 跟单操作
-const followTrader = (traderId: number) => {
-  console.log('跟单函数被调用:', traderId)
+const followTrader = (trader: any) => {
+  console.log('跟单函数被调用, trader:', trader)
+  
+  // 尝试多个可能的ID字段
+  const traderId = trader?.id || trader?.traderId || trader?.trader_id || trader?.userId || trader?.code
+  
+  if (!traderId) {
+    console.error('❌ 无法找到trader ID! Trader对象:', trader)
+    console.error('可用的字段:', Object.keys(trader || {}))
+    return
+  }
+  
+  console.log('✅ 使用的 traderId:', traderId)
   try {
     // 使用storage存储参数
     const setResult = storage.setSync('traderJumpParams', { traderId, source: 'follow' })
@@ -331,7 +383,7 @@ const followTrader = (traderId: number) => {
     // 由于使用自定义tabbar，使用navigateTo跳转
     console.log('准备执行navigateTo跳转...')
     uni.navigateTo({
-      url: '/pages/market/index',
+      url: '/pages/market/index?traderId=' + traderId + '&type=detail',
       success: (res) => {
         console.log('navigateTo跳转成功:', res)
       },

@@ -312,12 +312,16 @@
 						</view>
 					</view>
 
-					<!-- Confirm Button -->
-					<view class="confirm-btn" @click="handleConfirmFollow">
-						<text>{{ $t('market.confirmFollow') }}</text>
-					</view>
+				<!-- Confirm Button - Show when not following -->
+				<view v-if="!traderPerformanceDetail?.isFollow && !traderPerformanceDetail?.is_follow" class="confirm-btn" @click="handleConfirmFollow(traderId)">
+					<text>{{ $t('market.confirmFollow') }}</text>
 				</view>
-
+				
+				<!-- Unfollow Button - Show when already following -->
+				<view v-else class="confirm-btn unfollow-btn" @click="handleUnfollow(traderId)">
+					<text>{{ $t('market.confirmUnfollow') }}</text>
+				</view>
+				</view>
 				<!-- Personal Views Content -->
 				<view v-else-if="activeContentTab === 'views'" class="personal-views-content">
 					<!-- 使用v-for渲染view-item -->
@@ -1240,24 +1244,63 @@ function handleAutoFollowToggle() {
 	// 这里可以添加调用API的逻辑来保存设置
 }
 
+function handleUnfollow(expertId) {
+	console.log("🔄 取消跟单，专家ID:", expertId);
+	uni.showModal({
+		title: t('market.confirmUnfollow'),
+		content: t('market.confirmUnFollowContent'),
+		confirmText: t('market.confirm'),
+		cancelText: t('market.cancel'),
+		success: async (res) => {
+			if (res.confirm) {
+				console.log("✅ 已取消跟单");
+				// 这里可以添加调用API的逻辑来取消跟单
+
+						const response = await tradingStore.unSubscribeCopyTrader(expertId)
+						console.log('✅ Subscription successful:', response)
+						if (response?.status == 1) {
+							// Navigate to success page after successful subscription
+								uni.showToast({
+									title: t('market.unfollowSuccess'),
+									icon: "success",
+									duration: 2000
+								});
+
+							uni.navigateTo({
+								url: `/pages/follow/index`,
+								success: () => console.log('✅ Navigated to success page'),
+								fail: (err) => console.error('❌ Navigation failed:', err)
+							})
+						} else {
+							uni.showToast({
+								title: t('market.operationFailed'),
+								icon: "none",
+								duration: 2000
+							});
+						}
+			}
+		},
+	});
+}
+
 // 处理确认跟单
-function handleConfirmFollow() {
+function handleConfirmFollow(expertId) {
 	try {
 		// 获取跟单金额
-		const amount =
-			selectedAmount.value === "custom"
-				? customAmountInput.value || 0
-				: selectedAmount.value;
+		// const amount =
+		// 	selectedAmount.value === "custom"
+		// 		? customAmountInput.value || 0
+		// 		: selectedAmount.value;
 
-		// 验证金额
-		if (!amount || amount <= 0) {
-			uni.showToast({
-				title: t('market.enterValidAmount'),
-				icon: "none",
-				duration: 2000
-			});
-			return;
-		}
+		// // 验证金额
+		// if (!amount || amount <= 0) {
+		// 	uni.showToast({
+		// 		title: t('market.enterValidAmount'),
+		// 		icon: "none",
+		// 		duration: 2000
+		// 	});
+		// 	return;
+		// }
 
 		// 验证可用余额（如果有）
 		// const availableBalance = 10000; // 这里应该从API获取
@@ -1270,11 +1313,11 @@ function handleConfirmFollow() {
 		//   return;
 		// }
 
-		console.log("🔄 确认跟单，参数:", {
-			amount,
-			autoFollow: autoFollowEnabled.value,
-			traderId: "current_trader", // 这里应该从当前上下文获取交易员ID
-		});
+		// console.log("🔄 确认跟单，参数:", {
+		// 	,
+		// 	autoFollow: autoFollowEnabled.value,
+		// 	traderId: "current_trader", // 这里应该从当前上下文获取交易员ID
+		// });
 
 		// 交易前实名认证校验
 		if (!userStore.isKycApproved) {
@@ -1292,22 +1335,21 @@ function handleConfirmFollow() {
 		// 显示确认对话框
 		uni.showModal({
 			title: t('market.confirmFollow'),
-			content: t('market.confirmFollowAmount', { amount: amount, autoFollow: autoFollowEnabled.value ? '\n' + t('market.autoFollowEnabled') : '' }),
+			content: t('market.confirmFollowAmount', { autoFollow: autoFollowEnabled.value ? '\n' + t('market.autoFollowEnabled') : '' }),
 			confirmText: t('market.confirm'),
 			cancelText: t('market.cancel'),
 			success: async (res) => {
 				if (res.confirm) {
 					console.log('跟单成功', traderPerformanceDetail?.value);
-					console.log('Expert Id', traderId.value);
-					console.log('Amount', amount);
+					console.log('Expert Id', expertId);
+					console.log('Amount', 0);
 					console.log('Copy Trading Enabled:', autoFollowEnabled.value);
 					try {
 						// Prepare subscription parameters
 
-						const expertId = traderId.value;
 						const copyAllTrade = autoFollowEnabled.value;
 						// Call the subscribe API
-						const response = await tradingStore.subscribeToTrader(amount, expertId, copyAllTrade)
+						const response = await tradingStore.subscribeToTrader(0, expertId, copyAllTrade)
 						console.log('✅ Subscription successful:', response)
 						if (response?.status == 1) {
 							// Navigate to success page after successful subscription

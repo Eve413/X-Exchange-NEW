@@ -80,10 +80,11 @@ export const useTradingStore = defineStore('trading', () => {
     }
   }
 
-  const fetchTraderPerformaByUserId = async (userId: number) => {
+  const fetchTraderPerformaByUserId = async (expertID: number) => {
     try {
       const userStore = useUserStore()
-      const response = await tradingApi.traderPerformaByUserId(userId, {
+      const userId = userInfo.data.data.id || 0
+      const response = await tradingApi.traderPerformaByUserId(expertID,userId, {
         passkey: pasKeyAuth,
         device: deviceAuth,
         appversion: appversionAuth,
@@ -240,7 +241,7 @@ export const useTradingStore = defineStore('trading', () => {
     getRecentOrders,
     fetchTraderHistoryPerformance,
     fetchTradingHistory,
-	unSubscribeCopyTrader
+	  unSubscribeCopyTrader
   }
 })
 
